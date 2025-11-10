@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquaproved Prijscalculator V6.9</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #f5f7fa;
+            border-radius: 20px;
+            padding: 20px;
+        }
+        
+        @media (min-width: 600px) {
+            .container {
+                max-width: 600px;
+                padding: 25px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 900px;
+            }
+            
+            .components-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .component-card {
+                margin-bottom: 0;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1100px;
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1300px;
+            }
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .header-content {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .logo-container {
+            width: 65px;
+            height: auto;
+            flex-shrink: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .logo-container {
+                width: 81px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .logo-container {
+                width: 97px;
+            }
+        }
+        
+        #aqp-logo {
+            width: 100%;
+            height: auto;
+            opacity: 0.95;
+        }
+        
+        h1 {
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: clamp(27px, 6vw, 33px);
+            line-height: 1.1;
+        }
+        
+        .title-blue {
+            color: #33b2d2;
+        }
+        
+        .title-grey {
+            color: #535554;
+            font-size: calc(1em - 10px);
+        }
+        
+        .subtitle {
+            font-size: 13px;
+            color: #718096;
+        }
+        
+        .trademark {
+            font-size: 0.5em;
+            vertical-align: super;
+        }
+        
+        .component-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .component-card:hover {
+            box-shadow: 0 4px 15px rgba(51, 178, 210, 0.1);
+        }
+        
+        .component-card.active {
+            border: 2px solid #33b2d2;
+        }
+        
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .component-icon {
+            font-size: 24px;
+        }
+        
+        .component-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: #2d3748;
+            flex: 1;
+            line-height: 1.3;
+        }
+        
+        @media (min-width: 768px) {
+            .component-name {
+                font-size: 15px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .component-name {
+                font-size: 16px;
+            }
+        }
+        
+        .info-icon {
+            background: linear-gradient(135deg, #33b2d2 0%, #33b2d2 70%, #535554 100%);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .price-badge {
+            background: linear-gradient(135deg, #33b2d2 0%, #33b2d2 70%, #535554 100%);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .input-wrapper input, .input-wrapper select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            background: white;
+        }
+        
+        .input-wrapper select {
+            cursor: pointer;
+        }
+        
+        .input-wrapper input:focus, .input-wrapper select:focus {
+            outline: none;
+            border-color: #33b2d2;
+        }
+        
+        .input-wrapper input::placeholder {
+            color: #718096;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: left;
+        }
+        
+        /* Verwijder pijltjes van number inputs */
+        .input-wrapper input[type="number"]::-webkit-inner-spin-button,
+        .input-wrapper input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .input-wrapper input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        
+        .input-wrapper .unit {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .breakdown {
+            display: none;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        
+        .breakdown.show {
+            display: block;
+        }
+        
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            color: #4a5568;
+        }
+        
+        .breakdown-row.total {
+            font-weight: 700;
+            color: #2d3748;
+            border-top: 2px solid #e2e8f0;
+            margin-top: 5px;
+            padding-top: 10px;
+        }
+        
+        .toggle-section {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-section:hover {
+            background: #f7fafc;
+        }
+        
+        .toggle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .toggle-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        
+        .toggle-icon {
+            color: #33b2d2;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+        
+        .extra-components {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .extra-components.open {
+            max-height: 2000px;
+        }
+        
+        .bijkomend-werk {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .bijkomend-werk.expanded {
+            max-height: 1000px;
+        }
+        
+        .total-overview {
+            background: linear-gradient(135deg, #33b2d2 0%, #33b2d2 70%, #535554 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            margin-top: 20px;
+        }
+        
+        .total-overview h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .total-divider {
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            margin: 10px 0;
+        }
+        
+        .total-section-title {
+            padding: 6px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .total-section-title:first-of-type {
+            margin-top: 0;
+        }
+        
+        .total-row.indented {
+            padding-left: 10px;
+        }
+        
+        .total-price {
+            font-size: 28px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .invoice-overview {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #33b2d2;
+        }
+        
+        .invoice-overview h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        
+        .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .invoice-row:last-of-type {
+            border-bottom: none;
+        }
+        
+        .invoice-row .component-name {
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .invoice-row .component-calc {
+            font-weight: 400;
+            color: #718096;
+            margin: 0 10px;
+        }
+        
+        .invoice-row .component-total {
+            font-weight: 700;
+            color: #2d3748;
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .invoice-total {
+            font-size: 20px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #33b2d2;
+            color: #33b2d2;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid #e2e8f0;
+            font-size: 9px;
+            line-height: 1.5;
+        }
+        
+        @media (min-width: 768px) {
+            .footer {
+                font-size: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .footer .copyright {
+                margin-top: 0 !important;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .footer {
+                font-size: 11px;
+            }
+        }
+        
+        .footer-brand {
+            color: #33b2d2;
+            font-weight: 700;
+        }
+        
+        .footer-info {
+            color: #718096;
+        }
+        
+        .footer .copyright {
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #a0aec0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            overflow-y: auto;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-btn {
+            font-size: 28px;
+            font-weight: 700;
+            color: #718096;
+            cursor: pointer;
+        }
+        
+        .info-section h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            background: #f7fafc;
+            margin-bottom: 3px;
+            border-radius: 5px;
+            line-height: 1.3;
+        }
+        
+        .info-row.highlight {
+            background: #33b2d2;
+            color: white;
+            font-size: 16px;
+            padding: 8px;
+        }
+        
+        .info-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .info-list li {
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        
+        .material-badge {
+            background: linear-gradient(135deg, #33b2d2 0%, #33b2d2 70%, #535554 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .total-badge {
+            background: linear-gradient(135deg, #33b2d2 0%, #33b2d2 70%, #535554 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>
+                    <span class="title-blue">AQUAPROVED<span class="trademark">®</span></span>
+                    <br>
+                    <span class="title-grey">PRIJSCALCULATOR</span>
+                </h1>
+                <div class="subtitle">Subcalculator V6.9</div>
+            </div>
+            <div class="logo-container">
+                <svg id="aqp-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 235">
+                    <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#595857;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#41b0d4;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <polygon fill="#595857" points="12.33 117.21 47.27 39.41 71.44 83.27 73.22 79.93 48.6 35.34 45.82 35.34 7.21 120.21 10.85 120.21 20.01 120.21 52.07 120.21 53.74 117.21 12.33 117.21"/>
+                        <path fill="#595857" d="M133.6,8.32h-3.78c-31.54,71.25-49.7,108.9-61.09,134.47-9.95,22.32-15.43,32.06-16.29,41.78-.92,10.39,2.82,20.75,10.51,29.15,7.43,8.1,17.36,11.12,26.57,11.12,17.15,0,37.09-16.49,37.09-40.12,0-13.38-9.19-30.13-18.92-47.86-1.61-2.93-4.39-8.48-5.97-11.41l-1.98,4.29c1.58,2.94,3.2,5.9,4.82,8.84,9.5,17.32,18.48,33.68,18.48,46.14,0,21.61-18.01,36.54-33.51,36.54-8.22,0-17.17-2.58-23.93-9.96-7-7.65-10.41-17.03-9.59-26.42.8-9.07,6.43-18.53,15.95-40.54,11.74-27.13,28.55-59.66,60.27-133.1h1.38c16.1,0,34.66,11.19,34.66,34.42,0,16.47-14.25,35.46-34.89,35.46h-11.04l-1.68,3.43h12.72c21.98,0,38.71-19.84,38.71-38.89,0-25.47-19.81-37.35-38.48-37.35Z"/>
+                        <rect fill="url(#grad)" x="58.83" y="188.34" width="61.47" height="1.66"/>
+                        <rect fill="url(#grad)" x="57.91" y="191.68" width="63.55" height="3.32"/>
+                        <rect fill="url(#grad)" x="58.6" y="196.25" width="62.58" height="3.32"/>
+                        <path fill="url(#grad)" d="M60.75,201.08l58.5-.28s-32.09,43.15-58.5.28Z"/>
+                        <circle fill="url(#grad)" cx="62.14" cy="184.78" r="1.05"/>
+                        <circle fill="url(#grad)" cx="69.29" cy="184.78" r="1.05"/>
+                        <circle fill="url(#grad)" cx="65.72" cy="181.2" r="1.05"/>
+                        <circle fill="url(#grad)" cx="69.29" cy="177.62" r="1.05"/>
+                        <circle fill="url(#grad)" cx="77.84" cy="184.72" r="1.05"/>
+                        <circle fill="url(#grad)" cx="73.5" cy="181.14" r="1.05"/>
+                        <circle fill="url(#grad)" cx="77.84" cy="177.56" r="1.05"/>
+                        <circle fill="url(#grad)" cx="86.18" cy="184.78" r="1.05"/>
+                        <circle fill="url(#grad)" cx="82.19" cy="181.2" r="1.05"/>
+                        <circle fill="url(#grad)" cx="86.18" cy="177.62" r="1.05"/>
+                        <circle fill="url(#grad)" cx="86.31" cy="184.72" r="1.05"/>
+                        <circle fill="url(#grad)" cx="93.88" cy="184.72" r="1.05"/>
+                        <circle fill="url(#grad)" cx="89.89" cy="181.14" r="1.05"/>
+                        <circle fill="url(#grad)" cx="86.31" cy="177.56" r="1.05"/>
+                        <circle fill="url(#grad)" cx="93.88" cy="177.56" r="1.05"/>
+                        <circle fill="url(#grad)" cx="102.29" cy="184.78" r="1.05"/>
+                        <circle fill="url(#grad)" cx="97.92" cy="181.09" r="1.05"/>
+                        <circle fill="url(#grad)" cx="102.29" cy="177.56" r="1.05"/>
+                        <circle fill="url(#grad)" cx="110.36" cy="184.78" r="1.05"/>
+                        <circle fill="url(#grad)" cx="106.28" cy="181.09" r="1.05"/>
+                        <circle fill="url(#grad)" cx="110.36" cy="177.56" r="1.05"/>
+                        <circle fill="url(#grad)" cx="117.72" cy="184.77" r="1.05"/>
+                        <circle fill="url(#grad)" cx="114.14" cy="181.19" r="1.05"/>
+                        <circle fill="url(#grad)" cx="117.72" cy="177.61" r="1.05"/>
+                        <circle fill="url(#grad)" cx="62.14" cy="177.56" r="1.05"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <div class="components-grid">
+        
+        <div class="component-card" id="card-afkappen">
+            <div class="component-header">
+                <span class="component-name">Afkappen</span>
+                <span class="info-icon" onclick="showInfo('afkappen')">i</span>
+            </div>
+            <div class="price-badge" id="price-afkappen">€0,00/m²</div>
+            <div class="input-wrapper">
+                <input type="number" id="afkappen" placeholder="totaal aantal m²">
+                <span class="unit">m²</span>
+            </div>
+            <div class="breakdown" id="breakdown-afkappen">
+                <div class="breakdown-row">
+                    <span>Materiaal:</span>
+                    <span id="mat-afkappen">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Arbeid:</span>
+                    <span id="arb-afkappen">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Tijd:</span>
+                    <span id="tijd-afkappen">0u 0m</span>
+                </div>
+                <div class="breakdown-row total">
+                    <span>Totaal:</span>
+                    <span id="tot-afkappen">€0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="component-card" id="card-injecties">
+            <div class="component-header">
+                <span class="component-name">Injecties</span>
+                <span class="info-icon" onclick="showInfo('injecties')">i</span>
+            </div>
+            <div class="price-badge" id="price-injecties">€0,00/m</div>
+            <div class="input-wrapper">
+                <input type="number" id="injecties" placeholder="totaal aantal m">
+                <span class="unit">m</span>
+            </div>
+            <div class="breakdown" id="breakdown-injecties">
+                <div class="breakdown-row">
+                    <span>Materiaal:</span>
+                    <span id="mat-injecties">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Arbeid:</span>
+                    <span id="arb-injecties">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Tijd:</span>
+                    <span id="tijd-injecties">0u 0m</span>
+                </div>
+                <div class="breakdown-row total">
+                    <span>Totaal:</span>
+                    <span id="tot-injecties">€0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="component-card" id="card-membraan">
+            <div class="component-header">
+                <span class="component-name">SNC-membraan</span>
+                <span class="info-icon" onclick="showInfo('membraan')">i</span>
+            </div>
+            <div class="price-badge" id="price-membraan">€0,00/m²</div>
+            <div class="input-wrapper">
+                <input type="number" id="membraan" placeholder="totaal aantal m²">
+                <span class="unit">m²</span>
+            </div>
+            <div class="breakdown" id="breakdown-membraan">
+                <div class="breakdown-row">
+                    <span>Materiaal:</span>
+                    <span id="mat-membraan">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Arbeid:</span>
+                    <span id="arb-membraan">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Tijd:</span>
+                    <span id="tijd-membraan">0u 0m</span>
+                </div>
+                <div class="breakdown-row total">
+                    <span>Totaal:</span>
+                    <span id="tot-membraan">€0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="component-card" id="card-bezetten">
+            <div class="component-header">
+                <span class="component-name">Bezetten</span>
+                <span class="info-icon" onclick="showInfo('bezetten')">i</span>
+            </div>
+            <div class="price-badge" id="price-bezetten">€0,00/m²</div>
+            <div class="input-wrapper">
+                <input type="number" id="bezetten" placeholder="totaal aantal m²">
+                <span class="unit">m²</span>
+            </div>
+            <div class="breakdown" id="breakdown-bezetten">
+                <div class="breakdown-row">
+                    <span>Materiaal:</span>
+                    <span id="mat-bezetten">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Arbeid:</span>
+                    <span id="arb-bezetten">€0</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>Tijd:</span>
+                    <span id="tijd-bezetten">0u 0m</span>
+                </div>
+                <div class="breakdown-row total">
+                    <span>Totaal:</span>
+                    <span id="tot-bezetten">€0</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- Bijkomend werk sectie -->
+        <div class="toggle-section" onclick="toggleBijkomend()">
+            <div class="toggle-header">
+                <div class="toggle-title">
+                    <span>Bijkomend werk</span>
+                </div>
+                <span class="toggle-icon" id="toggle-icon-bijkomend">▼</span>
+            </div>
+        </div>
+
+        <div class="bijkomend-werk" id="bijkomend-werk">
+            <div class="components-grid">
+            
+            <div class="component-card" id="card-hoekprofielen">
+                <div class="component-header">
+                    <span class="component-name">Plaatsen hoekprofiel(en)</span>
+                    <span class="info-icon" onclick="showInfo('hoekprofielen')">i</span>
+                </div>
+                <div class="price-badge" id="price-hoekprofielen">€0,00/m</div>
+                <div class="input-wrapper">
+                    <input type="number" id="hoekprofielen" placeholder="totaal aantal m">
+                    <span class="unit">m</span>
+                </div>
+                <div class="breakdown" id="breakdown-hoekprofielen">
+                    <div class="breakdown-row">
+                        <span>Materiaal:</span>
+                        <span id="mat-hoekprofielen">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Arbeid:</span>
+                        <span id="arb-hoekprofielen">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Tijd:</span>
+                        <span id="tijd-hoekprofielen">0u 0m</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-hoekprofielen">€0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="component-card" id="card-bijkomendpleister">
+                <div class="component-header">
+                    <span class="component-name">Bijkomend pleisterwerk</span>
+                    <span class="info-icon" onclick="showInfo('bijkomendpleister')">i</span>
+                </div>
+                <div class="price-badge" id="price-bijkomendpleister">€0,00/m²</div>
+                <div class="input-wrapper">
+                    <input type="number" id="bijkomendpleister" placeholder="totaal aantal verbruikte zakken">
+                    <span class="unit">zakken (totaal)</span>
+                </div>
+                <div class="breakdown" id="breakdown-bijkomendpleister">
+                    <div class="breakdown-row">
+                        <span>Totale dikte:</span>
+                        <span id="totale-dikte-bijkomendpleister">0 cm</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Extra dikte:</span>
+                        <span id="extra-dikte-bijkomendpleister">0 cm</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-bijkomendpleister">€0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="component-card" id="card-egalisatie">
+                <div class="component-header">
+                    <span class="component-name">Bijkomende egalisatie</span>
+                    <span class="info-icon" onclick="showInfo('egalisatie')">i</span>
+                </div>
+                <div class="price-badge" id="price-egalisatie">€0,00/m²</div>
+                <div class="input-wrapper">
+                    <input type="number" id="egalisatie" placeholder="totaal aantal verbruikte zakken">
+                    <span class="unit">zakken (totaal)</span>
+                </div>
+                <div class="breakdown" id="breakdown-egalisatie">
+                    <div class="breakdown-row">
+                        <span>Totale dikte:</span>
+                        <span id="totale-dikte-egalisatie">0 mm</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-egalisatie">€0</span>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
+
+        <div class="toggle-section" onclick="toggleExtras()">
+            <div class="toggle-header">
+                <div class="toggle-title">
+                    <span>Extra Componenten</span>
+                </div>
+                <span class="toggle-icon" id="toggle-icon">▼</span>
+            </div>
+        </div>
+
+        <div class="extra-components" id="extra-components">
+            <div class="components-grid">
+            
+            <div class="component-card" id="card-xps">
+                <div class="component-header">
+                    <span class="component-name">XPS-isolatie systeem</span>
+                    <span class="info-icon" onclick="showInfo('xps')">i</span>
+                </div>
+                <div class="price-badge" id="price-xps">€0,00/m²</div>
+                <div class="input-wrapper">
+                    <select id="xps-dikte">
+                        <option value="20">XPS 20mm</option>
+                        <option value="30">XPS 30mm</option>
+                        <option value="40">XPS 40mm</option>
+                        <option value="50">XPS 50mm</option>
+                        <option value="60">XPS 60mm</option>
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" id="xps" placeholder="totaal aantal m²">
+                    <span class="unit">m²</span>
+                </div>
+                <div class="breakdown" id="breakdown-xps">
+                    <div class="breakdown-row">
+                        <span>Materiaal:</span>
+                        <span id="mat-xps">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Arbeid:</span>
+                        <span id="arb-xps">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Tijd:</span>
+                        <span id="tijd-xps">0u 0m</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-xps">€0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="component-card" id="card-ultradun">
+                <div class="component-header">
+                    <span class="component-name">Compacte dichting</span>
+                    <span class="info-icon" onclick="showInfo('ultradun')">i</span>
+                </div>
+                <div class="price-badge" id="price-ultradun">€0,00/m²</div>
+                <div class="input-wrapper">
+                    <select id="ultradun-systeem">
+                        <option value="sulfatex">Sulfatex</option>
+                        <option value="sopro">Sopro ZR Turbo Maxx</option>
+                    </select>
+                </div>
+                <div class="input-wrapper">
+                    <input type="number" id="ultradun" placeholder="totaal aantal m²">
+                    <span class="unit">m²</span>
+                </div>
+                <div class="breakdown" id="breakdown-ultradun">
+                    <div class="breakdown-row">
+                        <span>Materiaal:</span>
+                        <span id="mat-ultradun">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Arbeid:</span>
+                        <span id="arb-ultradun">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Tijd:</span>
+                        <span id="tijd-ultradun">0u 0m</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-ultradun">€0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="component-card" id="card-fixfinish">
+                <div class="component-header">
+                    <span class="component-name">Fix & Finish</span>
+                    <span class="info-icon" onclick="showInfo('fixfinish')">i</span>
+                </div>
+                <div class="price-badge" id="price-fixfinish">€0,00/m²</div>
+                <div class="input-wrapper">
+                    <input type="number" id="fixfinish" placeholder="totaal aantal m²">
+                    <span class="unit">m²</span>
+                </div>
+                <div class="breakdown" id="breakdown-fixfinish">
+                    <div class="breakdown-row">
+                        <span>Materiaal:</span>
+                        <span id="mat-fixfinish">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Arbeid:</span>
+                        <span id="arb-fixfinish">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Tijd:</span>
+                        <span id="tijd-fixfinish">0u 0m</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-fixfinish">€0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FASSA SHIELD ISOLATIE -->
+            <div class="component-card" id="card-fassashield">
+                <div class="component-header">
+                    <span class="component-name">Fassa Shield Isolatiesysteem</span>
+                    <span class="info-icon" onclick="showInfo('fassashield')">i</span>
+                </div>
+                <div class="price-badge" id="price-fassashield">€0,00/m²</div>
+                <div class="input-wrapper">
+                    <input type="number" id="fassashield" placeholder="totaal aantal m²">
+                    <span class="unit">m²</span>
+                </div>
+                <div class="breakdown" id="breakdown-fassashield">
+                    <div class="breakdown-row">
+                        <span>Materiaal:</span>
+                        <span id="mat-fassashield">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Arbeid:</span>
+                        <span id="arb-fassashield">€0</span>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Tijd:</span>
+                        <span id="tijd-fassashield">0u 0m</span>
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Totaal:</span>
+                        <span id="tot-fassashield">€0</span>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
+
+        <div class="total-overview">
+            <h3>Totaaloverzicht</h3>
+            
+            <div class="total-section-title" id="hoofdcomponenten-title">Hoofdcomponenten</div>
+            <div class="total-row indented">
+                <span>Totale tijd:</span>
+                <span id="total-tijd">0u 0m</span>
+            </div>
+            <div class="total-row indented">
+                <span>Totale arbeidskost:</span>
+                <span id="total-arbeid">€0,00</span>
+            </div>
+            <div class="total-row indented">
+                <span>Totale materiaalkost:</span>
+                <span id="total-materiaal">€0,00</span>
+            </div>
+            <div class="total-row indented">
+                <span>Transport & overhead:</span>
+                <span id="total-to">€0,00</span>
+            </div>
+            <div class="total-row indented">
+                <span>Marge (25%):</span>
+                <span id="total-winst">€0,00</span>
+            </div>
+            
+            <div class="total-section-title" id="bijkomend-title" style="display: none;">Bijkomende Componenten</div>
+            <div class="total-row indented" id="row-bijkomendpleister" style="display: none;">
+                <span>Bijkomend pleisterwerk:</span>
+                <span id="total-bijkomendpleister">€0,00</span>
+            </div>
+            <div class="total-row indented" id="row-egalisatie" style="display: none;">
+                <span>Bijkomende egalisatie:</span>
+                <span id="total-egalisatie">€0,00</span>
+            </div>
+            <div class="total-row indented" id="row-hoekprofielen" style="display: none;">
+                <span>Plaatsen hoekprofiel(en):</span>
+                <span id="total-hoekprofielen">€0,00</span>
+            </div>
+            
+            <div class="total-price">TOTAALPRIJS: <span id="total-prijs">€0,00</span></div>
+        </div>
+
+        <div class="invoice-overview" id="invoice-overview">
+            <h3>Factuuroverzicht Onderaannemer</h3>
+            <div id="invoice-items">
+                <!-- Dynamisch gevuld via JavaScript -->
+            </div>
+            <div class="invoice-total">TOTAAL FACTUUR: <span id="invoice-total">€0,00</span></div>
+        </div>
+
+        <div class="footer">
+            <div>
+                <span class="footer-brand">AQUAPROVED<span class="trademark">®</span></span> 
+                <span class="footer-info">| BTW: BE0546999034 | info@aquaproved.be | +32 486 355 702</span>
+            </div>
+            <div class="copyright">© 2025 Vecon. All rights reserved.</div>
+        </div>
+    </div>
+
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Component Info</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        const LOON = 48.03;
+        const TO_PER_DAG = 208;
+        
+        const COMP = {
+            afkappen: { mat: 0, cap_per_man: 35, mannen: 1 },
+            injecties: { mat: 3.30, cap_per_man: 60, mannen: 2 },
+            membraan: { mat: 8.20, cap_per_man: 40, mannen: 1 },
+            bezetten: { mat: 6.38, cap_per_man: 20, mannen: 1 }
+        };
+
+        const XPS_MAT = {
+            20: 13.72,  // €4,08 (plaat) + €9,64 (L-gips + PU + Gitex + Snelband)
+            30: 15.76,  // €6,12 + €9,64
+            40: 17.83,  // €8,19 + €9,64
+            50: 19.91,  // €10,27 + €9,64
+            60: 30.08   // €20,44 + €9,64
+        };
+
+        const XTRA = {
+            xps: { cap_per_man: 20, mannen: 2 },              // 20 m²/man/dag → 40 m²/dag team
+            ultradun: { 
+                sulfatex: { mat: 30.66, cap_per_man: 30 },    // Sulfatex: 30 m²/man/dag → 60 m²/dag team
+                sopro: { mat: 20.83, cap_per_man: 24 }        // Sopro: 24 m²/man/dag → 48 m²/dag team
+            },
+            fixfinish: { mat: 2.12, cap_per_man: 35, mannen: 2 }, // 35 m²/man/dag → 70 m²/dag team
+            fassashield: { mat: 40.28, cap_per_man: 15, mannen: 2 } // 15 m²/man/dag → 30 m²/dag team
+        };
+
+        window.showInfo = function(component) {
+            const modal = document.getElementById('infoModal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            
+            const compNames = {
+                'afkappen': 'Afkappen',
+                'injecties': 'Injecties',
+                'membraan': 'SNC-membraan',
+                'bezetten': 'Bezetten',
+                'xps': 'XPS-isolatie systeem',
+                'ultradun': 'Compacte dichting',
+                'fixfinish': 'Fix & Finish',
+                'fassashield': 'Fassa Shield Isolatiesysteem',
+                'hoekprofielen': 'Plaatsen hoekprofiel(en)',
+                'bijkomendpleister': 'Bijkomend pleisterwerk',
+                'egalisatie': 'Bijkomende egalisatie'
+            };
+            
+            title.textContent = compNames[component];
+            
+            const qty = parseFloat(document.getElementById(component === 'bijkomendpleister' ? 'bijkomendpleister' : component === 'egalisatie' ? 'egalisatie' : component === 'hoekprofielen' ? 'hoekprofielen' : component).value) || 0;
+            const unit = (component === 'injecties' || component === 'hoekprofielen') ? 'm' : (component === 'bijkomendpleister' || component === 'egalisatie') ? 'zakken' : 'm²';
+            
+            let html = '';
+            
+            if (qty > 0) {
+                html += '<div class="info-section">';
+                html += `<h3>${qty} ${unit} ${compNames[component]}</h3>`;
+                
+                if (component === 'bezetten') {
+                    html += '<div class="material-badge">MP75 Gipspleister</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>11,25 kg/m² × ${qty} m² = ${(qty * 11.25).toFixed(0)} kg</li>`;
+                    html += `<li>${((qty * 11.25) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                    html += `<li>€4,28/m² × ${qty} m² = €${(qty * 4.28).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">Knauf Snelband</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>3,75 kg/m² × ${qty} m² = ${(qty * 3.75).toFixed(0)} kg</li>`;
+                    html += `<li>${((qty * 3.75) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                    html += `<li>€2,10/m² × ${qty} m² = €${(qty * 2.10).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="total-badge">';
+                    html += '<span>TOTAAL</span>';
+                    html += `<span>€${(qty * 6.38).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                else if (component === 'injecties') {
+                    html += '<div class="material-badge">Fassa Inject</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>0,2 L/m × ${qty} m = ${(qty * 0.2).toFixed(1)} L</li>`;
+                    html += `<li>${((qty * 0.2) / 5).toFixed(1)} bidons (5 L/bidon)</li>`;
+                    html += `<li>€3,16/m × ${qty} m = €${(qty * 3.16).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">PU-schuim</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>0,002 bus/m × ${qty} m = ${(qty * 0.002).toFixed(2)} bussen</li>`;
+                    html += `<li>€0,014/m × ${qty} m = €${(qty * 0.014).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="total-badge">';
+                    html += '<span>TOTAAL</span>';
+                    html += `<span>€${(qty * 3.30).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                else if (component === 'membraan') {
+                    html += '<div class="material-badge">CODEX POWER CX2</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>6,25 kg/m² × ${qty} m² = ${(qty * 6.25).toFixed(0)} kg</li>`;
+                    html += `<li>${((qty * 6.25) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                    html += `<li>€3,77/m² × ${qty} m² = €${(qty * 3.77).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">SNC-Membraan</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>1,10 m²/m² × ${qty} m² = ${(qty * 1.10).toFixed(1)} m²</li>`;
+                    html += `<li>${((qty * 1.10) / 30).toFixed(1)} rollen (30 m²/rol)</li>`;
+                    html += `<li>€4,43/m² × ${qty} m² = €${(qty * 4.43).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="total-badge">';
+                    html += '<span>TOTAAL</span>';
+                    html += `<span>€${(qty * 8.20).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                else if (component === 'afkappen') {
+                    html += '<ul class="info-list">';
+                    html += '<li>Geen materiaal nodig (enkel arbeid)</li>';
+                    html += '</ul>';
+                }
+                else if (component === 'xps') {
+                    const dikte = document.getElementById('xps-dikte').value;
+                    const matPrijs = XPS_MAT[dikte];
+                    
+                    html += '<div class="material-badge">XPS plaat</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>1,05 m²/m² × ${qty} m² = ${(qty * 1.05).toFixed(1)} m²</li>`;
+                    html += `<li>€${(matPrijs * 0.545).toFixed(2)}/m² × ${qty} m² = €${(qty * matPrijs * 0.545).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">L-gips</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>5 kg/m² × ${qty} m² = ${(qty * 5).toFixed(0)} kg</li>`;
+                    html += `<li>${((qty * 5) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                    html += `<li>€2,40/m² × ${qty} m² = €${(qty * 2.40).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">PU-schuim</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>0,12 bus/m² × ${qty} m² = ${(qty * 0.12).toFixed(1)} bussen</li>`;
+                    html += `<li>€0,94/m² × ${qty} m² = €${(qty * 0.94).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">Gitex</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>1,10 m²/m² × ${qty} m² = ${(qty * 1.10).toFixed(1)} m²</li>`;
+                    html += `<li>${((qty * 1.10) / 50).toFixed(2)} rollen (50 m²/rol)</li>`;
+                    html += `<li>€1,43/m² × ${qty} m² = €${(qty * 1.43).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">Knauf Snelband</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>5 kg/m² × ${qty} m² = ${(qty * 5).toFixed(0)} kg</li>`;
+                    html += `<li>${((qty * 5) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                    html += `<li>€4,87/m² × ${qty} m² = €${(qty * 4.87).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="total-badge">';
+                    html += '<span>TOTAAL</span>';
+                    html += `<span>€${(qty * matPrijs).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                else if (component === 'ultradun') {
+                    const systeem = document.getElementById('ultradun-systeem').value;
+                    
+                    if (systeem === 'sulfatex') {
+                        html += '<div class="material-badge">Kiesol MB</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>0,6 L/m² × ${qty} m² = ${(qty * 0.6).toFixed(1)} L</li>`;
+                        html += `<li>${((qty * 0.6) / 5).toFixed(1)} jerrycans (5 L/jerrycan)</li>`;
+                        html += `<li>€5,40/m² × ${qty} m² = €${(qty * 5.40).toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="material-badge">Waterplug</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>0,15 kg/m² × ${qty} m² = ${(qty * 0.15).toFixed(1)} kg</li>`;
+                        html += `<li>${((qty * 0.15) / 5).toFixed(2)} emmers (5 kg/emmer)</li>`;
+                        html += `<li>€0,60/m² × ${qty} m² = €${(qty * 0.60).toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="material-badge">Autex</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>1,10 m²/m² × ${qty} m² = ${(qty * 1.10).toFixed(1)} m²</li>`;
+                        html += `<li>${((qty * 1.10) / 50).toFixed(2)} rollen (50 m²/rol)</li>`;
+                        html += `<li>€0,66/m² × ${qty} m² = €${(qty * 0.66).toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="material-badge">WP Sulfatex Rapid fixatie</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>3,5 kg/m² × ${qty} m² = ${(qty * 3.5).toFixed(1)} kg</li>`;
+                        html += `<li>${((qty * 3.5) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                        html += `<li>€6,30/m² × ${qty} m² = €${(qty * 6.30).toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="material-badge">WP Sulfatex Rapid toplaag</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>7 kg/m² × ${qty} m² = ${(qty * 7).toFixed(0)} kg</li>`;
+                        html += `<li>${((qty * 7) / 25).toFixed(1)} zakken (25 kg/zak)</li>`;
+                        html += `<li>€17,70/m² × ${qty} m² = €${(qty * 17.70).toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="total-badge">';
+                        html += '<span>TOTAAL</span>';
+                        html += `<span>€${(qty * 30.66).toFixed(2)}</span>`;
+                        html += '</div>';
+                    } else {
+                        // Sopro ZR Turbo Maxx
+                        const emmers = Math.ceil(qty / 4);
+                        html += '<div class="material-badge">Sopro ZR Turbo Maxx 2K</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>4 m² per emmer (6 kg set)</li>`;
+                        html += `<li>${qty} m² = ${emmers} emmers</li>`;
+                        html += `<li>€83/emmer × ${emmers} = €${(emmers * 83).toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="total-badge">';
+                        html += '<span>TOTAAL</span>';
+                        html += `<span>€${(emmers * 83).toFixed(2)}</span>`;
+                        html += '</div>';
+                    }
+                }
+                else if (component === 'fixfinish') {
+                    html += '<div class="material-badge">Stucprimer</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>0,14 L/m² × ${qty} m² = ${(qty * 0.14).toFixed(1)} L</li>`;
+                    html += `<li>${((qty * 0.14) / 5).toFixed(2)} jerrycans (5 L/jerrycan)</li>`;
+                    html += `<li>€0,49/m² × ${qty} m² = €${(qty * 0.49).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">Fix & Finish (3mm dikte)</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>2,4 kg/m² × ${qty} m² = ${(qty * 2.4).toFixed(1)} kg</li>`;
+                    html += `<li>${((qty * 2.4) / 20).toFixed(1)} zakken (20 kg/zak)</li>`;
+                    html += `<li>€2,12/m² × ${qty} m² = €${(qty * 2.12).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="total-badge">';
+                    html += '<span>TOTAAL</span>';
+                    html += `<span>€${(qty * 2.12).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                else if (component === 'fassashield') {
+                    html += '<div class="material-badge">Fassa Shield membraan</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>1,05 m²/m² × ${qty} m² = ${(qty * 1.05).toFixed(1)} m²</li>`;
+                    html += `<li>${((qty * 1.05) / 7.125).toFixed(1)} rollen (7,125 m²/rol)</li>`;
+                    html += `<li>€33,89/m² × ${qty} m² = €${(qty * 33.89).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">Fassa Superbond lijm</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>${((qty * 1.05) / 7).toFixed(1)} emmers (7 m²/emmer)</li>`;
+                    html += `<li>€4,27/m² × ${qty} m² = €${(qty * 4.27).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="material-badge">Fix & Finish afwerking (3mm)</div>';
+                    html += '<ul class="info-list">';
+                    html += `<li>2,4 kg/m² × ${qty} m² = ${(qty * 2.4).toFixed(1)} kg</li>`;
+                    html += `<li>${((qty * 2.4) / 20).toFixed(1)} zakken (20 kg/zak)</li>`;
+                    html += `<li>€2,12/m² × ${qty} m² = €${(qty * 2.12).toFixed(2)}</li>`;
+                    html += '</ul>';
+                    
+                    html += '<div class="total-badge">';
+                    html += '<span>TOTAAL</span>';
+                    html += `<span>€${(qty * 40.28).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                else if (component === 'bijkomendpleister') {
+                    const oppervlakte_bezetten = parseFloat(document.getElementById('bezetten').value) || 0;
+                    if (oppervlakte_bezetten > 0 && qty > 0) {
+                        const totaal_kg = qty * 25;
+                        const kg_per_m2 = totaal_kg / oppervlakte_bezetten;
+                        const totale_dikte = kg_per_m2 / 7.5;
+                        const extra_dikte = Math.max(0, totale_dikte - 2);
+                        
+                        const standaard_zakken = (oppervlakte_bezetten * 2 * 7.5) / 25;
+                        const extra_zakken = qty - standaard_zakken;
+                        
+                        // Alleen info tonen als er ECHT bijkomend werk is
+                        if (qty > standaard_zakken) {
+                            html += '<div class="material-badge">Verbruik pleister</div>';
+                            html += '<ul class="info-list">';
+                            html += `<li>Standaard (2cm): ${standaard_zakken.toFixed(2)} zakken 25kg</li>`;
+                            html += `<li>Extra verbruik: ${extra_zakken.toFixed(2)} zakken 25kg</li>`;
+                            html += `<li><strong>Totaal verbruikt: ${qty.toFixed(2)} zakken 25kg Ã¢Å“â€œ</strong></li>`;
+                            html += '</ul>';
+                            
+                            html += '<div class="material-badge">Berekening</div>';
+                            html += '<ul class="info-list">';
+                            html += `<li>${qty} zakken × 25 kg = ${totaal_kg} kg</li>`;
+                            html += `<li>${totaal_kg} kg ÃƒÂ· ${oppervlakte_bezetten} m² = ${kg_per_m2.toFixed(2)} kg/m²</li>`;
+                            html += `<li>${kg_per_m2.toFixed(2)} kg/m² ÃƒÂ· 7,5 = ${totale_dikte.toFixed(2)} cm dikte</li>`;
+                            html += `<li>Extra dikte: ${totale_dikte.toFixed(2)} - 2 = ${extra_dikte.toFixed(2)} cm</li>`;
+                            html += `<li>${extra_dikte.toFixed(2)} cm × €10/cm/m² × ${oppervlakte_bezetten} m²</li>`;
+                            html += '</ul>';
+                            
+                            html += '<div class="total-badge">';
+                            html += '<span>TOTAAL</span>';
+                            html += `<span>€${(extra_dikte * 10 * oppervlakte_bezetten).toFixed(2)}</span>`;
+                            html += '</div>';
+                        } else {
+                            html += '<p style="color: #718096; font-size: 16px; text-align: center; padding: 20px;">Geen bijkomend pleisterwerk</p>';
+                        }
+                    } else {
+                        html += '<p style="color: #e53e3e;">Vul eerst het oppervlak "Bezetten" in.</p>';
+                    }
+                }
+                else if (component === 'egalisatie') {
+                    const oppervlakte_bezetten = parseFloat(document.getElementById('bezetten').value) || 0;
+                    if (oppervlakte_bezetten > 0 && qty > 0) {
+                        const totaal_kg = qty * 25;
+                        const kg_per_m2 = totaal_kg / oppervlakte_bezetten;
+                        const totale_dikte_mm = kg_per_m2 / 2; // 2 kg per mm per m²
+                        
+                        html += '<div class="material-badge">Verbruik Mixem Sub</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>Standaard: 2 kg per mm per m²</li>`;
+                        html += `<li>Dikte: ${totale_dikte_mm.toFixed(2)} mm gemiddeld</li>`;
+                        html += `<li><strong>Totaal verbruikt: ${qty} zakken Mixemsub</strong></li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="material-badge">Berekening</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>${qty} zakken × 25 kg = ${totaal_kg} kg</li>`;
+                        html += `<li>${totaal_kg} kg ÃƒÂ· ${oppervlakte_bezetten} m² = ${kg_per_m2.toFixed(2)} kg/m²</li>`;
+                        html += `<li>${kg_per_m2.toFixed(2)} kg/m² ÃƒÂ· 2 = ${totale_dikte_mm.toFixed(2)} mm dikte</li>`;
+                        html += `<li>${totale_dikte_mm.toFixed(2)} mm × €3,50/mm/m² × ${oppervlakte_bezetten} m²</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="total-badge">';
+                        html += '<span>TOTAAL</span>';
+                        html += `<span>€${(totale_dikte_mm * 3.50 * oppervlakte_bezetten).toFixed(2)}</span>`;
+                        html += '</div>';
+                    } else {
+                        html += '<p style="color: #e53e3e;">Vul eerst het oppervlak "Bezetten" in.</p>';
+                    }
+                }
+                else if (component === 'hoekprofielen') {
+                    const oppervlakte_bezetten = parseFloat(document.getElementById('bezetten').value) || 0;
+                    if (oppervlakte_bezetten > 0 && qty > 0) {
+                        const mat_prijs = qty * 0.80;
+                        const tijd_uren = (qty / 4);  // 15 min per m = 4m per uur
+                        const arb_prijs = tijd_uren * LOON;
+                        const totaal_prijs = mat_prijs + arb_prijs;
+                        
+                        html += '<div class="material-badge">MDB hoekprofiel, percar pro</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>${qty} m × €0,80/m = €${mat_prijs.toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="material-badge">Berekening</div>';
+                        html += '<ul class="info-list">';
+                        html += `<li>15 min per m Ã¢â€ â€™ ${(qty * 0.25).toFixed(2)} uur</li>`;
+                        html += `<li>${(qty * 0.25).toFixed(2)} u × €${LOON}/u = €${arb_prijs.toFixed(2)}</li>`;
+                        html += '</ul>';
+                        
+                        html += '<div class="total-badge">';
+                        html += '<span>TOTAAL</span>';
+                        html += `<span>€${totaal_prijs.toFixed(2)}</span>`;
+                        html += '</div>';
+                    } else if (qty > 0 && oppervlakte_bezetten === 0) {
+                        html += '<p style="color: #e53e3e;">Vul eerst het oppervlak "Bezetten" in.</p>';
+                    }
+                }
+                
+                html += '</div>';
+            } else {
+                html += '<div class="info-section">';
+                html += '<div class="info-row">';
+                html += '<span class="info-label">Vul eerst een oppervlakte in om de materiaalinfo te zien</span>';
+                html += '</div>';
+                html += '</div>';
+            }
+            
+            body.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        window.closeModal = function() {
+            document.getElementById('infoModal').classList.remove('show');
+        }
+
+        document.getElementById('infoModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        window.toggleExtras = function() {
+            const container = document.getElementById('extra-components');
+            const icon = document.getElementById('toggle-icon');
+            container.classList.toggle('open');
+            icon.classList.toggle('open');
+        }
+
+        window.toggleBijkomend = function() {
+            const bijkomend = document.getElementById('bijkomend-werk');
+            const icon = document.getElementById('toggle-icon-bijkomend');
+            
+            bijkomend.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        }
+
+        function isEvenredigVerdeeld(qty) {
+            if (qty.afkappen <= 0 || qty.injecties <= 0 || 
+                qty.membraan <= 0 || qty.bezetten <= 0) {
+                return false;
+            }
+            
+            const values = [qty.afkappen, qty.injecties, qty.membraan, qty.bezetten];
+            const first = values[0];
+            const tolerance = 0.01;
+            return values.every(v => Math.abs(v - first) < tolerance);
+        }
+
+        function berekenVasteTarieven(qty) {
+            const tarieven = {
+                afkappen: 13,
+                injecties: 31,
+                membraan: 28,
+                bezetten: 38
+            };
+            
+            const result = { 
+                manuren: 0, 
+                mat: 0, 
+                loon: 0, 
+                TO: 0, 
+                totaal: 0, 
+                winst: 0, 
+                werkdagen_TO: 0 
+            };
+            
+            let totaal_manuren = 0;
+            ['afkappen', 'injecties', 'membraan', 'bezetten'].forEach(comp => {
+                if (qty[comp] > 0) {
+                    const manuren = (qty[comp] / COMP[comp].cap_per_man) * 8;
+                    totaal_manuren += manuren;
+                }
+            });
+            
+            result.manuren = totaal_manuren;
+            // V6.5: T&O met 4 uur speling - maar alleen bij effectief werk
+            let werkdagen = 0;
+            if (totaal_manuren > 0) {
+                werkdagen = Math.ceil((totaal_manuren - 4) / 16);
+                if (werkdagen < 1) werkdagen = 1;
+            }
+            result.werkdagen_TO = werkdagen;
+            
+            ['afkappen', 'injecties', 'membraan', 'bezetten'].forEach(comp => {
+                if (qty[comp] > 0) {
+                    const prijs_per_eenheid = tarieven[comp];
+                    const subtotaal = qty[comp] * prijs_per_eenheid;
+                    const tijd = (qty[comp] / COMP[comp].cap_per_man) * 8;
+                    const mat = qty[comp] * COMP[comp].mat;
+                    const loon = tijd * LOON;
+                    
+                    result[comp] = { 
+                        prijs: prijs_per_eenheid,
+                        subtotaal: subtotaal,
+                        tijd: tijd,
+                        manuren: tijd,
+                        mat: mat,
+                        loon: loon
+                    };
+                    
+                    result.totaal += subtotaal;
+                    result.mat += mat;
+                    result.loon += loon;
+                }
+            });
+            
+            result.TO = result.werkdagen_TO * TO_PER_DAG;
+            result.winst = result.totaal * 0.25;
+            
+            const kosten = result.totaal * 0.75;
+            const werkelijke_kosten = result.mat + result.loon + result.TO;
+            
+            if (werkelijke_kosten > 0) {
+                const factor = kosten / werkelijke_kosten;
+                result.loon = result.loon * factor;
+            }
+            
+            result.mat = result.totaal - result.loon - result.TO - result.winst;
+
+            return result;
+        }
+
+        function berekenDynamisch(qty) {
+            const result = { 
+                manuren: 0, 
+                mat: 0, 
+                loon: 0, 
+                TO: 0, 
+                totaal: 0, 
+                winst: 0 
+            };
+            
+            ['afkappen', 'injecties', 'membraan', 'bezetten'].forEach(comp => {
+                if (qty[comp] > 0) {
+                    const manuren = (qty[comp] / COMP[comp].cap_per_man) * 8;
+                    const loon = manuren * LOON;
+                    const mat = qty[comp] * COMP[comp].mat;
+                    
+                    result[comp] = { manuren, loon, mat };
+                    result.manuren += manuren;
+                    result.loon += loon;
+                    result.mat += mat;
+                }
+            });
+
+            if (qty.xps > 0) {
+                const dikte = parseInt(document.getElementById('xps-dikte').value);
+                const mat_prijs = XPS_MAT[dikte];
+                const manuren = (qty.xps / XTRA.xps.cap_per_man) * 8;
+                const loon = manuren * LOON;
+                const mat = qty.xps * mat_prijs;
+                
+                result.xps = { manuren, loon, mat };
+                result.manuren += manuren;
+                result.loon += loon;
+                result.mat += mat;
+            }
+
+            if (qty.ultradun > 0) {
+                const systeem = document.getElementById('ultradun-systeem').value;
+                const systeem_data = XTRA.ultradun[systeem];
+                
+                let mat;
+                if (systeem === 'sopro') {
+                    // Sopro: trapberekening emmers
+                    const emmers = Math.ceil(qty.ultradun / 4);
+                    mat = emmers * 83;
+                } else {
+                    // Sulfatex: standaard m² berekening
+                    mat = qty.ultradun * systeem_data.mat;
+                }
+                
+                const manuren = (qty.ultradun / systeem_data.cap_per_man) * 8;
+                const loon = manuren * LOON;
+                
+                result.ultradun = { manuren, loon, mat };
+                result.manuren += manuren;
+                result.loon += loon;
+                result.mat += mat;
+            }
+
+            if (qty.fixfinish > 0) {
+                const manuren = (qty.fixfinish / XTRA.fixfinish.cap_per_man) * 8;
+                const loon = manuren * LOON;
+                const mat = qty.fixfinish * XTRA.fixfinish.mat;
+                
+                result.fixfinish = { manuren, loon, mat };
+                result.manuren += manuren;
+                result.loon += loon;
+                result.mat += mat;
+            }
+
+            if (qty.fassashield > 0) {
+                const manuren = (qty.fassashield / XTRA.fassashield.cap_per_man) * 8;
+                const loon = manuren * LOON;
+                const mat = qty.fassashield * XTRA.fassashield.mat;
+                
+                result.fassashield = { manuren, loon, mat };
+                result.manuren += manuren;
+                result.loon += loon;
+                result.mat += mat;
+            }
+
+            // V6.5: T&O met 4 uur speling - maar alleen bij effectief werk
+            let werkdagen = 0;
+            if (result.manuren > 0) {
+                werkdagen = Math.ceil((result.manuren - 4) / 16);
+                if (werkdagen < 1) werkdagen = 1;
+            }
+            result.werkdagen_TO = werkdagen;
+            result.TO = result.werkdagen_TO * TO_PER_DAG;
+
+            const werkelijke_kosten = result.mat + result.loon + result.TO;
+            result.winst = werkelijke_kosten / 3;
+            result.totaal = werkelijke_kosten + result.winst;
+
+            ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 
+             'ultradun', 'fixfinish', 'fassashield'].forEach(comp => {
+                if (result[comp]) {
+                    const comp_manuren = result[comp].manuren;
+                    const comp_ratio = comp_manuren / result.manuren;
+                    
+                    result[comp].TO = result.TO * comp_ratio;
+                    
+                    const comp_kosten = result[comp].mat + 
+                                       result[comp].loon + 
+                                       result[comp].TO;
+                    result[comp].winst = comp_kosten / 3;
+                    result[comp].subtotaal = comp_kosten + result[comp].winst;
+                    result[comp].prijs = result[comp].subtotaal / qty[comp];
+                    result[comp].tijd = result[comp].manuren;
+                }
+            });
+
+            // V6.6: Herbereken subtotalen op basis van afgeronde eenheidsprijzen
+            // Dit zorgt dat visuele wiskunde klopt: qty × prijs = subtotaal
+            let totaal_herberekend = 0;
+            ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 
+             'ultradun', 'fixfinish', 'fassashield'].forEach(comp => {
+                if (result[comp] && qty[comp] > 0) {
+                    // Rond eenheidsprijs af naar 2 decimalen
+                    const eenheidsprijs_afgerond = Math.round(result[comp].prijs * 100) / 100;
+                    // Herbereken subtotaal op basis van afgeronde eenheidsprijs
+                    const subtotaal_nieuw = qty[comp] * eenheidsprijs_afgerond;
+                    result[comp].subtotaal = subtotaal_nieuw;
+                    result[comp].prijs = eenheidsprijs_afgerond;
+                    totaal_herberekend += subtotaal_nieuw;
+                }
+            });
+            result.totaal = totaal_herberekend;
+
+            return result;
+        }
+
+        function calculate() {
+            const qty = {
+                afkappen: parseFloat(document.getElementById('afkappen').value) || 0,
+                injecties: parseFloat(document.getElementById('injecties').value) || 0,
+                membraan: parseFloat(document.getElementById('membraan').value) || 0,
+                bezetten: parseFloat(document.getElementById('bezetten').value) || 0,
+                xps: parseFloat(document.getElementById('xps').value) || 0,
+                ultradun: parseFloat(document.getElementById('ultradun').value) || 0,
+                fixfinish: parseFloat(document.getElementById('fixfinish').value) || 0,
+                fassashield: parseFloat(document.getElementById('fassashield').value) || 0
+            };
+
+            let result;
+            
+            if (isEvenredigVerdeeld(qty) && qty.xps === 0 && qty.ultradun === 0 && qty.fixfinish === 0 && qty.fassashield === 0) {
+                result = berekenVasteTarieven(qty);
+            } else {
+                result = berekenDynamisch(qty);
+            }
+
+            // === BIJKOMEND PLEISTERWERK BEREKENING (APARTE LOGICA - V3.5) ===
+            let bijkomend_totaal = 0;
+            const bijkomendpleister_zakken = parseFloat(document.getElementById('bijkomendpleister').value) || 0;
+            const oppervlakte_bezetten = qty.bezetten;
+            
+            if (bijkomendpleister_zakken > 0 && oppervlakte_bezetten > 0) {
+                // Bereken diktes vanuit zakken
+                const totaal_kg = bijkomendpleister_zakken * 25;
+                const kg_per_m2 = totaal_kg / oppervlakte_bezetten;
+                const totale_dikte = kg_per_m2 / 7.5; // 1 cm = 7,5 kg/m²
+                const extra_dikte = Math.max(0, totale_dikte - 2);
+                
+                // Bereken standaard zakken (2cm dikte)
+                const standaard_zakken = (oppervlakte_bezetten * 2 * 7.5) / 25;
+                
+                // Alleen als er MEER zakken zijn dan standaard, is er bijkomend werk
+                if (bijkomendpleister_zakken > standaard_zakken) {
+                    // Bereken vergoeding: €10 per cm per m² voor extra dikte
+                    bijkomend_totaal = extra_dikte * 10 * oppervlakte_bezetten;
+                    
+                    // Update displays
+                    const prijs_per_m2 = bijkomend_totaal / oppervlakte_bezetten;
+                    document.getElementById('price-bijkomendpleister').textContent = 
+                        `€${prijs_per_m2.toFixed(2)}/m²`;
+                    document.getElementById('totale-dikte-bijkomendpleister').textContent = 
+                        `${totale_dikte.toFixed(2)} cm`;
+                    document.getElementById('extra-dikte-bijkomendpleister').textContent = 
+                        `${extra_dikte.toFixed(2)} cm`;
+                    document.getElementById('tot-bijkomendpleister').textContent = 
+                        `€${bijkomend_totaal.toFixed(2)}`;
+                    
+                    // Toon breakdown
+                    const card = document.getElementById('card-bijkomendpleister');
+                    const breakdown = document.getElementById('breakdown-bijkomendpleister');
+                    card.classList.add('active');
+                    breakdown.classList.add('show');
+                } else {
+                    // Geen bijkomend werk - verberg breakdown
+                    const card = document.getElementById('card-bijkomendpleister');
+                    const breakdown = document.getElementById('breakdown-bijkomendpleister');
+                    card.classList.remove('active');
+                    breakdown.classList.remove('show');
+                    document.getElementById('price-bijkomendpleister').textContent = '€0,00/m²';
+                    document.getElementById('totale-dikte-bijkomendpleister').textContent = '0 cm';
+                    document.getElementById('extra-dikte-bijkomendpleister').textContent = '0 cm';
+                    document.getElementById('tot-bijkomendpleister').textContent = '€0';
+                }
+            } else {
+                // Verberg breakdown
+                const card = document.getElementById('card-bijkomendpleister');
+                const breakdown = document.getElementById('breakdown-bijkomendpleister');
+                card.classList.remove('active');
+                breakdown.classList.remove('show');
+                document.getElementById('price-bijkomendpleister').textContent = '€0,00/m²';
+                document.getElementById('totale-dikte-bijkomendpleister').textContent = '0 cm';
+                document.getElementById('extra-dikte-bijkomendpleister').textContent = '0 cm';
+                document.getElementById('tot-bijkomendpleister').textContent = '€0';
+            }
+
+            // === BIJKOMENDE EGALISATIE BEREKENING (MIXEMSUB) ===
+            let egalisatie_totaal = 0;
+            const egalisatie_zakken = parseFloat(document.getElementById('egalisatie').value) || 0;
+            
+            if (egalisatie_zakken > 0 && oppervlakte_bezetten > 0) {
+                // Bereken dikte vanuit zakken
+                const totaal_kg = egalisatie_zakken * 25;
+                const kg_per_m2 = totaal_kg / oppervlakte_bezetten;
+                const totale_dikte_mm = kg_per_m2 / 2; // 2 kg per mm per m²
+                
+                // Voor Mixemsub telt ELKE mm mee (geen standaard zoals bij pleisterwerk)
+                // Bereken vergoeding ONDERAANNEMER: €3,50 per mm per m²
+                egalisatie_totaal = totale_dikte_mm * 3.50 * oppervlakte_bezetten;
+                
+                // Update displays
+                const prijs_per_m2 = egalisatie_totaal / oppervlakte_bezetten;
+                document.getElementById('price-egalisatie').textContent = 
+                    `€${prijs_per_m2.toFixed(2)}/m²`;
+                document.getElementById('totale-dikte-egalisatie').textContent = 
+                    `${totale_dikte_mm.toFixed(2)} mm`;
+                document.getElementById('tot-egalisatie').textContent = 
+                    `€${egalisatie_totaal.toFixed(2)}`;
+                
+                // Toon breakdown
+                const card = document.getElementById('card-egalisatie');
+                const breakdown = document.getElementById('breakdown-egalisatie');
+                card.classList.add('active');
+                breakdown.classList.add('show');
+            } else {
+                // Verberg breakdown
+                const card = document.getElementById('card-egalisatie');
+                const breakdown = document.getElementById('breakdown-egalisatie');
+                card.classList.remove('active');
+                breakdown.classList.remove('show');
+                document.getElementById('price-egalisatie').textContent = '€0,00/m²';
+                document.getElementById('totale-dikte-egalisatie').textContent = '0 mm';
+                document.getElementById('tot-egalisatie').textContent = '€0';
+            }
+
+            // === HOEKPROFIELEN BEREKENING (STRIKT GESCHEIDEN) ===
+            let hoekprofielen_totaal = 0;
+            const hoekprofielen_meters = parseFloat(document.getElementById('hoekprofielen').value) || 0;
+            
+            if (hoekprofielen_meters > 0 && oppervlakte_bezetten > 0) {
+                // Materiaal: €0,80/m
+                const hoekprofielen_mat = hoekprofielen_meters * 0.80;
+                
+                // Arbeid: 15 min per m = 0,25 uur per m
+                const hoekprofielen_tijd = hoekprofielen_meters * 0.25;
+                const hoekprofielen_arb = hoekprofielen_tijd * LOON;
+                
+                // Totaal
+                hoekprofielen_totaal = hoekprofielen_mat + hoekprofielen_arb;
+                
+                // Update displays - prijs per meter (niet per m²!)
+                const prijs_per_meter = 0.80 + (0.25 * LOON);  // €0,80 materiaal + arbeid voor 1m
+                document.getElementById('price-hoekprofielen').textContent = 
+                    `€${prijs_per_meter.toFixed(2)}/m`;
+                document.getElementById('mat-hoekprofielen').textContent = 
+                    `€${hoekprofielen_mat.toFixed(2)}`;
+                document.getElementById('arb-hoekprofielen').textContent = 
+                    `€${hoekprofielen_arb.toFixed(2)}`;
+                
+                const uren = Math.floor(hoekprofielen_tijd);
+                const minuten = Math.round((hoekprofielen_tijd - uren) * 60);
+                document.getElementById('tijd-hoekprofielen').textContent = 
+                    `${uren}u ${minuten}m`;
+                document.getElementById('tot-hoekprofielen').textContent = 
+                    `€${hoekprofielen_totaal.toFixed(2)}`;
+                
+                // Toon breakdown
+                const card = document.getElementById('card-hoekprofielen');
+                const breakdown = document.getElementById('breakdown-hoekprofielen');
+                card.classList.add('active');
+                breakdown.classList.add('show');
+            } else {
+                // Verberg breakdown
+                const card = document.getElementById('card-hoekprofielen');
+                const breakdown = document.getElementById('breakdown-hoekprofielen');
+                card.classList.remove('active');
+                breakdown.classList.remove('show');
+                document.getElementById('price-hoekprofielen').textContent = '€0,00/m';
+                document.getElementById('mat-hoekprofielen').textContent = '€0';
+                document.getElementById('arb-hoekprofielen').textContent = '€0';
+                document.getElementById('tijd-hoekprofielen').textContent = '0u 0m';
+                document.getElementById('tot-hoekprofielen').textContent = '€0';
+            }
+            
+            // Toon/verberg bijkomend pleisterwerk rij in totaaloverzicht
+            const row_bijkomend = document.getElementById('row-bijkomendpleister');
+            if (bijkomend_totaal > 0) {
+                row_bijkomend.style.display = 'flex';
+            } else {
+                row_bijkomend.style.display = 'none';
+            }
+            
+            // Toon/verberg egalisatie rij in totaaloverzicht
+            const row_egalisatie = document.getElementById('row-egalisatie');
+            if (egalisatie_totaal > 0) {
+                row_egalisatie.style.display = 'flex';
+            } else {
+                row_egalisatie.style.display = 'none';
+            }
+            
+            // Toon/verberg hoekprofielen rij in totaaloverzicht
+            const row_hoekprofielen = document.getElementById('row-hoekprofielen');
+            if (hoekprofielen_totaal > 0) {
+                row_hoekprofielen.style.display = 'flex';
+            } else {
+                row_hoekprofielen.style.display = 'none';
+            }
+            
+            // Update hoofdcomponenten titel op basis van extra componenten
+            const hoofdTitle = document.getElementById('hoofdcomponenten-title');
+            const hasExtraComponents = qty.xps > 0 || qty.ultradun > 0 || qty.fixfinish > 0 || qty.fassashield > 0;
+            hoofdTitle.textContent = hasExtraComponents ? 'Hoofd- en Extra Componenten' : 'Hoofdcomponenten';
+            
+            // Toon/verberg bijkomende componenten titel
+            const bijkomendTitle = document.getElementById('bijkomend-title');
+            if (bijkomend_totaal > 0 || egalisatie_totaal > 0 || hoekprofielen_totaal > 0) {
+                bijkomendTitle.style.display = 'block';
+            } else {
+                bijkomendTitle.style.display = 'none';
+            }
+            
+            // V6.4: Bijkomend werk krijgt GEEN marge - pure kosten doorrekening
+            // V6.6: Herbereken op basis van afgeronde eenheidsprijs
+            // Component subtotalen blijven ongewijzigd (behouden hun proportionele marge)
+            
+            // Pleisterwerk: rond af en herbereken
+            if (bijkomend_totaal > 0 && oppervlakte_bezetten > 0) {
+                const eenheidsprijs = bijkomend_totaal / oppervlakte_bezetten;
+                const eenheidsprijs_afgerond = Math.round(eenheidsprijs * 100) / 100;
+                bijkomend_totaal = oppervlakte_bezetten * eenheidsprijs_afgerond;
+            }
+            
+            // Egalisatie: rond af en herbereken
+            if (egalisatie_totaal > 0 && oppervlakte_bezetten > 0) {
+                const eenheidsprijs = egalisatie_totaal / oppervlakte_bezetten;
+                const eenheidsprijs_afgerond = Math.round(eenheidsprijs * 100) / 100;
+                egalisatie_totaal = oppervlakte_bezetten * eenheidsprijs_afgerond;
+            }
+            
+            // Hoekprofielen: rond af en herbereken (hergebruik hoekprofielen_meters van regel 1780)
+            if (hoekprofielen_totaal > 0 && hoekprofielen_meters > 0) {
+                const eenheidsprijs = hoekprofielen_totaal / hoekprofielen_meters;
+                const eenheidsprijs_afgerond = Math.round(eenheidsprijs * 100) / 100;
+                hoekprofielen_totaal = hoekprofielen_meters * eenheidsprijs_afgerond;
+            }
+            
+            const bijkomend_werk_kosten = bijkomend_totaal + egalisatie_totaal + hoekprofielen_totaal;
+            if (bijkomend_werk_kosten > 0) {
+                result.totaal += bijkomend_werk_kosten; // Geen marge, enkel kosten
+            }
+
+            ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 'ultradun', 'fixfinish', 'fassashield'].forEach(comp => {
+                const card = document.getElementById(`card-${comp}`);
+                const breakdown = document.getElementById(`breakdown-${comp}`);
+                
+                if (qty[comp] > 0 && result[comp]) {
+                    card.classList.add('active');
+                    breakdown.classList.add('show');
+                    
+                    const unit = (comp === 'injecties') ? 'm' : 'm²';
+                    document.getElementById(`price-${comp}`).textContent = 
+                        `€${result[comp].prijs.toFixed(2)}/${unit}`;
+                    document.getElementById(`mat-${comp}`).textContent = 
+                        `€${result[comp].mat.toFixed(2)}`;
+                    document.getElementById(`arb-${comp}`).textContent = 
+                        `€${result[comp].loon.toFixed(2)}`;
+                    
+                    const uren = Math.floor(result[comp].tijd);
+                    const minuten = Math.round((result[comp].tijd - uren) * 60);
+                    document.getElementById(`tijd-${comp}`).textContent = 
+                        `${uren}u ${minuten}m`;
+                    document.getElementById(`tot-${comp}`).textContent = 
+                        `€${result[comp].subtotaal.toFixed(2)}`;
+                } else {
+                    card.classList.remove('active');
+                    breakdown.classList.remove('show');
+                    document.getElementById(`price-${comp}`).textContent = 
+                        `€0,00/${(comp === 'injecties') ? 'm' : 'm²'}`;
+                }
+            });
+
+            const totaal_uren = Math.floor(result.manuren);
+            const totaal_minuten = Math.round((result.manuren - totaal_uren) * 60);
+            document.getElementById('total-tijd').textContent = 
+                `${totaal_uren}u ${totaal_minuten}m`;
+            document.getElementById('total-arbeid').textContent = 
+                `€${result.loon.toFixed(2)}`;
+            document.getElementById('total-materiaal').textContent = 
+                `€${result.mat.toFixed(2)}`;
+            document.getElementById('total-to').textContent = 
+                `€${result.TO.toFixed(2)}`;
+            document.getElementById('total-bijkomendpleister').textContent = 
+                `€${bijkomend_totaal.toFixed(2)}`;
+            document.getElementById('total-egalisatie').textContent = 
+                `€${egalisatie_totaal.toFixed(2)}`;
+            document.getElementById('total-hoekprofielen').textContent = 
+                `€${hoekprofielen_totaal.toFixed(2)}`;
+            document.getElementById('total-winst').textContent = 
+                `€${result.winst.toFixed(2)}`;
+            document.getElementById('total-prijs').textContent = 
+                `€${result.totaal.toFixed(2)}`;
+            
+            // === FACTUUROVERZICHT ONDERAANNEMER ===
+            const invoiceItemsContainer = document.getElementById('invoice-items');
+            invoiceItemsContainer.innerHTML = '';
+            
+            const componentNames = {
+                'afkappen': 'Afkappen',
+                'injecties': 'Injecties',
+                'membraan': 'SNC-membraan',
+                'bezetten': 'Bezetten',
+                'xps': 'XPS isolatie',
+                'ultradun': 'Compacte dichting',
+                'fixfinish': 'Fix & Finish',
+                'fassashield': 'Fassa Shield isolatie'
+            };
+            
+            // Hoofdcomponenten + Extra componenten
+            ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 
+             'ultradun', 'fixfinish', 'fassashield'].forEach(comp => {
+                if (qty[comp] > 0 && result[comp]) {
+                    const unit = (comp === 'injecties') ? 'm' : 'm²';
+                    const eenheidsprijs = result[comp].prijs;  // Al afgerond in V6.6
+                    const subtotaal = result[comp].subtotaal;   // Al herberekend in V6.6
+                    
+                    const row = document.createElement('div');
+                    row.className = 'invoice-row';
+                    row.innerHTML = `
+                        <span class="component-name">${componentNames[comp]}</span>
+                        <span class="component-calc">${qty[comp].toFixed(2)} ${unit} × 
+                        €${eenheidsprijs.toFixed(2)}</span>
+                        <span class="component-total">€${subtotaal.toFixed(2)}</span>
+                    `;
+                    invoiceItemsContainer.appendChild(row);
+                }
+            });
+            
+            // Bijkomend pleisterwerk (V6.4: GEEN marge, pure kosten)
+            // V6.6: Gebruik herberekend bedrag op basis van afgeronde eenheidsprijs
+            if (bijkomend_totaal > 0 && oppervlakte_bezetten > 0) {
+                const eenheidsprijs = bijkomend_totaal / oppervlakte_bezetten;  // Al afgerond en herberekend
+                const row = document.createElement('div');
+                row.className = 'invoice-row';
+                row.innerHTML = `
+                    <span class="component-name">Bijkomend pleisterwerk</span>
+                    <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m² × 
+                    €${eenheidsprijs.toFixed(2)}</span>
+                    <span class="component-total">€${bijkomend_totaal.toFixed(2)}</span>
+                `;
+                invoiceItemsContainer.appendChild(row);
+            }
+            
+            // Bijkomende egalisatie (V6.4: GEEN marge, pure kosten)
+            // V6.6: Gebruik herberekend bedrag op basis van afgeronde eenheidsprijs
+            if (egalisatie_totaal > 0 && oppervlakte_bezetten > 0) {
+                const eenheidsprijs = egalisatie_totaal / oppervlakte_bezetten;  // Al afgerond en herberekend
+                const row = document.createElement('div');
+                row.className = 'invoice-row';
+                row.innerHTML = `
+                    <span class="component-name">Bijkomende egalisatie</span>
+                    <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m² × 
+                    €${eenheidsprijs.toFixed(2)}</span>
+                    <span class="component-total">€${egalisatie_totaal.toFixed(2)}</span>
+                `;
+                invoiceItemsContainer.appendChild(row);
+            }
+            
+            // Hoekprofielen (V6.4: GEEN marge, pure kosten)
+            // V6.6: Gebruik herberekend bedrag op basis van afgeronde eenheidsprijs
+            // Hergebruik hoekprofielen_meters van regel 1780
+            if (hoekprofielen_totaal > 0 && hoekprofielen_meters > 0) {
+                const eenheidsprijs = hoekprofielen_totaal / hoekprofielen_meters;  // Al afgerond en herberekend
+                    const row = document.createElement('div');
+                    row.className = 'invoice-row';
+                    row.innerHTML = `
+                        <span class="component-name">Plaatsen hoekprofiel(en)</span>
+                        <span class="component-calc">${hoekprofielen_meters.toFixed(2)} m × 
+                        €${eenheidsprijs.toFixed(2)}</span>
+                        <span class="component-total">€${hoekprofielen_totaal.toFixed(2)}</span>
+                    `;
+                    invoiceItemsContainer.appendChild(row);
+                }
+            
+            // Update totaal factuur
+            document.getElementById('invoice-total').textContent = 
+                `€${result.totaal.toFixed(2)}`;
+        }
+
+        calculate();
+        
+        // Voeg event listeners toe voor alle input velden
+        const inputIds = [
+            'afkappen', 'injecties', 'membraan', 'bezetten',
+            'hoekprofielen', 'bijkomendpleister', 'egalisatie',
+            'xps', 'ultradun', 'fixfinish', 'fassashield'
+        ];
+        
+        inputIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', calculate);
+            }
+        });
+        
+        // Ook voor dropdowns
+        const selectIds = ['xps-dikte', 'ultradun-systeem'];
+        selectIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('change', calculate);
+            }
+        });
+    </script>
+</body>
+</html>
