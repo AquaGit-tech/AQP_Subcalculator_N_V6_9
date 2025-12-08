@@ -6,42 +6,244 @@
     <meta name="description" content="AQP Subcalculator - Onderaannemer prijsberekening voor Vecon">
     <meta name="author" content="Vecon">
     <meta name="robots" content="noindex, nofollow">
-    <title>AQP Subcalculator V10.0</title>
+    <title>AQP Subcalculator V11.0</title>
     <style>
     /* ============================================================
-       AQP SUBCALCULATOR V10.0
+       AQP SUBCALCULATOR V11.0
        ============================================================
-       BUILD DATE: 05-12-2025
+       BUILD DATE: 08-12-2025
        STATUS: PRODUCTION READY
        
-       CHANGELOG V10.0:
-       ---------------
-       [UTF-8 ENCODING CONVERSIE]
-       - EUR → € (alle user-facing weergaves)
-       - m2 → m² (placeholders, units, price-badges, modals)
-       - (c) → © (footer copyright)
-       - Technische identifiers ongewijzigd
+       CHANGELOG V11.0:
+       -----------------
+       [UTF-8 ENCODING] Complete conversie conform KB V2.0
        
-       CHANGELOG V9.29:
-       ---------------
-       [SOPRO - GLASVEZELWAPENING VERWIJDERD]
-       - Wapening checkbox volledig verwijderd uit Sopro component
-       - Sopro is nu alleen mortel (conform KB: wapening is optioneel)
-       - Formule: 1,2 kg/m2 per mm droge laagdikte x € 3,125/kg (EUR 75/24kg)
-       - Prijzen: 2 lagen EUR 7,50, 3 lagen EUR 11,25, 4 lagen EUR 15,00
+       [VALUTA] EUR → € symbool
+       - Alle prijsbadges: EUR X,XX/m² → € X,XX/m²
+       - Alle breakdown spans: EUR X → € X
+       - Alle summary values: EUR X,XX → € X,XX
+       - Alle factuuroverzicht regels: EUR → €
+       - Alle info modal prijzen: EUR → €
+       - Alle dormant reset values: EUR → €
        
-       [FIX & FINISH - CORRECTIES]
-       - Naam: "ABS Finish" -> "Fix & Finish"
-       - Verbruik: 1,8 kg/m2 -> 4 kg/m2
-       - Prijs: EUR 2,61 -> EUR 2,40/m2 (4 kg x € 0,60/kg)
+       [EENHEDEN] m2 → m² superscript
+       - Alle unit-inside spans: m2 → m²
+       - Alle sr-only labels: in m2 → in m²
+       - Alle placeholders: (m2) → (m²)
+       - Alle prijsbadges eenheden: /m2 → /m²
+       - Alle verbruik strings: kg/m², L/m², m²/m²
+       - Alle info modal eenheden: /cm/m² formaat
+       - Alle mat-qty regels: X m² = Y kg
+       
+       [COPYRIGHT] (c) → © symbool
+       - Footer: (c) 2025 Vecon → © 2025 Vecon
+       
+       [PIJLEN] -> → → symbool
+       - Mat-qty regels: -> X m² → → X m²
+       
+       [TECHNISCH] Behouden in ASCII
+       - Element IDs: vloer_m2, price-membraan etc.
+       - Data attributes: data-field, data-key
+       - JavaScript variabelen: inputs.vloer_m2, qty.bezetten
+       - Config keys: cap_per_man, mat_prijs
+       
+       CHANGELOG V10.11:
+       -----------------
+       [UX PARITEIT] Volledige V34.5 Sales Calculator UX-alignment
+       
+       [CSS] Dormant tekst styling
+       - .dormant select, .dormant input: color text-muted, font-weight 500
+       - Keuzevelden blijven grijs zolang kaart inactief is
+       
+       [JS] Card activation systeem (V30.15 pattern)
+       - cardPrimaryField mapping: bepaalt welk numeriek veld kaart activeert
+       - inputToCard mapping: koppelt elk input/select aan parent card
+       - shouldActivateCard(): check of primair veld waarde > 0 heeft
+       - deactivateCardIfEmpty(): zet kaart terug naar dormant als leeg
+       - Dropdown selecties alleen activeren kaart NIET meer
+       
+       [JS] Auto-scroll focus (V33.2 pattern)
+       - scrollFieldIntoView(): scrollt actief veld naar 1/3 van viewport
+       - Smooth scroll animatie voor prettige mobiele UX
+       - 50ms delay voorkomt conflict met toetsenbord
+       
+       [JS] Auto-select bestaande waarde (V27.0 pattern)
+       - Bij focus wordt gehele getal direct geselecteerd
+       - Directe overtypen mogelijk zonder eerst te selecteren
+       
+       [JS] Enhanced event handlers
+       - Input handler: dormant logica met shouldActivateCard check
+       - Select handler: alleen activeren als primair veld waarde heeft
+       - Reset handler: expliciete dormant state voor alle kaarten
+       
+       CHANGELOG V10.10:
+       -----------------
+       [BUGFIX] Fassa Shield capaciteit
+       - cap_per_man: 15 -> 25 m2/dag
+       - Conform Master Component Sheet V1.3 en Sales Calculator V34.2
+       
+       [PRIJSCORRECTIE] CODEX Power CX2 / Membraan
+       - Verpakkingsprijs: EUR 15,00 -> EUR 15,80 (zak 25kg)
+       - Eenheidsprijs: EUR 0,60/kg -> EUR 0,632/kg
+       - Membraan mat: EUR 7,80 -> EUR 7,98 (CODEX 3,95 + SNC 4,03)
+       - Conform Master Component Sheet V1.3
+       
+       CHANGELOG V10.9:
+       ----------------
+       [BUGFIX] Inconsistente if/else structuur
+       - Info modal volgorde: sopro -> asocret -> sulfatex (consistent)
+       - berekenDynamisch volgorde: sopro -> asocret -> sulfatex (consistent)
+       - Expliciete checks voor alle 3 systemen, geen fallback
+       
+       [BUGFIX] materialState reset toegevoegd
+       - Reset knop reset nu alle materialState checkboxes naar true
+       - Alle materialen weer enabled na reset
+       
+       [CLEANUP] Dubbele event listeners verwijderd
+       - sulfatex-lagen verwijderd uit forEach array (aparte listener behouden)
+       - asocret-dikte verwijderd uit forEach array (aparte listener behouden)
+       
+       [CLEANUP] Comment header functie signatures geüpdatet
+       
+       CHANGELOG V10.8:
+       ----------------
+       [FEATURE] Asocret dikte dropdown (10/15/20mm)
+       - asocret-dikte dropdown toegevoegd
+       - Capaciteit per dikte: 25/20/15 m2/dag (met Autex: -20%)
+       - Materiaal per dikte: EUR 16,20/24,30/32,40 per m2
+       - Info modal met dikte-specifieke verbruiken
+       - Conform V34.2 Sales Calculator en Master Sheet V1.2
+       
+       CHANGELOG V10.7:
+       ----------------
+       [FEATURE] Sulfatex lagen + Autex optie
+       - sulfatex-lagen dropdown (2/3 lagen)
+       - sulfatex-autex dropdown (zonder/met)
+       - Capaciteit: 32,50/21,67 m2/dag (met Autex: -20%)
+       - Materiaal: EUR 18,00/27,00 per m² (+EUR 3,24 met Autex)
+       - Info modal met checkboxes
+       - Conform V34.2 Sales Calculator en Master Sheet V1.2
+       
+       CHANGELOG V10.6:
+       ----------------
+       [FEATURE] Sopro Autex optie
+       - sopro-autex dropdown toegevoegd (zonder/met)
+       - Capaciteit met Autex: -20% (26/17,33/13 m2/dag)
+       - Materiaal met Autex: +EUR 3,24/m2
+       - Info modal met Autex checkbox
+       - Conform V34.2 Sales Calculator
+       
+       CHANGELOG V10.5:
+       ----------------
+       [FEATURE] XPS Gitex methode dropdown
+       - xps-gitex dropdown toegevoegd (naden/volledig)
+       - XPS_GITEX_SYSTEMS datastructuur (conform Wedi)
+       - Dynamische capaciteit: naden 35, volledig 30 m2/dag
+       - Dynamische gitex/snelband prijzen per methode
+       
+       [FIX] Gitex prijscorrectie (Master Sheet V1.2)
+       - Gitex eenheidsprijs: EUR 1,2534 -> EUR 1,0665/m2
+       - XPS naden gitex: EUR 0,31 -> EUR 0,27
+       - XPS volledig gitex: EUR 1,38 -> EUR 1,17
+       - Wedi naden gitex: EUR 0,31 -> EUR 0,27
+       - Wedi volledig gitex: EUR 1,38 -> EUR 1,17
+       
+       [CLEANUP] Dode code verwijderd
+       - XPS_MAT object (ongebruikt)
+       - WEDI_MAT object (ongebruikt)
+       
+       CHANGELOG V10.4:
+       ----------------
+       [GRONDERING] Mat-qty regels toegevoegd voor alle 6 producten
+       - Stucprimer: 0,10 kg/m², verpakking 5L
+       - Sopro GD749: 0,15 kg/m², verpakking 5kg
+       - Technicure CS: 0,50 L/m², verpakking 25L
+       - Keisol MB: 0,15 kg/m², verpakking 30kg
+       - Betokontakt: 0,30 kg/m², verpakking 20kg
+       - Technicure AS: 0,33 kg/m², verpakking 5kg (trapfunctie)
+       - Format: "-> qty m² = X,X kg/L (Y,YY emmers a grootte)"
+       
+       CHANGELOG V10.2:
+       ----------------
+       [FIX] Mat-qty Wedi plaat format
+       - Toegevoegd "a" voor plaatafmeting
+       - Was: "X,XX platen 2600x600"
+       - Nu: "X,XX platen a 2600x600"
+       
+       CHANGELOG V10.1:
+       ----------------
+       [INFO MODALS - MAT-QTY FORMAT FIX]
+       - Volledig format hersteld: totaal + exacte verpakkingseenheden
+       - Format: "-> qty m² = X kg/L/m2 (Y,YY zakken/emmers/rollen a grootte)"
+       - Voorbeeld: "-> 42 m² = 630 kg (25,20 zakken a 25kg)"
+       - Alle 20 materiaalregels consistent aangepast
+       
+       CHANGELOG V10:
+       --------------
+       [PRIJSVERIFICATIE - ALLE DYNAMISCHE BREAKDOWNS]
+       Systematische verificatie tegen technische fiches en factuuroprijzen.
+       NB: VAST/ANKER systeem (EUR 13/31/28/38) blijft ONGEWIJZIGD.
+       
+       [INJECTIES]
+       - Fassa Inject: EUR 15,80 -> EUR 14,22/L (emmer EUR 142,20/10L)
+       - Prijs/m: EUR 3,16 -> EUR 2,84
+       
+       [MEMBRAAN]
+       - SNC-Membraan: verbruik 1,10 -> 1,00 m²/m² (overlap verwijderd)
+       - SNC prijs: EUR 4,43 -> EUR 4,03/m2
+       - Totaal: EUR 8,20 -> EUR 7,80/m2
+       
+       [BEZETTEN]
+       - MP75 zakprijs: EUR 9,08/25kg (eenheidsprijs EUR 0,3632/kg)
+       - Prijs/m2: EUR 5,70 -> EUR 5,45
+       
+       [XPS ISOLATIESYSTEEM]
+       - L-gips: forfait EUR 2,40 -> EUR 0,75 (1,8 kg/m² x € 0,4104/kg)
+       - Gitex: EUR 1,43 -> EUR 1,38 (rol EUR 125,34/100m2)
+       - Snelband: 3mm -> 1mm, EUR 1,34 -> EUR 0,44 (0,8 kg x € 0,552/kg)
+       - Totalen: 20mm EUR 5,72, 30mm EUR 6,40, 40mm EUR 7,82, 
+                  50mm EUR 9,13, 60mm EUR 10,45
+       
+       [WEDI SYSTEEM]
+       - Flexlijm -> CODEX: EUR 5,00 -> EUR 3,77/m2
+       - Gitex naden: EUR 0,42 -> EUR 0,31 (0,25 m2 x € 1,2534)
+       - Snelband naden: EUR 0,16 -> EUR 0,11 (0,20 kg x € 0,552)
+       - Totalen: 4mm EUR 35,61, 6mm EUR 33,17, 10mm EUR 32,00
+       
+       [ASOCRET]
+       - Autex: EUR 2,16 -> EUR 3,24 (rol EUR 178,20/55m2)
+       - Verbruik: 1,1 -> 1,0 m²/m² (overlap verwijderd)
+       - Totaal: EUR 18,36 -> EUR 19,44/m2
+       
+       [FIX & FINISH]
+       - Laagdikte: 3mm (gebruiker keuze)
+       - Verbruik: 4 -> 2,55 kg/m² (0,85 kg/mm x 3mm)
+       - Zakprijs: EUR 17,67/25kg (eenheidsprijs EUR 0,7068/kg)
+       - Prijs/m2: EUR 2,40 -> EUR 1,80
+       
+       [FASSA SHIELD]
+       - Superbond: EUR 4,27 -> EUR 4,20 (2,21 kg/m² x € 1,90/kg)
+       - Afwerking: EUR 2,12 -> EUR 1,80 (Fix & Finish 3mm)
+       - Totaal: EUR 40,28 -> EUR 39,89/m2
+       
+       [GRONDERING - 6 PRODUCTEN]
+       - Stucprimer: EUR 0,70 -> EUR 0,52 (0,10 kg x € 5,234/kg)
+       - Sopro GD749: EUR 1,17 (ongewijzigd)
+       - Technicure CS: EUR 2,91 -> EUR 3,64 (0,50 L x € 7,28/L)
+       - Keisol MB: EUR 3,10 -> EUR 0,78 (0,15 kg x € 5,17/kg)
+       - Betokontakt: EUR 1,73 -> EUR 0,84 (0,30 kg x € 2,79/kg)
+       - Technicure AS: ongewijzigd (trapfunctie)
+       
+       [BIJKOMEND PLEISTERWERK]
+       - MP75: EUR 2,85 -> EUR 2,72/cm/m2 (7,5 kg x € 0,3632/kg)
        
        CHANGELOG V9.28:
        ---------------
        [BIJKOMEND PLEISTERWERK - PUUR MP75]
        - Herwerkt naar puur MP75 basis (zonder Snelband)
-       - Materiaal: MP75 EUR 2,85/cm/m² (7,5 kg/cm x € 0,38/kg)
-       - Arbeid: EUR 7,15/cm/m² (vast)
-       - Totaal: EUR 10,00/cm/m² (ongewijzigd)
+       - Materiaal: MP75 EUR 2,85/cm/m2 (7,5 kg/cm x € 0,38/kg)
+       - Arbeid: EUR 7,15/cm/m2 (vast)
+       - Totaal: EUR 10,00/cm/m2 (ongewijzigd)
        - Info modal met checkbox voor MP75 materiaal
        - Uitvinken MP75 = alleen arbeidskosten (EUR 7,15/cm/m²)
        
@@ -67,8 +269,8 @@
        ---------------
        [MEMBRAAN CORRECTIE - HYGROSCOPISCHE KB]
        - Twee checkboxes: CODEX POWER CX2 + SNC-Membraan
-       - CODEX POWER CX2: 6,25 kg/m² x € 0,60/kg = € 3,77/m2
-       - SNC-Membraan: 1,10 m²/m² x € 4,03/m2 = € 4,43/m2
+       - CODEX POWER CX2: 6,25 kg/m² x € 0,60/kg = EUR 3,77/m2
+       - SNC-Membraan: 1,10 m²/m² x € 4,03/m2 = EUR 4,43/m2
        - Materiaalprijs: EUR 8,00/m2 -> EUR 8,20/m2 (KB conform)
        - Bron: HYGROSCOPISCHE_BEHANDELING_MET_SNC-MEMBRAAN_KB
        
@@ -81,12 +283,13 @@
          * Membraan: getMembraanMatPrijs()
          * Bezetten: getBezettenMatPrijs()
          * XPS: getXpsMatPrijs(dikte)
-         * Sopro: getSoproMatPrijs(lagen)
-         * Asocret: getAsocretMatPrijs(metAutex)
+         * Sopro: getSoproMatPrijs(lagen, metAutex)
+         * Sulfatex: getSulfatexMatPrijs(lagen, metAutex)
+         * Asocret: getAsocretMatPrijs(dikte, metAutex)
          * Fixfinish: getFixfinishMatPrijs()
          * Fassashield: getFassashieldMatPrijs()
        - berekenVasteTarieven() ook aangepast voor checkbox sync
-       - Resultaat: uitvinken checkbox = € 0,00 in BEIDE weergaves
+       - Resultaat: uitvinken checkbox = EUR 0,00 in BEIDE weergaves
        
        CHANGELOG V9.24:
        ---------------
@@ -101,7 +304,7 @@
        - Kiesol MB -> Fassa Inject (correcte productnaam)
        - Materiaalprijs: EUR 2,00/m -> EUR 3,30/m (KB conform)
        - Twee checkboxes: Fassa Inject (EUR 3,16/m) + PU-schuim (EUR 0,14/m)
-       - Verbruik: 0,2 L/m x € 15,80/L = € 3,16/m
+       - Verbruik: 0,2 L/m x € 15,80/L = EUR 3,16/m
        - PU-schuim: forfait EUR 0,14/m
        - Bron: FASSA_INJECT_VOCHTINJECTIES_KNOWLEDGE_BASE
        
@@ -110,12 +313,12 @@
        [ALLE INFO MODALS HERSCHREVEN - KB V1.0 STANDAARD]
        - Alle modals naar two-line layout met checkboxes
        - Injecties: checkbox Kiesol MB (EUR 2,00/m)
-       - Membraan: checkbox SNC-membraan (EUR 8,00/m2)
-       - Bezetten: checkbox MP75 gipspleister (EUR 5,70/m2)
+       - Membraan: checkbox SNC-membraan (EUR 8,00/m²)
+       - Bezetten: checkbox MP75 gipspleister (EUR 5,70/m²)
        - XPS: checkboxes plaat/L-gips/PU-schuim/Gitex/Snelband
        - Ultradun Sopro: checkboxes per laag + wapening
        - Ultradun Asocret: checkboxes mortel + Autex
-       - Fix & Finish: checkbox Fix & Finish (EUR 2,61/m2)
+       - Fix & Finish: checkbox Fix & Finish (EUR 2,61/m²)
        - Fassa Shield: checkboxes Shield/Superbond/Afwerking
        - Consistente V30.13/V30.18 styling voor alle modals
        - materialState uitgebreid voor alle componenten
@@ -127,8 +330,8 @@
        [WEDI GITEX METHODE - V30.18 SYNC]
        - Dropdown: "Naden verstevigen" vs "Volledig oppervlak"
        - WEDI_GITEX_SYSTEMS met productiviteit/prijzen per methode
-       - Naden: 30 m2/dag, Gitex 0,12 m²/m² = € 0,42
-       - Volledig: 25 m2/dag, Gitex 1,10 m²/m² = € 3,85
+       - Naden: 30 m2/dag, Gitex 0,12 m²/m² = EUR 0,42
+       - Volledig: 25 m2/dag, Gitex 1,10 m²/m² = EUR 3,85
        - Snelband variabel per methode (naden = 12% van volledig)
        - Info modal: toont gekozen methode en variabele prijzen
        - Capaciteit en materiaal dynamisch per methode
@@ -148,9 +351,9 @@
        ---------------
        [SNELBAND CORRECTIE]
        - Laagdikte: 3mm (voor Gitex verankering)
-       - Verbruik: 0,8 kg/mm x 3mm = 2,4 kg/m2
-       - Prijs: EUR 14,00/25kg = € 0,56/kg
-       - Kosten: 2,4 x 0,56 = € 1,34/m2 (was EUR 2,00)
+       - Verbruik: 0,8 kg/mm x 3mm = 2,4 kg/m²
+       - Prijs: EUR 14,00/25kg = EUR 0,56/kg
+       - Kosten: 2,4 x 0,56 = EUR 1,34/m2 (was EUR 2,00)
        - Totaal 10mm: EUR 38,66 -> EUR 38,00 (-EUR 0,66)
        - Bron: Knauf datasheet + praktijk
        
@@ -167,7 +370,7 @@
        CHANGELOG V9.17:
        ---------------
        [FLEXLIJM CORRECTIE]
-       - Verbruik: 14 kg/m2 -> 6,25 kg/m2 (praktijk: 4m2/zak)
+       - Verbruik: 14 kg/m² -> 6,25 kg/m² (praktijk: 4m2/zak)
        - Prijs: EUR 11,20 -> EUR 5,00 per m2
        - Bron: Hygroscopische KB + praktijkervaring
        - Impact Wedi totaal: -EUR 6,20/m2
@@ -183,7 +386,7 @@
        - getWediMatPrijs(): effectieve prijs o.b.v. checkboxes
        - toggleWediMaterial(): toggle + herbereken
        - Info modal Wedi: checkboxes per materiaal
-       - Uitvinken materiaal = € 0,00 (AQP levert)
+       - Uitvinken materiaal = EUR 0,00 (AQP levert)
        - Direct update componentkaart bij toggle
        
        CHANGELOG V9.15:
@@ -208,7 +411,7 @@
        ---------------
        [BEZETTEN MATERIAALKOST]
        - mat: 6.50 -> 5.70 (puur MP75, geen Snelband)
-       - 15 kg/m² x € 0,38/kg = € 5,70/m2
+       - 15 kg/m² x € 0,38/kg = EUR 5,70/m2
        - Info modal ook aangepast naar 5.70
        
        CHANGELOG V9.12:
@@ -561,6 +764,11 @@
     }
     /* Hide in dormant state */
     .dormant .unit-inside, .dormant .label-inside { display: none !important; }
+    /* V11.0: Placeholder-style in dormant state (grey + lighter weight) - V34.5 parity */
+    .dormant select, .dormant input { 
+        color: var(--text-muted) !important; 
+        font-weight: 500 !important; 
+    }
 
     /* Select Styling - V3.0 met SVG arrow */
     .input-wrapper select {
@@ -1103,6 +1311,17 @@
     }
     .material-checkbox-item.disabled .mat-calc {
         opacity: 0.5;
+    }
+    .material-checkbox-item .mat-qty {
+        margin-left: 28px;
+        margin-top: 2px;
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 500;
+    }
+    .material-checkbox-item.disabled .mat-qty {
+        opacity: 0.5;
+        color: var(--text-muted);
     }
 
     /* === FOOTER - V3.0 STYLING === */
@@ -1693,7 +1912,7 @@
                                     <h2 class="card-title" id="title-bijkomendpleister">
                                         Bijkomend pleisterwerk</h2>
                                     <span class="price-badge" id="price-bijkomendpleister">
-                                        EUR 0,00/m²</span>
+                                        € 0,00/m²</span>
                                 </div>
                                 <div class="input-stack">
                                     <div class="input-wrapper">
@@ -1902,6 +2121,13 @@
                                         <span class="unit-inside" aria-hidden="true">mm</span>
                                         <span class="label-inside" aria-hidden="true">dikte xps plaat</span>
                                     </div>
+                                    <div class="input-wrapper select-wrapper">
+                                        <label for="xps-gitex" class="sr-only">Gitex afwerking methode XPS</label>
+                                        <select id="xps-gitex" data-field="gitex_xps">
+                                            <option value="naden" selected>Naden verstevigen met Gitex</option>
+                                            <option value="volledig">Volledig oppervlak met Gitex</option>
+                                        </select>
+                                    </div>
                                     <div class="input-wrapper">
                                         <label for="xps" class="sr-only">XPS isolatie oppervlakte in m²</label>
                                         <input type="text" id="xps" 
@@ -2070,12 +2296,45 @@
                                             <option value="met">Met Autex glasvezelwapening</option>
                                         </select>
                                     </div>
+                                    <!-- V10.8: Asocret dikte dropdown -->
+                                    <div class="input-wrapper select-wrapper" id="asocret-dikte-wrapper" style="display: none;">
+                                        <label for="asocret-dikte" class="sr-only">Laagdikte Asocret</label>
+                                        <select id="asocret-dikte" data-field="dikte_asocret">
+                                            <option value="10" selected>10mm: Licht</option>
+                                            <option value="15">15mm: Standaard</option>
+                                            <option value="20">20mm: Zwaar</option>
+                                        </select>
+                                    </div>
+                                    <!-- V10.6: Sopro Autex dropdown -->
+                                    <div class="input-wrapper select-wrapper" id="sopro-autex-wrapper" style="display: none;">
+                                        <label for="sopro-autex" class="sr-only">Autex glasvezelwapening Sopro</label>
+                                        <select id="sopro-autex" data-field="autex_sopro">
+                                            <option value="zonder" selected>Zonder Autex glasvezelwapening</option>
+                                            <option value="met">Met Autex glasvezelwapening</option>
+                                        </select>
+                                    </div>
                                     <div class="input-wrapper select-wrapper" id="sopro-lagen-wrapper" style="display: none;">
                                         <label for="sopro-lagen" class="sr-only">Aantal lagen Sopro</label>
                                         <select id="sopro-lagen" data-field="lagen_sopro">
                                             <option value="2" selected>2 lagen</option>
                                             <option value="3">3 lagen</option>
                                             <option value="4">4 lagen</option>
+                                        </select>
+                                    </div>
+                                    <!-- V10.7: Sulfatex Autex dropdown -->
+                                    <div class="input-wrapper select-wrapper" id="sulfatex-autex-wrapper" style="display: none;">
+                                        <label for="sulfatex-autex" class="sr-only">Autex glasvezelwapening Sulfatex</label>
+                                        <select id="sulfatex-autex" data-field="autex_sulfatex">
+                                            <option value="zonder" selected>Zonder Autex glasvezelwapening</option>
+                                            <option value="met">Met Autex glasvezelwapening</option>
+                                        </select>
+                                    </div>
+                                    <!-- V10.7: Sulfatex lagen dropdown -->
+                                    <div class="input-wrapper select-wrapper" id="sulfatex-lagen-wrapper" style="display: none;">
+                                        <label for="sulfatex-lagen" class="sr-only">Aantal lagen Sulfatex</label>
+                                        <select id="sulfatex-lagen" data-field="lagen_sulfatex">
+                                            <option value="2" selected>2 lagen (3,2mm)</option>
+                                            <option value="3">3 lagen (4,8mm)</option>
                                         </select>
                                     </div>
                                     <div class="input-wrapper">
@@ -2202,53 +2461,59 @@
     const LOON = 48.03;
     const TO_PER_DAG = 208;
 
-    // Hoofdcomponenten configuratie
+    // V10: Hoofdcomponenten configuratie (dynamische materiaalkosten)
     const COMP = {
         afkappen: { cap_per_man: 35, mat: 0 },
-        injecties: { cap_per_man: 60, mat: 3.16 },  // V9.24: Fassa Inject alleen
-        membraan: { cap_per_man: 40, mat: 8.20 },   // V9.26: CODEX + SNC KB
-        bezetten: { cap_per_man: 20, mat: 5.70 }
+        injecties: { cap_per_man: 60, mat: 2.84 },  // V10: Fassa Inject EUR 14,22/L x 0,2 L/m
+        membraan: { cap_per_man: 40, mat: 7.98 },   // V10.10: CODEX 3,95 + SNC 4,03
+        bezetten: { cap_per_man: 20, mat: 5.45 }    // V10: MP75 15 kg x € 0,3632/kg
     };
 
     // Extra componenten configuratie
     const XTRA = {
-        xps: { cap_per_man: 30 },  // V7.0: aangepast van 20 naar 30
+        xps: {},  // V10.5: capaciteit nu dynamisch via getXpsCapaciteit()
         wedi: { cap_per_man: 25 },  // V8.0: Wedi Bouwplatensysteem
         ultradun: {
-            sulfatex: { cap_per_man: 30, mat: 5.50 },
-            sopro: { 
-                mat_per_laag: 3.75,  // V9.29: 1,2 kg/m2/mm x € 3,125/kg = € 3,75/laag
-                // Capaciteit en materiaal per aantal lagen (basis 32,5 m2/dag)
+            // V10.7: Sulfatex Rapid met lagen en Autex optie
+            sulfatex: { 
+                mat_per_laag: 9.00,  // 1,6 kg/m²/laag x € 5,625/kg = EUR 9,00/laag
                 lagen: {
-                    2: { cap_per_man: 32.50, mat: 7.50 },
-                    3: { cap_per_man: 21.67, mat: 11.25 },
-                    4: { cap_per_man: 16.25, mat: 15.00 }
+                    2: { cap_per_man: 32.50, cap_met_autex: 26.00, mat: 18.00, mat_met_autex: 21.24 },
+                    3: { cap_per_man: 21.67, cap_met_autex: 17.33, mat: 27.00, mat_met_autex: 30.24 }
                 }
             },
-            // V9.1: Asocret-M30 waterdichte multimortel (Schomburg)
+            sopro: { 
+                mat_per_laag: 3.75,  // V9.29: 1,2 kg/m²/mm x € 3,125/kg = EUR 3,75/laag
+                // V10.6: Capaciteit en materiaal per aantal lagen met Autex optie
+                lagen: {
+                    2: { cap_per_man: 32.50, cap_met_autex: 26.00, mat: 7.50, mat_met_autex: 10.74 },
+                    3: { cap_per_man: 21.67, cap_met_autex: 17.33, mat: 11.25, mat_met_autex: 14.49 },
+                    4: { cap_per_man: 16.25, cap_met_autex: 13.00, mat: 15.00, mat_met_autex: 18.24 }
+                }
+            },
+            // V10.8: Asocret-M30 met dikte dropdown (10/15/20mm)
             asocret: {
-                cap_zonder_autex: 30,       // 30 m2/dag zonder Autex
-                cap_met_autex: 25,          // 25 m2/dag met Autex
-                mat_zonder_autex: 16.20,    // EUR 16,20/m2 (14 kg x € 1,157/kg)
-                mat_met_autex: 18.36,       // EUR 18,36/m2 (incl. Autex EUR 2,16)
-                naam: "Schomburg, Asocret-M30",
-                verbruik: "14 kg/m² (10mm)",
-                laagdikte: 10
+                mat_per_mm: 1.62,  // 1,4 kg/m²/mm x € 1,157/kg = EUR 1,62/mm
+                diktes: {
+                    10: { cap_per_man: 25, cap_met_autex: 20, mat: 16.20, mat_met_autex: 19.44, verbruik: 14 },
+                    15: { cap_per_man: 20, cap_met_autex: 16, mat: 24.30, mat_met_autex: 27.54, verbruik: 21 },
+                    20: { cap_per_man: 15, cap_met_autex: 12, mat: 32.40, mat_met_autex: 35.64, verbruik: 28 }
+                }
             }
         },
-        fixfinish: { cap_per_man: 35, mat: 2.40 },  // V9.29: 4 kg/m² x € 0,60/kg
-        fassashield: { cap_per_man: 15, mat: 40.28 },
-        // V8.8: Grondering Muur - 6 producten
+        fixfinish: { cap_per_man: 35, mat: 1.80 },  // V10: 2,55 kg/m² x € 0,7068/kg
+        fassashield: { cap_per_man: 25, mat: 39.89 },  // V10.10: cap conform Master Sheet V1.3
+        // V10: Grondering Muur - 6 producten (prijzen geverifieerd)
         grondering: {
-            stucprimer:    { cap_per_man: 140, mat: 0.70, naam: "Knauf, Stuc Primer", verbruik: "0,14 kg/m²" },
-            sopro_gd749:   { cap_per_man: 140, mat: 1.17, naam: "Sopro, GD749", verbruik: "0,15 kg/m²" },
-            technicure_cs: { cap_per_man: 140, mat: 2.91, naam: "Technichem, Technicure CS", verbruik: "0,40 L/m²" },
-            keisol_mb:     { cap_per_man: 140, mat: 3.10, naam: "Remmers, Keisol MB", verbruik: "0,60 L/m²" },
-            betocontact:   { cap_per_man: 120, mat: 1.73, naam: "Knauf, Betokontakt", verbruik: "0,25 kg/m²" },
+            stucprimer:    { cap_per_man: 140, mat: 0.52, naam: "Knauf, Stuc Primer", verbruik: "0,10 kg/m²", verbruik_num: 0.10, eenheid: "kg", emmer: 5, emmer_eenheid: "L" },
+            sopro_gd749:   { cap_per_man: 140, mat: 1.17, naam: "Sopro, GD749", verbruik: "0,15 kg/m²", verbruik_num: 0.15, eenheid: "kg", emmer: 5, emmer_eenheid: "kg" },
+            technicure_cs: { cap_per_man: 140, mat: 3.64, naam: "Technichem, Technicure CS", verbruik: "0,50 L/m²", verbruik_num: 0.50, eenheid: "L", emmer: 25, emmer_eenheid: "L" },
+            keisol_mb:     { cap_per_man: 140, mat: 0.78, naam: "Remmers, Keisol MB", verbruik: "0,15 kg/m²", verbruik_num: 0.15, eenheid: "kg", emmer: 30, emmer_eenheid: "kg" },
+            betocontact:   { cap_per_man: 120, mat: 0.84, naam: "Knauf, Betokontakt", verbruik: "0,30 kg/m²", verbruik_num: 0.30, eenheid: "kg", emmer: 20, emmer_eenheid: "kg" },
             technicure_as: { 
                 cap_per_man: 120, 
                 emmer_kg: 5,
-                emmer_prijs: 51.918,
+                emmer_prijs: 51.92,
                 verbruik_per_m2: 0.33,
                 naam: "Technichem, Technicure AS",
                 verbruik: "0,33 kg/m² (2 lagen)",
@@ -2257,56 +2522,66 @@
         }
     };
 
-    // XPS materiaalkosten per dikte
-    const XPS_MAT = {
-        20: 6.00,
-        30: 7.50,
-        40: 9.00,
-        50: 10.50,
-        60: 12.00
-    };
-
-    // V9.21: Wedi gitex systemen (naden vs volledig)
+    // V10.5: Wedi gitex systemen - Gitex prijs gecorrigeerd (EUR 1,0665/m²)
     const WEDI_GITEX_SYSTEMS = {
         naden: {
             naam: 'Naden verstevigen',
             productiviteit: 30,           // m2/dag per man
-            gitex_verbruik: 0.12,         // m2 Gitex per m2 wand
-            gitex_prijs: 0.42,            // 0.12 x 3.50
-            snelband_verbruik: 0.29,      // kg/m2 (alleen naden, ~12% van volledig)
-            snelband_prijs: 0.16          // 0.29 x 0.56
+            gitex_verbruik: 0.25,         // m2 Gitex per m2 wand
+            gitex_prijs: 0.27,            // V10.5: 0.25 x 1.0665 (was 0.31)
+            snelband_verbruik: 0.20,      // kg/m²
+            snelband_prijs: 0.11          // 0.20 x 0.552
         },
         volledig: {
             naam: 'Volledig oppervlak',
             productiviteit: 25,           // m2/dag per man
             gitex_verbruik: 1.10,         // m2 Gitex per m2 wand
-            gitex_prijs: 3.85,            // 1.10 x 3.50
-            snelband_verbruik: 2.40,      // kg/m2 (volledig oppervlak)
-            snelband_prijs: 1.34          // 2.40 x 0.56
+            gitex_prijs: 1.17,            // V10.5: 1.10 x 1.0665 (was 1.38)
+            snelband_verbruik: 0.88,      // kg/m²
+            snelband_prijs: 0.49          // 0.88 x 0.552
         }
     };
 
-    // Wedi materiaalkosten per dikte (plaat + flexlijm)
-    // V9.21: Gitex en Snelband apart via WEDI_GITEX_SYSTEMS
-    // Bron: WEDI_BOUWPLATEN_KNOWLEDGE_BASE_V1_4.md + V30.18
+    // V10.5: XPS gitex systemen (conform Wedi patroon)
+    const XPS_GITEX_SYSTEMS = {
+        naden: {
+            naam: 'Naden verstevigen',
+            productiviteit: 35,           // m2/dag per man
+            gitex_verbruik: 0.25,         // m2 Gitex per m2 wand
+            gitex_prijs: 0.27,            // 0.25 x 1.0665
+            snelband_verbruik: 0.20,      // kg/m²
+            snelband_prijs: 0.11          // 0.20 x 0.552
+        },
+        volledig: {
+            naam: 'Volledig oppervlak',
+            productiviteit: 30,           // m2/dag per man
+            gitex_verbruik: 1.10,         // m2 Gitex per m2 wand
+            gitex_prijs: 1.17,            // 1.10 x 1.0665
+            snelband_verbruik: 0.88,      // kg/m²
+            snelband_prijs: 0.49          // 0.88 x 0.552
+        }
+    };
+
+    // V10: Wedi materiaalkosten per dikte (plaat + CODEX lijm)
+    // Gitex en Snelband apart via WEDI_GITEX_SYSTEMS
     const WEDI_MAT_BREAKDOWN = {
         4: {
             plaat:    { naam: 'Wedi plaat 4mm', prijs: 31.42, 
                         verbruik: '1,05 m2/m²', eenheidsprijs: '29,92' },
-            flexlijm: { naam: 'Flexlijm C2 TE', prijs: 5.00,  
-                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,80/kg' }
+            flexlijm: { naam: 'CODEX POWER CX2', prijs: 3.77,  
+                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,60/kg' }
         },
         6: {
             plaat:    { naam: 'Wedi plaat 6mm', prijs: 28.98, 
                         verbruik: '1,05 m2/m²', eenheidsprijs: '27,60' },
-            flexlijm: { naam: 'Flexlijm C2 TE', prijs: 5.00,  
-                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,80/kg' }
+            flexlijm: { naam: 'CODEX POWER CX2', prijs: 3.77,  
+                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,60/kg' }
         },
         10: {
             plaat:    { naam: 'Wedi plaat 10mm', prijs: 27.81, 
                         verbruik: '1,05 m2/m²',  eenheidsprijs: '26,49' },
-            flexlijm: { naam: 'Flexlijm C2 TE',  prijs: 5.00,  
-                        verbruik: '6,25 kg/m²',  eenheidsprijs: '0,80/kg' }
+            flexlijm: { naam: 'CODEX POWER CX2',  prijs: 3.77,  
+                        verbruik: '6,25 kg/m²',  eenheidsprijs: '0,60/kg' }
         }
     };
     
@@ -2338,9 +2613,15 @@
             gitex: true,
             snelband: true
         },
-        // V9.29: Sopro alleen mortel
+        // V10.6: Sopro mortel + Autex
         sopro: {
-            mortel: true
+            mortel: true,
+            autex: true
+        },
+        // V10.7: Sulfatex mortel + Autex
+        sulfatex: {
+            mortel: true,
+            autex: true
         },
         asocret: {
             mortel: true,
@@ -2357,132 +2638,158 @@
         // V9.28: Bijkomend pleisterwerk puur MP75
         bijkomendpleister: {
             mp75: true
+        },
+        // V9.29: Grondering met checkbox
+        grondering: {
+            product: true
         }
     };
     
-    // V9.24: Material breakdown voor Injecties (alleen Fassa Inject)
+    // V10: Material breakdown voor Injecties (prijzen geverifieerd)
     const INJECTIES_MAT_BREAKDOWN = {
-        fassainject: { naam: 'Fassa Inject', prijs: 3.16, 
-                       verbruik: '0,2 L/m', eenheidsprijs: '15,80/L' }
+        fassainject: { naam: 'Fassa Inject', prijs: 2.84, 
+                       verbruik: '0,2 L/m', eenheidsprijs: '14,22/L' }
     };
     
-    // V9.26: Material breakdown voor Membraan (Hygroscopische KB)
+    // V10: Material breakdown voor Membraan (prijzen geverifieerd)
     const MEMBRAAN_MAT_BREAKDOWN = {
         codex: { naam: 'CODEX POWER CX2', prijs: 3.77, 
                  verbruik: '6,25 kg/m²', eenheidsprijs: '0,60/kg' },
-        snc:   { naam: 'SNC-Membraan', prijs: 4.43, 
-                 verbruik: '1,10 m2/m²', eenheidsprijs: '4,03/m²' }
+        snc:   { naam: 'SNC-Membraan', prijs: 4.03, 
+                 verbruik: '1,00 m2/m²', eenheidsprijs: '4,03/m²' }
     };
     
-    // V9.22: Material breakdown voor Bezetten
+    // V10: Material breakdown voor Bezetten (prijzen geverifieerd)
     const BEZETTEN_MAT_BREAKDOWN = {
-        mp75: { naam: 'MP75 gipspleister', prijs: 5.70, 
-                verbruik: '15 kg/m²', eenheidsprijs: '0,38/kg' }
+        mp75: { naam: 'MP75 gipspleister', prijs: 5.45, 
+                verbruik: '15 kg/m²', eenheidsprijs: '0,3632/kg' }
     };
     
-    // V9.22: Material breakdown voor XPS per dikte
-    // V9.27: XPS Material breakdown zonder PU-schuim
+    // V10.5: XPS Material breakdown - alleen vaste materialen
+    // Gitex en Snelband nu dynamisch via XPS_GITEX_SYSTEMS
     const XPS_MAT_BREAKDOWN = {
         20: {
-            plaat:    { naam: 'XPS plaat 20mm', prijs: 3.15, 
-                        verbruik: '1,05 m2/m²', eenheidsprijs: '3,00' },
-            lgips:    { naam: 'L-gips (punt)', prijs: 2.40, 
-                        verbruik: 'punt-systeem', eenheidsprijs: 'forfait' },
-            gitex:    { naam: 'Gitex weefsel', prijs: 1.43, 
-                        verbruik: '1,1 m2/m²', eenheidsprijs: '1,30/m²' },
-            snelband: { naam: 'Snelband 3mm', prijs: 1.34, 
-                        verbruik: '2,4 kg/m²', eenheidsprijs: '0,56/kg' }
+            plaat: { naam: 'XPS plaat 20mm', prijs: 3.15, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '3,00' },
+            lgips: { naam: 'L-gips', prijs: 0.75, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
         },
         30: {
-            plaat:    { naam: 'XPS plaat 30mm', prijs: 3.83, 
-                        verbruik: '1,05 m2/m²', eenheidsprijs: '3,65' },
-            lgips:    { naam: 'L-gips (punt)', prijs: 2.40, 
-                        verbruik: 'punt-systeem', eenheidsprijs: 'forfait' },
-            gitex:    { naam: 'Gitex weefsel', prijs: 1.43, 
-                        verbruik: '1,1 m2/m²', eenheidsprijs: '1,30/m²' },
-            snelband: { naam: 'Snelband 3mm', prijs: 1.34, 
-                        verbruik: '2,4 kg/m²', eenheidsprijs: '0,56/kg' }
+            plaat: { naam: 'XPS plaat 30mm', prijs: 3.83, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '3,65' },
+            lgips: { naam: 'L-gips', prijs: 0.75, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
         },
         40: {
-            plaat:    { naam: 'XPS plaat 40mm', prijs: 5.25, 
-                        verbruik: '1,05 m2/m²', eenheidsprijs: '5,00' },
-            lgips:    { naam: 'L-gips (punt)', prijs: 2.40, 
-                        verbruik: 'punt-systeem', eenheidsprijs: 'forfait' },
-            gitex:    { naam: 'Gitex weefsel', prijs: 1.43, 
-                        verbruik: '1,1 m2/m²', eenheidsprijs: '1,30/m²' },
-            snelband: { naam: 'Snelband 3mm', prijs: 1.34, 
-                        verbruik: '2,4 kg/m²', eenheidsprijs: '0,56/kg' }
+            plaat: { naam: 'XPS plaat 40mm', prijs: 5.25, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '5,00' },
+            lgips: { naam: 'L-gips', prijs: 0.75, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
         },
         50: {
-            plaat:    { naam: 'XPS plaat 50mm', prijs: 6.56, 
-                        verbruik: '1,05 m2/m²', eenheidsprijs: '6,25' },
-            lgips:    { naam: 'L-gips (punt)', prijs: 2.40, 
-                        verbruik: 'punt-systeem', eenheidsprijs: 'forfait' },
-            gitex:    { naam: 'Gitex weefsel', prijs: 1.43, 
-                        verbruik: '1,1 m2/m²', eenheidsprijs: '1,30/m²' },
-            snelband: { naam: 'Snelband 3mm', prijs: 1.34, 
-                        verbruik: '2,4 kg/m²', eenheidsprijs: '0,56/kg' }
+            plaat: { naam: 'XPS plaat 50mm', prijs: 6.56, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '6,25' },
+            lgips: { naam: 'L-gips', prijs: 0.75, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
         },
         60: {
-            plaat:    { naam: 'XPS plaat 60mm', prijs: 7.88, 
-                        verbruik: '1,05 m2/m²', eenheidsprijs: '7,50' },
-            lgips:    { naam: 'L-gips (punt)', prijs: 2.40, 
-                        verbruik: 'punt-systeem', eenheidsprijs: 'forfait' },
-            gitex:    { naam: 'Gitex weefsel', prijs: 1.43, 
-                        verbruik: '1,1 m2/m²', eenheidsprijs: '1,30/m²' },
-            snelband: { naam: 'Snelband 3mm', prijs: 1.34, 
-                        verbruik: '2,4 kg/m²', eenheidsprijs: '0,56/kg' }
+            plaat: { naam: 'XPS plaat 60mm', prijs: 7.88, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '7,50' },
+            lgips: { naam: 'L-gips', prijs: 0.75, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
         }
     };
     
-    // V9.22: Material breakdown voor Sopro Ultradun per aantal lagen
-    // V9.29: Sopro alleen mortel (wapening verwijderd)
-    // 1,2 kg/m2 per mm droge laagdikte x € 3,125/kg (EUR 75/24kg)
-    const SOPRO_MAT_BREAKDOWN = {
+    // V10.7: Material breakdown voor Sulfatex Rapid per aantal lagen
+    // Mortel: 1,6 kg/m² per laag x € 5,625/kg
+    // Autex: 1,0 m²/m² x € 3,24/m2
+    const SULFATEX_MAT_BREAKDOWN = {
         2: {
-            mortel:   { naam: 'Sopro ZR Turbo (2 lagen)', prijs: 7.50, 
-                        verbruik: '2,4 kg/m²', eenheidsprijs: '3,125/kg' }
+            mortel: { naam: 'Sulfatex Rapid (2 lagen)', prijs: 18.00, 
+                      verbruik: '3,2 kg/m²', eenheidsprijs: '5,625/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
         },
         3: {
-            mortel:   { naam: 'Sopro ZR Turbo (3 lagen)', prijs: 11.25, 
-                        verbruik: '3,6 kg/m²', eenheidsprijs: '3,125/kg' }
-        },
-        4: {
-            mortel:   { naam: 'Sopro ZR Turbo (4 lagen)', prijs: 15.00, 
-                        verbruik: '4,8 kg/m²', eenheidsprijs: '3,125/kg' }
+            mortel: { naam: 'Sulfatex Rapid (3 lagen)', prijs: 27.00, 
+                      verbruik: '4,8 kg/m²', eenheidsprijs: '5,625/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
         }
     };
     
-    // V9.22: Material breakdown voor Asocret
+    // V10.6: Material breakdown voor Sopro Ultradun per aantal lagen
+    // Mortel: 1,2 kg/m² per laag x € 3,125/kg
+    // Autex: 1,0 m²/m² x € 3,24/m2
+    const SOPRO_MAT_BREAKDOWN = {
+        2: {
+            mortel: { naam: 'Sopro ZR Turbo (2 lagen)', prijs: 7.50, 
+                      verbruik: '2,4 kg/m²', eenheidsprijs: '3,125/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
+        },
+        3: {
+            mortel: { naam: 'Sopro ZR Turbo (3 lagen)', prijs: 11.25, 
+                      verbruik: '3,6 kg/m²', eenheidsprijs: '3,125/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
+        },
+        4: {
+            mortel: { naam: 'Sopro ZR Turbo (4 lagen)', prijs: 15.00, 
+                      verbruik: '4,8 kg/m²', eenheidsprijs: '3,125/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
+        }
+    };
+    
+    // V10.8: Material breakdown voor Asocret per dikte
+    // Mortel: 1,4 kg/m²/mm x € 1,157/kg
+    // Autex: 1,0 m²/m² x € 3,24/m2
     const ASOCRET_MAT_BREAKDOWN = {
-        mortel: { naam: 'Asocret-M30', prijs: 16.20, 
-                  verbruik: '14 kg/m²', eenheidsprijs: '1,157/kg' },
-        autex:  { naam: 'Autex glasvezelwapening', prijs: 2.16, 
-                  verbruik: '1,1 m2/m²', eenheidsprijs: '1,96/m²' }
+        10: {
+            mortel: { naam: 'Asocret-M30 (10mm)', prijs: 16.20, 
+                      verbruik: '14 kg/m²', eenheidsprijs: '1,157/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
+        },
+        15: {
+            mortel: { naam: 'Asocret-M30 (15mm)', prijs: 24.30, 
+                      verbruik: '21 kg/m²', eenheidsprijs: '1,157/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
+        },
+        20: {
+            mortel: { naam: 'Asocret-M30 (20mm)', prijs: 32.40, 
+                      verbruik: '28 kg/m²', eenheidsprijs: '1,157/kg' },
+            autex:  { naam: 'Autex glasvezelwapening', prijs: 3.24, 
+                      verbruik: '1,0 m2/m²', eenheidsprijs: '3,24/m²' }
+        }
     };
     
-    // V9.29: Material breakdown voor Fix & Finish (4 kg/m² x € 0,60/kg)
+    // V10: Material breakdown voor Fix & Finish (3mm laagdikte)
+    // Verbruik: 0,85 kg/mm x 3mm = 2,55 kg/m²
+    // Zakprijs: EUR 17,67/25kg = EUR 0,7068/kg
     const FIXFINISH_MAT_BREAKDOWN = {
-        absfinish: { naam: 'Fix & Finish', prijs: 2.40, 
-                     verbruik: '4 kg/m²', eenheidsprijs: '0,60/kg' }
+        absfinish: { naam: 'Fix & Finish', prijs: 1.80, 
+                     verbruik: '2,55 kg/m²', eenheidsprijs: '0,7068/kg' }
     };
     
-    // V9.22: Material breakdown voor Fassa Shield
+    // V10: Material breakdown voor Fassa Shield (prijzen geverifieerd)
     const FASSASHIELD_MAT_BREAKDOWN = {
         shield:    { naam: 'Fassa Shield', prijs: 33.89, 
-                     verbruik: '25 kg/m²', eenheidsprijs: '1,36/kg' },
-        superbond: { naam: 'Superbond', prijs: 4.27, 
-                     verbruik: '5 kg/m²', eenheidsprijs: '0,85/kg' },
-        afwerking: { naam: 'Fix & Finish afwerking', prijs: 2.12, 
-                     verbruik: '1,8 kg/m²', eenheidsprijs: '1,18/kg' }
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '32,28/m²' },
+        superbond: { naam: 'Superbond', prijs: 4.20, 
+                     verbruik: '2,21 kg/m²', eenheidsprijs: '1,90/kg' },
+        afwerking: { naam: 'Fix & Finish afwerking', prijs: 1.80, 
+                     verbruik: '2,55 kg/m²', eenheidsprijs: '0,7068/kg' }
     };
     
-    // V9.28: Bijkomend pleisterwerk - puur MP75
+    // V10: Bijkomend pleisterwerk - puur MP75 (prijs geverifieerd)
     const BIJKOMENDPLEISTER_MAT_BREAKDOWN = {
-        mp75: { naam: 'Knauf MP75', prijs: 2.85, 
-                verbruik: '7,5 kg/cm/m²', eenheidsprijs: '0,38/kg' }
+        mp75: { naam: 'Knauf MP75', prijs: 2.72, 
+                verbruik: '7,5 kg/cm/m²', eenheidsprijs: '0,3632/kg' }
     };
-    const BIJKOMENDPLEISTER_ARBEID = 7.15;  // EUR/cm/m² vast
+    const BIJKOMENDPLEISTER_ARBEID = 7.28;  // EUR/cm/m2 (10,00 - 2,72 = 7,28 arbeid)
     
     // V9.24: Effectieve materiaalprijs functies per component
     function getInjectiesMatPrijs() {
@@ -2505,29 +2812,42 @@
         return totaal;
     }
     
-    // V9.27: XPS zonder PU-schuim
-    function getXpsMatPrijs(dikte) {
+    // V10.5: XPS materiaalprijs met gitex methode
+    function getXpsMatPrijs(dikte, gitexMethode) {
         const breakdown = XPS_MAT_BREAKDOWN[dikte] || XPS_MAT_BREAKDOWN[40];
+        const gitexSys = XPS_GITEX_SYSTEMS[gitexMethode] || XPS_GITEX_SYSTEMS.naden;
         let totaal = 0;
         if (materialState.xps.plaat) totaal += breakdown.plaat.prijs;
         if (materialState.xps.lgips) totaal += breakdown.lgips.prijs;
-        if (materialState.xps.gitex) totaal += breakdown.gitex.prijs;
-        if (materialState.xps.snelband) totaal += breakdown.snelband.prijs;
+        if (materialState.xps.gitex) totaal += gitexSys.gitex_prijs;
+        if (materialState.xps.snelband) totaal += gitexSys.snelband_prijs;
         return totaal;
     }
     
-    // V9.29: Sopro alleen mortel
-    function getSoproMatPrijs(lagen) {
+    // V10.7: Sulfatex mortel + Autex
+    function getSulfatexMatPrijs(lagen, metAutex) {
+        const breakdown = SULFATEX_MAT_BREAKDOWN[lagen] || SULFATEX_MAT_BREAKDOWN[2];
+        let totaal = 0;
+        if (materialState.sulfatex.mortel) totaal += breakdown.mortel.prijs;
+        if (metAutex && materialState.sulfatex.autex) totaal += breakdown.autex.prijs;
+        return totaal;
+    }
+    
+    // V10.6: Sopro mortel + Autex
+    function getSoproMatPrijs(lagen, metAutex) {
         const breakdown = SOPRO_MAT_BREAKDOWN[lagen] || SOPRO_MAT_BREAKDOWN[2];
         let totaal = 0;
         if (materialState.sopro.mortel) totaal += breakdown.mortel.prijs;
+        if (metAutex && materialState.sopro.autex) totaal += breakdown.autex.prijs;
         return totaal;
     }
     
-    function getAsocretMatPrijs(metAutex) {
+    // V10.8: Asocret met dikte parameter
+    function getAsocretMatPrijs(dikte, metAutex) {
+        const breakdown = ASOCRET_MAT_BREAKDOWN[dikte] || ASOCRET_MAT_BREAKDOWN[10];
         let totaal = 0;
-        if (materialState.asocret.mortel) totaal += ASOCRET_MAT_BREAKDOWN.mortel.prijs;
-        if (metAutex && materialState.asocret.autex) totaal += ASOCRET_MAT_BREAKDOWN.autex.prijs;
+        if (materialState.asocret.mortel) totaal += breakdown.mortel.prijs;
+        if (metAutex && materialState.asocret.autex) totaal += breakdown.autex.prijs;
         return totaal;
     }
     
@@ -2545,11 +2865,18 @@
         return totaal;
     }
     
-    // V9.28: Bijkomend pleisterwerk materiaalprijs (per cm/m2)
+    // V9.28: Bijkomend pleisterwerk materiaalprijs (per cm/m²)
     function getBijkomendpleisterMatPrijs() {
         let totaal = 0;
         if (materialState.bijkomendpleister.mp75) totaal += BIJKOMENDPLEISTER_MAT_BREAKDOWN.mp75.prijs;
         return totaal;
+    }
+    
+    // V9.29: Grondering materiaalprijs
+    function getGroderingMatPrijs(product) {
+        const spec = XTRA.grondering[product];
+        if (!spec || !materialState.grondering.product) return 0;
+        return spec.mat || 0;
     }
     
     // V9.21: Bereken effectieve Wedi materiaalprijs op basis van checkbox state + gitex methode
@@ -2584,13 +2911,11 @@
         return gitexSys.productiviteit;
     }
     
-    // Legacy WEDI_MAT voor backward compatibility (niet meer direct gebruikt)
-    // V9.21: Naden is standaard - totalen voor naden methode
-    const WEDI_MAT = {
-        4:  37.00,    // 31.42 + 5.00 + 0.42 + 0.16 (naden)
-        6:  34.56,    // 28.98 + 5.00 + 0.42 + 0.16 (naden)
-        10: 33.39     // 27.81 + 5.00 + 0.42 + 0.16 (naden)
-    };
+    // V10.5: Haal XPS capaciteit op basis van gitex methode
+    function getXpsCapaciteit(gitexMethode) {
+        const gitexSys = XPS_GITEX_SYSTEMS[gitexMethode] || XPS_GITEX_SYSTEMS.naden;
+        return gitexSys.productiviteit;
+    }
 
     // === THEME MANAGEMENT ===
     const themeBtn = document.getElementById('theme-toggle-btn');
@@ -2715,6 +3040,8 @@
         
         document.getElementById('xps-dikte').selectedIndex = 0;
         document.getElementById('xps-dikte').classList.add('placeholder-active');
+        // V10.5: Reset xps-gitex dropdown
+        document.getElementById('xps-gitex').value = 'naden';
         document.getElementById('wedi-dikte').selectedIndex = 0;
         document.getElementById('wedi-dikte').classList.add('placeholder-active');
         document.getElementById('ultradun-systeem').selectedIndex = 0;
@@ -2722,15 +3049,53 @@
         // V8.2: Reset sopro-lagen dropdown to default (2 lagen)
         document.getElementById('sopro-lagen').value = '2';
         document.getElementById('sopro-lagen-wrapper').style.display = 'none';
+        // V10.6: Reset sopro-autex dropdown (default: zonder)
+        document.getElementById('sopro-autex').value = 'zonder';
+        document.getElementById('sopro-autex-wrapper').style.display = 'none';
+        // V10.7: Reset sulfatex-lagen dropdown (default: 2 lagen)
+        document.getElementById('sulfatex-lagen').value = '2';
+        document.getElementById('sulfatex-lagen-wrapper').style.display = 'none';
+        // V10.7: Reset sulfatex-autex dropdown (default: zonder)
+        document.getElementById('sulfatex-autex').value = 'zonder';
+        document.getElementById('sulfatex-autex-wrapper').style.display = 'none';
         // V9.9: Reset asocret-autex dropdown (default: zonder)
         document.getElementById('asocret-autex').value = 'zonder';
         document.getElementById('asocret-autex-wrapper').style.display = 'none';
+        // V10.8: Reset asocret-dikte dropdown (default: 10mm)
+        document.getElementById('asocret-dikte').value = '10';
+        document.getElementById('asocret-dikte-wrapper').style.display = 'none';
         // V8.8: Reset product-grondering dropdown
         document.getElementById('product-grondering').selectedIndex = 0;
         document.getElementById('product-grondering').classList.add('placeholder-active');
         
         // Reset unit/label positions
         UnitPositioner.reset();
+        
+        // V10.9: Reset materialState - alle checkboxes weer enabled
+        materialState.wedi.plaat = true;
+        materialState.wedi.flexlijm = true;
+        materialState.wedi.gitex = true;
+        materialState.wedi.snelband = true;
+        materialState.injecties.fassainject = true;
+        materialState.membraan.codex = true;
+        materialState.membraan.snc = true;
+        materialState.bezetten.mp75 = true;
+        materialState.xps.plaat = true;
+        materialState.xps.lgips = true;
+        materialState.xps.gitex = true;
+        materialState.xps.snelband = true;
+        materialState.sopro.mortel = true;
+        materialState.sopro.autex = true;
+        materialState.sulfatex.mortel = true;
+        materialState.sulfatex.autex = true;
+        materialState.asocret.mortel = true;
+        materialState.asocret.autex = true;
+        materialState.fixfinish.absfinish = true;
+        materialState.fassashield.shield = true;
+        materialState.fassashield.superbond = true;
+        materialState.fassashield.afwerking = true;
+        materialState.bijkomendpleister.mp75 = true;
+        materialState.grondering.product = true;
         
         // Collapse sections
         ['bijkomend', 'extra'].forEach(section => {
@@ -2744,6 +3109,33 @@
         });
         
         calculate();
+        
+        // V11.0: Expliciete dormant state voor alle kaarten na reset (V34.5 pattern)
+        setTimeout(() => {
+            // Hoofdcomponent cards
+            ['afkappen', 'injecties', 'membraan', 'bezetten'].forEach(comp => {
+                const card = document.getElementById(`card-${comp}`);
+                if (card) card.classList.add('dormant');
+            });
+            
+            // Bijkomend werk cards
+            ['hoekprofielen', 'bijkomendpleister', 'egalisatie'].forEach(comp => {
+                const card = document.getElementById(`card-${comp}`);
+                if (card) card.classList.add('dormant');
+            });
+            
+            // Extra component cards
+            ['xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering'].forEach(comp => {
+                const card = document.getElementById(`card-${comp}`);
+                if (card) card.classList.add('dormant');
+            });
+            
+            // Summary en Invoice cards
+            const summary = document.getElementById('summary');
+            const invoice = document.getElementById('invoice');
+            if (summary) summary.classList.add('dormant');
+            if (invoice) invoice.classList.add('dormant');
+        }, 50);
         
         setTimeout(() => this.classList.remove('btn-flash'), 300);
     });
@@ -2796,7 +3188,7 @@
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
                 html += '<li>Geen materiaalkosten (enkel arbeid)</li>';
-                html += '<li>Capaciteit: 35 m²/man/dag</li>';
+                html += '<li>Capaciteit: 35 m2/man/dag</li>';
                 html += `<li>${qty} m² = ${(qty / 35 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
             }
@@ -2820,6 +3212,8 @@
                 const fassaChecked = materialState.injecties.fassainject ? 'checked' : '';
                 const fassaDisabled = materialState.injecties.fassainject ? '' : 'disabled';
                 const fassaPrijs = materialState.injecties.fassainject ? breakdown.fassainject.prijs : 0;
+                const fassaLiter = qty * 0.2;
+                const fassaEmmers = (fassaLiter / 10).toFixed(2);
                 html += `<li class="material-checkbox-item ${fassaDisabled}" data-key="fassainject">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -2829,6 +3223,7 @@
                 html += `<span class="mat-price">€ ${fassaPrijs.toFixed(2)}/m</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.fassainject.verbruik} x € ${breakdown.fassainject.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m = ${fassaLiter.toFixed(1)} L (${fassaEmmers} emmers a 10L)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -2847,7 +3242,7 @@
                 // Sectie 1: Capaciteit & Arbeid
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
-                html += '<li>Capaciteit: 40 m²/man/dag</li>';
+                html += '<li>Capaciteit: 40 m2/man/dag</li>';
                 html += `<li>${qty} m² = ${(qty / 40 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
@@ -2859,6 +3254,8 @@
                 const codexChecked = materialState.membraan.codex ? 'checked' : '';
                 const codexDisabled = materialState.membraan.codex ? '' : 'disabled';
                 const codexPrijs = materialState.membraan.codex ? breakdown.codex.prijs : 0;
+                const codexKg = qty * 6.25;
+                const codexZakken = (codexKg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${codexDisabled}" data-key="codex">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -2868,12 +3265,15 @@
                 html += `<span class="mat-price">€ ${codexPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.codex.verbruik} x € ${breakdown.codex.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${codexKg.toFixed(1)} kg (${codexZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 // SNC-Membraan
                 const sncChecked = materialState.membraan.snc ? 'checked' : '';
                 const sncDisabled = materialState.membraan.snc ? '' : 'disabled';
                 const sncPrijs = materialState.membraan.snc ? breakdown.snc.prijs : 0;
+                const sncM2 = qty * 1.0;
+                const sncRollen = (sncM2 / 30).toFixed(2);
                 html += `<li class="material-checkbox-item ${sncDisabled}" data-key="snc">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -2883,6 +3283,7 @@
                 html += `<span class="mat-price">€ ${sncPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.snc.verbruik} x € ${breakdown.snc.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${sncM2.toFixed(1)} m² (${sncRollen} rollen a 30m²)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -2901,7 +3302,7 @@
                 // Sectie 1: Capaciteit & Arbeid
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
-                html += '<li>Capaciteit: 20 m²/man/dag</li>';
+                html += '<li>Capaciteit: 20 m2/man/dag</li>';
                 html += `<li>${qty} m² = ${(qty / 20 * 8).toFixed(2)} manuren</li>`;
                 html += `<li>Zakken (25kg): ${(qty * 15 / 25).toFixed(1)} stuks</li>`;
                 html += '</ul>';
@@ -2913,6 +3314,8 @@
                 const mp75Checked = materialState.bezetten.mp75 ? 'checked' : '';
                 const mp75Disabled = materialState.bezetten.mp75 ? '' : 'disabled';
                 const mp75Prijs = materialState.bezetten.mp75 ? breakdown.mp75.prijs : 0;
+                const mp75Kg = qty * 15;
+                const mp75Zakken = (mp75Kg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${mp75Disabled}" data-key="mp75">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -2922,6 +3325,7 @@
                 html += `<span class="mat-price">€ ${mp75Prijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.mp75.verbruik} x € ${breakdown.mp75.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${mp75Kg.toFixed(0)} kg (${mp75Zakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -2932,17 +3336,21 @@
                 html += `<span id="bezetten-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
                 html += '</div>';
             }
-            // === XPS (V9.22 two-line layout met 5 checkboxes) ===
+            // === XPS (V10.5: met gitex methode dropdown) ===
             else if (component === 'xps') {
                 const dikte = parseInt(document.getElementById('xps-dikte').value) || 40;
-                const effectief_mat = getXpsMatPrijs(dikte);
+                const gitexMethode = document.getElementById('xps-gitex').value || 'naden';
                 const breakdown = XPS_MAT_BREAKDOWN[dikte] || XPS_MAT_BREAKDOWN[40];
+                const gitexSys = XPS_GITEX_SYSTEMS[gitexMethode] || XPS_GITEX_SYSTEMS.naden;
+                const effectief_mat = getXpsMatPrijs(dikte, gitexMethode);
+                const cap_per_man = getXpsCapaciteit(gitexMethode);
                 
                 // Sectie 1: Capaciteit & Arbeid
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
-                html += '<li>Capaciteit: 30 m²/man/dag</li>';
-                html += `<li>${qty} m² = ${(qty / 30 * 8).toFixed(2)} manuren</li>`;
+                html += `<li>Methode: ${gitexSys.naam}</li>`;
+                html += `<li>Capaciteit: ${cap_per_man} m2/man/dag</li>`;
+                html += `<li>${qty} m² = ${(qty / cap_per_man * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
                 // Sectie 2: Materiaalkosten met checkboxes
@@ -2953,60 +3361,74 @@
                 const plaatChecked = materialState.xps.plaat ? 'checked' : '';
                 const plaatDisabled = materialState.xps.plaat ? '' : 'disabled';
                 const plaatPrijs = materialState.xps.plaat ? breakdown.plaat.prijs : 0;
+                const plaatM2 = qty * 1.05;
+                const plaatStuks = (plaatM2 / 0.75).toFixed(2);
                 html += `<li class="material-checkbox-item ${plaatDisabled}" data-key="plaat">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
-                html += `<input type="checkbox" ${plaatChecked} onchange="toggleXpsMaterial('plaat', ${dikte}, ${qty})">`;
+                html += `<input type="checkbox" ${plaatChecked} onchange="toggleXpsMaterial('plaat', ${dikte}, ${qty}, '${gitexMethode}')">`;
                 html += `<span class="mat-name">${breakdown.plaat.naam}</span>`;
                 html += '</label>';
                 html += `<span class="mat-price">€ ${plaatPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.plaat.verbruik} x € ${breakdown.plaat.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${plaatM2.toFixed(1)} m² (${plaatStuks} platen a 0,75m²)</div>`;
                 html += '</li>';
                 
                 // L-gips
                 const lgipsChecked = materialState.xps.lgips ? 'checked' : '';
                 const lgipsDisabled = materialState.xps.lgips ? '' : 'disabled';
                 const lgipsPrijs = materialState.xps.lgips ? breakdown.lgips.prijs : 0;
+                const lgipsKg = qty * 1.8;
+                const lgipsZakken = (lgipsKg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${lgipsDisabled}" data-key="lgips">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
-                html += `<input type="checkbox" ${lgipsChecked} onchange="toggleXpsMaterial('lgips', ${dikte}, ${qty})">`;
+                html += `<input type="checkbox" ${lgipsChecked} onchange="toggleXpsMaterial('lgips', ${dikte}, ${qty}, '${gitexMethode}')">`;
                 html += `<span class="mat-name">${breakdown.lgips.naam}</span>`;
                 html += '</label>';
                 html += `<span class="mat-price">€ ${lgipsPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.lgips.verbruik} x € ${breakdown.lgips.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${lgipsKg.toFixed(1)} kg (${lgipsZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
-                // Gitex weefsel
+                // Gitex (variabel per methode)
                 const gitexChecked = materialState.xps.gitex ? 'checked' : '';
                 const gitexDisabled = materialState.xps.gitex ? '' : 'disabled';
-                const gitexPrijs = materialState.xps.gitex ? breakdown.gitex.prijs : 0;
+                const gitexPrijs = materialState.xps.gitex ? gitexSys.gitex_prijs : 0;
+                const gitexNaam = gitexMethode === 'naden' ? 'Gitex (naden)' : 'Gitex (volledig)';
+                const gitexM2 = qty * gitexSys.gitex_verbruik;
+                const gitexRollen = (gitexM2 / 100).toFixed(2);
                 html += `<li class="material-checkbox-item ${gitexDisabled}" data-key="gitex">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
-                html += `<input type="checkbox" ${gitexChecked} onchange="toggleXpsMaterial('gitex', ${dikte}, ${qty})">`;
-                html += `<span class="mat-name">${breakdown.gitex.naam}</span>`;
+                html += `<input type="checkbox" ${gitexChecked} onchange="toggleXpsMaterial('gitex', ${dikte}, ${qty}, '${gitexMethode}')">`;
+                html += `<span class="mat-name">${gitexNaam}</span>`;
                 html += '</label>';
                 html += `<span class="mat-price">€ ${gitexPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
-                html += `<div class="mat-calc">${breakdown.gitex.verbruik} x € ${breakdown.gitex.eenheidsprijs}</div>`;
+                html += `<div class="mat-calc">${gitexSys.gitex_verbruik.toFixed(2)} m²/m² x € 1,0665</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${gitexM2.toFixed(1)} m² (${gitexRollen} rollen a 100m²)</div>`;
                 html += '</li>';
                 
-                // Snelband
-                const snelbandChecked = materialState.xps.snelband ? 'checked' : '';
-                const snelbandDisabled = materialState.xps.snelband ? '' : 'disabled';
-                const snelbandPrijs = materialState.xps.snelband ? breakdown.snelband.prijs : 0;
-                html += `<li class="material-checkbox-item ${snelbandDisabled}" data-key="snelband">`;
+                // Snelband (variabel per methode)
+                const snelChecked = materialState.xps.snelband ? 'checked' : '';
+                const snelDisabled = materialState.xps.snelband ? '' : 'disabled';
+                const snelPrijs = materialState.xps.snelband ? gitexSys.snelband_prijs : 0;
+                const snelNaam = gitexMethode === 'naden' ? 'Snelband (naden)' : 'Snelband 1mm';
+                const snelKg = qty * gitexSys.snelband_verbruik;
+                const snelZakken = (snelKg / 25).toFixed(2);
+                html += `<li class="material-checkbox-item ${snelDisabled}" data-key="snelband">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
-                html += `<input type="checkbox" ${snelbandChecked} onchange="toggleXpsMaterial('snelband', ${dikte}, ${qty})">`;
-                html += `<span class="mat-name">${breakdown.snelband.naam}</span>`;
+                html += `<input type="checkbox" ${snelChecked} onchange="toggleXpsMaterial('snelband', ${dikte}, ${qty}, '${gitexMethode}')">`;
+                html += `<span class="mat-name">${snelNaam}</span>`;
                 html += '</label>';
-                html += `<span class="mat-price">€ ${snelbandPrijs.toFixed(2)}/m²</span>`;
+                html += `<span class="mat-price">€ ${snelPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
-                html += `<div class="mat-calc">${breakdown.snelband.verbruik} x € ${breakdown.snelband.eenheidsprijs}</div>`;
+                html += `<div class="mat-calc">${gitexSys.snelband_verbruik.toFixed(2)} kg/m² x € 0,552/kg</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${snelKg.toFixed(1)} kg (${snelZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -3030,7 +3452,7 @@
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
                 html += `<li>Methode: ${gitexSys.naam}</li>`;
-                html += `<li>Capaciteit: ${cap_per_man} m²/man/dag</li>`;
+                html += `<li>Capaciteit: ${cap_per_man} m2/man/dag</li>`;
                 html += `<li>${qty} m² = ${(qty / cap_per_man * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
@@ -3042,6 +3464,10 @@
                 const plaatChecked = materialState.wedi.plaat ? 'checked' : '';
                 const plaatDisabled = materialState.wedi.plaat ? '' : 'disabled';
                 const plaatPrijs = materialState.wedi.plaat ? breakdown.plaat.prijs : 0;
+                const plaatGrootte = dikte === 10 ? 1.56 : 0.75;
+                const plaatAfm = dikte === 10 ? '2600x600' : '1250x600';
+                const plaatM2 = qty * 1.05;
+                const plaatStuks = (plaatM2 / plaatGrootte).toFixed(2);
                 html += `<li class="material-checkbox-item ${plaatDisabled}" data-key="plaat">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3051,12 +3477,15 @@
                 html += `<span class="mat-price">€ ${plaatPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.plaat.verbruik} x € ${breakdown.plaat.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${plaatM2.toFixed(1)} m² (${plaatStuks} platen a ${plaatAfm})</div>`;
                 html += '</li>';
                 
-                // Flexlijm
+                // Flexlijm (CODEX)
                 const flexChecked = materialState.wedi.flexlijm ? 'checked' : '';
                 const flexDisabled = materialState.wedi.flexlijm ? '' : 'disabled';
                 const flexPrijs = materialState.wedi.flexlijm ? breakdown.flexlijm.prijs : 0;
+                const flexKg = qty * 6.25;
+                const flexZakken = (flexKg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${flexDisabled}" data-key="flexlijm">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3066,6 +3495,7 @@
                 html += `<span class="mat-price">€ ${flexPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.flexlijm.verbruik} x € ${breakdown.flexlijm.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${flexKg.toFixed(1)} kg (${flexZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 // Gitex (variabel per methode)
@@ -3073,6 +3503,8 @@
                 const gitexDisabled = materialState.wedi.gitex ? '' : 'disabled';
                 const gitexPrijs = materialState.wedi.gitex ? gitexSys.gitex_prijs : 0;
                 const gitexNaam = gitexMethode === 'naden' ? 'Gitex (naden)' : 'Gitex (volledig)';
+                const gitexM2 = qty * gitexSys.gitex_verbruik;
+                const gitexRollen = (gitexM2 / 100).toFixed(2);
                 html += `<li class="material-checkbox-item ${gitexDisabled}" data-key="gitex">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3081,14 +3513,17 @@
                 html += '</label>';
                 html += `<span class="mat-price">€ ${gitexPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
-                html += `<div class="mat-calc">${gitexSys.gitex_verbruik.toFixed(2)} m²/m² x € 3,50</div>`;
+                html += `<div class="mat-calc">${gitexSys.gitex_verbruik.toFixed(2)} m²/m² x € 1,0665</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${gitexM2.toFixed(1)} m² (${gitexRollen} rollen a 100m²)</div>`;
                 html += '</li>';
                 
                 // Snelband (variabel per methode)
                 const snelChecked = materialState.wedi.snelband ? 'checked' : '';
                 const snelDisabled = materialState.wedi.snelband ? '' : 'disabled';
                 const snelPrijs = materialState.wedi.snelband ? gitexSys.snelband_prijs : 0;
-                const snelNaam = gitexMethode === 'naden' ? 'Snelband (naden)' : 'Snelband 3mm';
+                const snelNaam = gitexMethode === 'naden' ? 'Snelband (naden)' : 'Snelband 1mm';
+                const snelKg = qty * gitexSys.snelband_verbruik;
+                const snelZakken = (snelKg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${snelDisabled}" data-key="snelband">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3097,7 +3532,8 @@
                 html += '</label>';
                 html += `<span class="mat-price">€ ${snelPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
-                html += `<div class="mat-calc">${gitexSys.snelband_verbruik.toFixed(2)} kg/m² x € 0,56/kg</div>`;
+                html += `<div class="mat-calc">${gitexSys.snelband_verbruik.toFixed(2)} kg/m² x € 0,552/kg</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${snelKg.toFixed(1)} kg (${snelZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -3112,97 +3548,25 @@
             else if (component === 'ultradun') {
                 const systeem = document.getElementById('ultradun-systeem').value;
                 
-                // Sulfatex (basis - geen checkboxes)
-                if (systeem === 'sulfatex') {
-                    html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
-                    html += '<ul class="material-list">';
-                    html += '<li>Capaciteit: 30 m²/man/dag</li>';
-                    html += `<li>${qty} m² = ${(qty / 30 * 8).toFixed(2)} manuren</li>`;
-                    html += '</ul>';
-                    
-                    html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
-                    html += '<ul class="material-list">';
-                    html += '<li>Sulfatex waterdichting</li>';
-                    html += `<li>€ 5,50/m2 x ${qty} m²</li>`;
-                    html += '</ul>';
-                    
-                    html += '<div class="modal-total">';
-                    html += '<span class="total-label">Materiaal</span>';
-                    html += `<span class="total-value">€ ${(qty * 5.50).toFixed(2)}</span>`;
-                    html += '</div>';
-                }
-                // Asocret (V9.22 two-line layout)
-                else if (systeem === 'asocret') {
-                    const metAutex = document.getElementById('asocret-autex').value === 'met';
-                    const spec = XTRA.ultradun.asocret;
-                    const cap = metAutex ? spec.cap_met_autex : spec.cap_zonder_autex;
-                    const effectief_mat = getAsocretMatPrijs(metAutex);
-                    
-                    // Sectie 1: Capaciteit & Arbeid
-                    html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
-                    html += '<ul class="material-list">';
-                    html += `<li>Laagdikte: ${spec.laagdikte} mm (waterdicht)</li>`;
-                    html += `<li>Capaciteit: ${cap} m²/man/dag</li>`;
-                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
-                    html += '</ul>';
-                    
-                    // Sectie 2: Materiaalkosten met checkboxes
-                    html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
-                    html += '<ul class="material-checkbox-list">';
-                    
-                    // Asocret mortel
-                    const mortelChecked = materialState.asocret.mortel ? 'checked' : '';
-                    const mortelDisabled = materialState.asocret.mortel ? '' : 'disabled';
-                    const mortelPrijs = materialState.asocret.mortel ? ASOCRET_MAT_BREAKDOWN.mortel.prijs : 0;
-                    html += `<li class="material-checkbox-item ${mortelDisabled}" data-key="mortel">`;
-                    html += '<div class="mat-row">';
-                    html += '<label>';
-                    html += `<input type="checkbox" ${mortelChecked} onchange="toggleAsocretMaterial('mortel', ${metAutex}, ${qty})">`;
-                    html += `<span class="mat-name">${ASOCRET_MAT_BREAKDOWN.mortel.naam}</span>`;
-                    html += '</label>';
-                    html += `<span class="mat-price">€ ${mortelPrijs.toFixed(2)}/m²</span>`;
-                    html += '</div>';
-                    html += `<div class="mat-calc">${ASOCRET_MAT_BREAKDOWN.mortel.verbruik} x € ${ASOCRET_MAT_BREAKDOWN.mortel.eenheidsprijs}</div>`;
-                    html += '</li>';
-                    
-                    // Autex (alleen als met Autex geselecteerd)
-                    if (metAutex) {
-                        const autexChecked = materialState.asocret.autex ? 'checked' : '';
-                        const autexDisabled = materialState.asocret.autex ? '' : 'disabled';
-                        const autexPrijs = materialState.asocret.autex ? ASOCRET_MAT_BREAKDOWN.autex.prijs : 0;
-                        html += `<li class="material-checkbox-item ${autexDisabled}" data-key="autex">`;
-                        html += '<div class="mat-row">';
-                        html += '<label>';
-                        html += `<input type="checkbox" ${autexChecked} onchange="toggleAsocretMaterial('autex', ${metAutex}, ${qty})">`;
-                        html += `<span class="mat-name">${ASOCRET_MAT_BREAKDOWN.autex.naam}</span>`;
-                        html += '</label>';
-                        html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
-                        html += '</div>';
-                        html += `<div class="mat-calc">${ASOCRET_MAT_BREAKDOWN.autex.verbruik} x € ${ASOCRET_MAT_BREAKDOWN.autex.eenheidsprijs}</div>`;
-                        html += '</li>';
-                    }
-                    
-                    html += '</ul>';
-                    
-                    // Totaal
-                    html += '<div class="modal-total">';
-                    html += '<span class="total-label">Materiaal</span>';
-                    html += `<span id="asocret-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
-                    html += '</div>';
-                }
-                // Sopro (V9.22 two-line layout)
-                else {
+                // V10.9: Volgorde consistent met berekenDynamisch: sopro -> asocret -> sulfatex
+                // Sopro (V10.6: met Autex optie)
+                if (systeem === 'sopro') {
                     const lagen = parseInt(document.getElementById('sopro-lagen').value) || 2;
+                    const metAutex = document.getElementById('sopro-autex').value === 'met';
                     const lagen_data = XTRA.ultradun.sopro.lagen[lagen];
-                    const effectief_mat = getSoproMatPrijs(lagen);
+                    const cap = metAutex ? lagen_data.cap_met_autex : lagen_data.cap_per_man;
+                    const effectief_mat = getSoproMatPrijs(lagen, metAutex);
                     const breakdown = SOPRO_MAT_BREAKDOWN[lagen] || SOPRO_MAT_BREAKDOWN[2];
                     
                     // Sectie 1: Capaciteit & Arbeid
                     html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                     html += '<ul class="material-list">';
                     html += `<li>Aantal lagen: ${lagen}</li>`;
-                    html += `<li>Capaciteit: ${lagen_data.cap_per_man} m²/man/dag</li>`;
-                    html += `<li>${qty} m² = ${(qty / lagen_data.cap_per_man * 8).toFixed(2)} manuren</li>`;
+                    if (metAutex) {
+                        html += '<li>Methode: Met Autex glasvezelwapening</li>';
+                    }
+                    html += `<li>Capaciteit: ${cap} m2/man/dag</li>`;
+                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
                     html += '</ul>';
                     
                     // Sectie 2: Materiaalkosten met checkboxes
@@ -3213,16 +3577,40 @@
                     const mortelChecked = materialState.sopro.mortel ? 'checked' : '';
                     const mortelDisabled = materialState.sopro.mortel ? '' : 'disabled';
                     const mortelPrijs = materialState.sopro.mortel ? breakdown.mortel.prijs : 0;
+                    const verbruikPerLaag = 1.2;
+                    const soproKg = qty * lagen * verbruikPerLaag;
+                    const soproEmmers = (soproKg / 24).toFixed(2);
                     html += `<li class="material-checkbox-item ${mortelDisabled}" data-key="mortel">`;
                     html += '<div class="mat-row">';
                     html += '<label>';
-                    html += `<input type="checkbox" ${mortelChecked} onchange="toggleSoproMaterial('mortel', ${lagen}, ${qty})">`;
+                    html += `<input type="checkbox" ${mortelChecked} onchange="toggleSoproMaterial('mortel', ${lagen}, ${qty}, ${metAutex})">`;
                     html += `<span class="mat-name">${breakdown.mortel.naam}</span>`;
                     html += '</label>';
                     html += `<span class="mat-price">€ ${mortelPrijs.toFixed(2)}/m²</span>`;
                     html += '</div>';
                     html += `<div class="mat-calc">${breakdown.mortel.verbruik} x € ${breakdown.mortel.eenheidsprijs}</div>`;
+                    html += `<div class="mat-qty">→ ${qty} m² = ${soproKg.toFixed(1)} kg (${soproEmmers} emmers a 24kg)</div>`;
                     html += '</li>';
+                    
+                    // Autex (alleen als met Autex geselecteerd)
+                    if (metAutex) {
+                        const autexChecked = materialState.sopro.autex ? 'checked' : '';
+                        const autexDisabled = materialState.sopro.autex ? '' : 'disabled';
+                        const autexPrijs = materialState.sopro.autex ? breakdown.autex.prijs : 0;
+                        const autexM2 = qty * 1.0;
+                        const autexRollen = (autexM2 / 55).toFixed(2);
+                        html += `<li class="material-checkbox-item ${autexDisabled}" data-key="autex">`;
+                        html += '<div class="mat-row">';
+                        html += '<label>';
+                        html += `<input type="checkbox" ${autexChecked} onchange="toggleSoproMaterial('autex', ${lagen}, ${qty}, ${metAutex})">`;
+                        html += `<span class="mat-name">${breakdown.autex.naam}</span>`;
+                        html += '</label>';
+                        html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
+                        html += '</div>';
+                        html += `<div class="mat-calc">${breakdown.autex.verbruik} x € ${breakdown.autex.eenheidsprijs}</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m2)</div>`;
+                        html += '</li>';
+                    }
                     
                     html += '</ul>';
                     
@@ -3230,6 +3618,157 @@
                     html += '<div class="modal-total">';
                     html += '<span class="total-label">Materiaal</span>';
                     html += `<span id="sopro-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                // Asocret (V10.8: met dikte dropdown)
+                else if (systeem === 'asocret') {
+                    const dikte = parseInt(document.getElementById('asocret-dikte').value) || 10;
+                    const metAutex = document.getElementById('asocret-autex').value === 'met';
+                    const dikte_data = XTRA.ultradun.asocret.diktes[dikte];
+                    const cap = metAutex ? dikte_data.cap_met_autex : dikte_data.cap_per_man;
+                    const effectief_mat = getAsocretMatPrijs(dikte, metAutex);
+                    const breakdown = ASOCRET_MAT_BREAKDOWN[dikte] || ASOCRET_MAT_BREAKDOWN[10];
+                    
+                    // Sectie 1: Capaciteit & Arbeid
+                    html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
+                    html += '<ul class="material-list">';
+                    html += `<li>Laagdikte: ${dikte} mm (waterdicht)</li>`;
+                    if (metAutex) {
+                        html += '<li>Methode: Met Autex glasvezelwapening</li>';
+                    }
+                    html += `<li>Capaciteit: ${cap} m2/man/dag</li>`;
+                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
+                    html += '</ul>';
+                    
+                    // Sectie 2: Materiaalkosten met checkboxes
+                    html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
+                    html += '<ul class="material-checkbox-list">';
+                    
+                    // Asocret mortel
+                    const mortelChecked = materialState.asocret.mortel ? 'checked' : '';
+                    const mortelDisabled = materialState.asocret.mortel ? '' : 'disabled';
+                    const mortelPrijs = materialState.asocret.mortel ? breakdown.mortel.prijs : 0;
+                    const mortelKg = qty * dikte_data.verbruik;
+                    const mortelZakken = (mortelKg / 25).toFixed(2);
+                    html += `<li class="material-checkbox-item ${mortelDisabled}" data-key="mortel">`;
+                    html += '<div class="mat-row">';
+                    html += '<label>';
+                    html += `<input type="checkbox" ${mortelChecked} onchange="toggleAsocretMaterial('mortel', ${dikte}, ${metAutex}, ${qty})">`;
+                    html += `<span class="mat-name">${breakdown.mortel.naam}</span>`;
+                    html += '</label>';
+                    html += `<span class="mat-price">€ ${mortelPrijs.toFixed(2)}/m²</span>`;
+                    html += '</div>';
+                    html += `<div class="mat-calc">${breakdown.mortel.verbruik} x € ${breakdown.mortel.eenheidsprijs}</div>`;
+                    html += `<div class="mat-qty">→ ${qty} m² = ${mortelKg.toFixed(0)} kg (${mortelZakken} zakken a 25kg)</div>`;
+                    html += '</li>';
+                    
+                    // Autex (alleen als met Autex geselecteerd)
+                    if (metAutex) {
+                        const autexChecked = materialState.asocret.autex ? 'checked' : '';
+                        const autexDisabled = materialState.asocret.autex ? '' : 'disabled';
+                        const autexPrijs = materialState.asocret.autex ? breakdown.autex.prijs : 0;
+                        const autexM2 = qty * 1.0;
+                        const autexRollen = (autexM2 / 55).toFixed(2);
+                        html += `<li class="material-checkbox-item ${autexDisabled}" data-key="autex">`;
+                        html += '<div class="mat-row">';
+                        html += '<label>';
+                        html += `<input type="checkbox" ${autexChecked} onchange="toggleAsocretMaterial('autex', ${dikte}, ${metAutex}, ${qty})">`;
+                        html += `<span class="mat-name">${breakdown.autex.naam}</span>`;
+                        html += '</label>';
+                        html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
+                        html += '</div>';
+                        html += `<div class="mat-calc">${breakdown.autex.verbruik} x € ${breakdown.autex.eenheidsprijs}</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m2)</div>`;
+                        html += '</li>';
+                    }
+                    
+                    html += '</ul>';
+                    
+                    // Opmerking Grondering
+                    html += '<div class="modal-note" style="margin-top: 12px; padding: 8px; background: var(--bg-tertiary); border-radius: 4px; font-size: 0.85em;">';
+                    html += '<strong>Let op:</strong> Grondering apart selecteren indien nodig.';
+                    html += '</div>';
+                    
+                    // Totaal
+                    html += '<div class="modal-total">';
+                    html += '<span class="total-label">Materiaal</span>';
+                    html += `<span id="asocret-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
+                    html += '</div>';
+                }
+                // Sulfatex (V10.7: met lagen en Autex optie)
+                else if (systeem === 'sulfatex') {
+                    const lagen = parseInt(document.getElementById('sulfatex-lagen').value) || 2;
+                    const metAutex = document.getElementById('sulfatex-autex').value === 'met';
+                    const lagen_data = XTRA.ultradun.sulfatex.lagen[lagen];
+                    const cap = metAutex ? lagen_data.cap_met_autex : lagen_data.cap_per_man;
+                    const effectief_mat = getSulfatexMatPrijs(lagen, metAutex);
+                    const breakdown = SULFATEX_MAT_BREAKDOWN[lagen] || SULFATEX_MAT_BREAKDOWN[2];
+                    
+                    // Sectie 1: Capaciteit & Arbeid
+                    html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
+                    html += '<ul class="material-list">';
+                    html += `<li>Aantal lagen: ${lagen}</li>`;
+                    if (metAutex) {
+                        html += '<li>Methode: Met Autex glasvezelwapening</li>';
+                    }
+                    html += `<li>Capaciteit: ${cap} m2/man/dag</li>`;
+                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
+                    html += '</ul>';
+                    
+                    // Sectie 2: Materiaalkosten met checkboxes
+                    html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
+                    html += '<ul class="material-checkbox-list">';
+                    
+                    // Sulfatex mortel
+                    const mortelChecked = materialState.sulfatex.mortel ? 'checked' : '';
+                    const mortelDisabled = materialState.sulfatex.mortel ? '' : 'disabled';
+                    const mortelPrijs = materialState.sulfatex.mortel ? breakdown.mortel.prijs : 0;
+                    const verbruikPerLaag = 1.6;
+                    const sulfatexKg = qty * lagen * verbruikPerLaag;
+                    const sulfatexEmmers = (sulfatexKg / 25).toFixed(2);
+                    html += `<li class="material-checkbox-item ${mortelDisabled}" data-key="mortel">`;
+                    html += '<div class="mat-row">';
+                    html += '<label>';
+                    html += `<input type="checkbox" ${mortelChecked} onchange="toggleSulfatexMaterial('mortel', ${lagen}, ${qty}, ${metAutex})">`;
+                    html += `<span class="mat-name">${breakdown.mortel.naam}</span>`;
+                    html += '</label>';
+                    html += `<span class="mat-price">€ ${mortelPrijs.toFixed(2)}/m²</span>`;
+                    html += '</div>';
+                    html += `<div class="mat-calc">${breakdown.mortel.verbruik} x € ${breakdown.mortel.eenheidsprijs}</div>`;
+                    html += `<div class="mat-qty">→ ${qty} m² = ${sulfatexKg.toFixed(1)} kg (${sulfatexEmmers} emmers a 25kg)</div>`;
+                    html += '</li>';
+                    
+                    // Autex (alleen als met Autex geselecteerd)
+                    if (metAutex) {
+                        const autexChecked = materialState.sulfatex.autex ? 'checked' : '';
+                        const autexDisabled = materialState.sulfatex.autex ? '' : 'disabled';
+                        const autexPrijs = materialState.sulfatex.autex ? breakdown.autex.prijs : 0;
+                        const autexM2 = qty * 1.0;
+                        const autexRollen = (autexM2 / 55).toFixed(2);
+                        html += `<li class="material-checkbox-item ${autexDisabled}" data-key="autex">`;
+                        html += '<div class="mat-row">';
+                        html += '<label>';
+                        html += `<input type="checkbox" ${autexChecked} onchange="toggleSulfatexMaterial('autex', ${lagen}, ${qty}, ${metAutex})">`;
+                        html += `<span class="mat-name">${breakdown.autex.naam}</span>`;
+                        html += '</label>';
+                        html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
+                        html += '</div>';
+                        html += `<div class="mat-calc">${breakdown.autex.verbruik} x € ${breakdown.autex.eenheidsprijs}</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m2)</div>`;
+                        html += '</li>';
+                    }
+                    
+                    html += '</ul>';
+                    
+                    // Opmerking Grondering
+                    html += '<div class="modal-note" style="margin-top: 12px; padding: 8px; background: var(--bg-tertiary); border-radius: 4px; font-size: 0.85em;">';
+                    html += '<strong>Let op:</strong> Grondering (Technicure AS) apart selecteren!';
+                    html += '</div>';
+                    
+                    // Totaal
+                    html += '<div class="modal-total">';
+                    html += '<span class="total-label">Materiaal</span>';
+                    html += `<span id="sulfatex-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
                     html += '</div>';
                 }
             }
@@ -3241,7 +3780,7 @@
                 // Sectie 1: Capaciteit & Arbeid
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
-                html += '<li>Capaciteit: 35 m²/man/dag</li>';
+                html += '<li>Capaciteit: 35 m2/man/dag</li>';
                 html += `<li>${qty} m² = ${(qty / 35 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
@@ -3252,6 +3791,8 @@
                 const absChecked = materialState.fixfinish.absfinish ? 'checked' : '';
                 const absDisabled = materialState.fixfinish.absfinish ? '' : 'disabled';
                 const absPrijs = materialState.fixfinish.absfinish ? breakdown.absfinish.prijs : 0;
+                const absKg = qty * 2.55;
+                const absZakken = (absKg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${absDisabled}" data-key="absfinish">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3261,6 +3802,7 @@
                 html += `<span class="mat-price">€ ${absPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.absfinish.verbruik} x € ${breakdown.absfinish.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${absKg.toFixed(1)} kg (${absZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -3279,7 +3821,7 @@
                 // Sectie 1: Capaciteit & Arbeid
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
-                html += '<li>Capaciteit: 15 m²/man/dag</li>';
+                html += '<li>Capaciteit: 15 m2/man/dag</li>';
                 html += `<li>${qty} m² = ${(qty / 15 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
@@ -3291,6 +3833,8 @@
                 const shieldChecked = materialState.fassashield.shield ? 'checked' : '';
                 const shieldDisabled = materialState.fassashield.shield ? '' : 'disabled';
                 const shieldPrijs = materialState.fassashield.shield ? breakdown.shield.prijs : 0;
+                const shieldM2 = qty * 1.05;
+                const shieldRollen = (shieldM2 / 7.125).toFixed(2);
                 html += `<li class="material-checkbox-item ${shieldDisabled}" data-key="shield">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3300,12 +3844,15 @@
                 html += `<span class="mat-price">€ ${shieldPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.shield.verbruik} x € ${breakdown.shield.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${shieldM2.toFixed(1)} m² (${shieldRollen} rollen a 7,125m2)</div>`;
                 html += '</li>';
                 
                 // Superbond lijm
                 const superbondChecked = materialState.fassashield.superbond ? 'checked' : '';
                 const superbondDisabled = materialState.fassashield.superbond ? '' : 'disabled';
                 const superbondPrijs = materialState.fassashield.superbond ? breakdown.superbond.prijs : 0;
+                const superbondKg = qty * 2.21;
+                const superbondEmmers = (superbondKg / 15).toFixed(2);
                 html += `<li class="material-checkbox-item ${superbondDisabled}" data-key="superbond">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3315,12 +3862,15 @@
                 html += `<span class="mat-price">€ ${superbondPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.superbond.verbruik} x € ${breakdown.superbond.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${superbondKg.toFixed(1)} kg (${superbondEmmers} emmers a 15kg)</div>`;
                 html += '</li>';
                 
                 // Afwerking
                 const afwerkingChecked = materialState.fassashield.afwerking ? 'checked' : '';
                 const afwerkingDisabled = materialState.fassashield.afwerking ? '' : 'disabled';
                 const afwerkingPrijs = materialState.fassashield.afwerking ? breakdown.afwerking.prijs : 0;
+                const afwerkingKg = qty * 2.55;
+                const afwerkingZakken = (afwerkingKg / 25).toFixed(2);
                 html += `<li class="material-checkbox-item ${afwerkingDisabled}" data-key="afwerking">`;
                 html += '<div class="mat-row">';
                 html += '<label>';
@@ -3330,6 +3880,7 @@
                 html += `<span class="mat-price">€ ${afwerkingPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.afwerking.verbruik} x € ${breakdown.afwerking.eenheidsprijs}</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${afwerkingKg.toFixed(1)} kg (${afwerkingZakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -3340,7 +3891,7 @@
                 html += `<span id="fassashield-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
                 html += '</div>';
             }
-            // === GRONDERING (basis modal) ===
+            // === GRONDERING (V9.29 met checkbox) ===
             else if (component === 'grondering') {
                 const product = document.getElementById('product-grondering').value;
                 const spec = XTRA.grondering[product];
@@ -3349,34 +3900,64 @@
                     // Sectie 1: Capaciteit & Arbeid
                     html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                     html += '<ul class="material-list">';
-                    html += `<li>Capaciteit: ${spec.cap_per_man} m²/man/dag</li>`;
+                    html += `<li>Capaciteit: ${spec.cap_per_man} m2/man/dag</li>`;
                     html += `<li>${qty} m² = ${(qty / spec.cap_per_man * 8).toFixed(2)} manuren</li>`;
                     html += '</ul>';
                     
-                    // Sectie 2: Materiaalkosten
+                    // Sectie 2: Materiaalkosten met checkbox
                     html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
-                    html += '<ul class="material-list">';
-                    html += `<li>${spec.naam}</li>`;
-                    html += `<li>Verbruik: ${spec.verbruik}</li>`;
+                    html += '<ul class="material-checkbox-list">';
+                    
+                    const productChecked = materialState.grondering.product ? 'checked' : '';
+                    const productDisabled = materialState.grondering.product ? '' : 'disabled';
                     
                     if (spec.trapfunctie) {
+                        // Technicure AS met trapfunctie
                         const kg_nodig = qty * spec.verbruik_per_m2;
                         const emmers = Math.ceil(kg_nodig / spec.emmer_kg);
-                        const mat_totaal = emmers * spec.emmer_prijs;
-                        html += `<li>Benodigde kg: ${kg_nodig.toFixed(2)} kg</li>`;
-                        html += `<li>Emmers: ${emmers} x ${spec.emmer_kg}kg @ € ${spec.emmer_prijs.toFixed(2)}</li>`;
+                        const emmers_exact = (kg_nodig / spec.emmer_kg).toFixed(2);
+                        const mat_totaal = materialState.grondering.product ? emmers * spec.emmer_prijs : 0;
+                        
+                        html += `<li class="material-checkbox-item ${productDisabled}" data-key="product">`;
+                        html += '<div class="mat-row">';
+                        html += '<label>';
+                        html += `<input type="checkbox" ${productChecked} onchange="toggleGroderingMaterial('${product}', ${qty})">`;
+                        html += `<span class="mat-name">${spec.naam}</span>`;
+                        html += '</label>';
+                        html += `<span class="mat-price">€ ${mat_totaal.toFixed(2)}</span>`;
+                        html += '</div>';
+                        html += `<div class="mat-calc">${spec.verbruik} - ${emmers} emmers x € ${spec.emmer_prijs.toFixed(2)}</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${kg_nodig.toFixed(1)} kg (${emmers_exact} emmers a ${spec.emmer_kg}kg)</div>`;
+                        html += '</li>';
                         html += '</ul>';
+                        
                         html += '<div class="modal-total">';
                         html += '<span class="total-label">Materiaal</span>';
-                        html += `<span class="total-value">€ ${mat_totaal.toFixed(2)}</span>`;
+                        html += `<span id="grondering-mat-total" class="total-value">€ ${mat_totaal.toFixed(2)}</span>`;
                         html += '</div>';
                     } else {
-                        const mat_totaal = qty * spec.mat;
-                        html += `<li>€ ${spec.mat.toFixed(2)}/m2 x ${qty} m²</li>`;
+                        // Standaard producten
+                        const mat_prijs = materialState.grondering.product ? spec.mat : 0;
+                        const mat_totaal = qty * mat_prijs;
+                        const totaal_verbruik = qty * spec.verbruik_num;
+                        const emmers = (totaal_verbruik / spec.emmer).toFixed(2);
+                        
+                        html += `<li class="material-checkbox-item ${productDisabled}" data-key="product">`;
+                        html += '<div class="mat-row">';
+                        html += '<label>';
+                        html += `<input type="checkbox" ${productChecked} onchange="toggleGroderingMaterial('${product}', ${qty})">`;
+                        html += `<span class="mat-name">${spec.naam}</span>`;
+                        html += '</label>';
+                        html += `<span class="mat-price">€ ${mat_prijs.toFixed(2)}/m²</span>`;
+                        html += '</div>';
+                        html += `<div class="mat-calc">${spec.verbruik}</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${totaal_verbruik.toFixed(1)} ${spec.eenheid} (${emmers} emmers a ${spec.emmer}${spec.emmer_eenheid})</div>`;
+                        html += '</li>';
                         html += '</ul>';
+                        
                         html += '<div class="modal-total">';
                         html += '<span class="total-label">Materiaal</span>';
-                        html += `<span class="total-value">€ ${mat_totaal.toFixed(2)}</span>`;
+                        html += `<span id="grondering-mat-total" class="total-value">€ ${mat_totaal.toFixed(2)}</span>`;
                         html += '</div>';
                     }
                 } else {
@@ -3446,6 +4027,8 @@
                         const mp75Checked = materialState.bijkomendpleister.mp75 ? 'checked' : '';
                         const mp75Disabled = materialState.bijkomendpleister.mp75 ? '' : 'disabled';
                         const mp75Prijs = materialState.bijkomendpleister.mp75 ? breakdown.mp75.prijs : 0;
+                        const mp75TotaalKg = extra_dikte * 7.5 * oppervlakte_bezetten;
+                        const mp75ExtraZakken = (mp75TotaalKg / 25).toFixed(2);
                         html += `<li class="material-checkbox-item ${mp75Disabled}" data-key="mp75">`;
                         html += '<div class="mat-row">';
                         html += '<label>';
@@ -3455,6 +4038,7 @@
                         html += `<span class="mat-price">€ ${mp75Prijs.toFixed(2)}/cm/m²</span>`;
                         html += '</div>';
                         html += `<div class="mat-calc">${breakdown.mp75.verbruik} x € ${breakdown.mp75.eenheidsprijs}</div>`;
+                        html += `<div class="mat-qty">→ ${extra_dikte.toFixed(2)} cm x ${oppervlakte_bezetten} m² = ${mp75TotaalKg.toFixed(0)} kg (${mp75ExtraZakken} zakken a 25kg)</div>`;
                         html += '</li>';
                         html += '</ul>';
                         
@@ -3654,11 +4238,12 @@
         calculate();
     };
     
-    // V9.27: Toggle XPS materiaal checkbox (zonder PU-schuim)
-    window.toggleXpsMaterial = function(materialKey, dikte, qty) {
+    // V10.5: Toggle XPS materiaal checkbox met gitex methode
+    window.toggleXpsMaterial = function(materialKey, dikte, qty, gitexMethode) {
         materialState.xps[materialKey] = !materialState.xps[materialKey];
-        const effectief_mat = getXpsMatPrijs(dikte);
+        const effectief_mat = getXpsMatPrijs(dikte, gitexMethode);
         const breakdown = XPS_MAT_BREAKDOWN[dikte] || XPS_MAT_BREAKDOWN[40];
+        const gitexSys = XPS_GITEX_SYSTEMS[gitexMethode] || XPS_GITEX_SYSTEMS.naden;
         
         const totalEl = document.getElementById('xps-mat-total');
         if (totalEl) {
@@ -3669,7 +4254,13 @@
         materials.forEach(key => {
             const item = document.querySelector(`.material-checkbox-item[data-key="${key}"]`);
             if (item) {
-                const prijs = materialState.xps[key] ? breakdown[key].prijs : 0;
+                let prijs = 0;
+                if (materialState.xps[key]) {
+                    if (key === 'plaat') prijs = breakdown.plaat.prijs;
+                    else if (key === 'lgips') prijs = breakdown.lgips.prijs;
+                    else if (key === 'gitex') prijs = gitexSys.gitex_prijs;
+                    else if (key === 'snelband') prijs = gitexSys.snelband_prijs;
+                }
                 const priceEl = item.querySelector('.mat-price');
                 if (priceEl) priceEl.textContent = `€ ${prijs.toFixed(2)}/m²`;
                 item.classList.toggle('disabled', !materialState.xps[key]);
@@ -3679,10 +4270,38 @@
         calculate();
     };
     
-    // V9.29: Toggle Sopro materiaal checkbox (alleen mortel)
-    window.toggleSoproMaterial = function(materialKey, lagen, qty) {
+    // V10.7: Toggle Sulfatex materiaal checkbox met Autex
+    window.toggleSulfatexMaterial = function(materialKey, lagen, qty, metAutex) {
+        materialState.sulfatex[materialKey] = !materialState.sulfatex[materialKey];
+        const effectief_mat = getSulfatexMatPrijs(lagen, metAutex);
+        const breakdown = SULFATEX_MAT_BREAKDOWN[lagen] || SULFATEX_MAT_BREAKDOWN[2];
+        
+        const totalEl = document.getElementById('sulfatex-mat-total');
+        if (totalEl) {
+            totalEl.textContent = `€ ${(qty * effectief_mat).toFixed(2)}`;
+        }
+        
+        const materials = metAutex ? ['mortel', 'autex'] : ['mortel'];
+        materials.forEach(key => {
+            const item = document.querySelector(`.material-checkbox-item[data-key="${key}"]`);
+            if (item) {
+                let prijs = 0;
+                if (materialState.sulfatex[key]) {
+                    prijs = breakdown[key].prijs;
+                }
+                const priceEl = item.querySelector('.mat-price');
+                if (priceEl) priceEl.textContent = `€ ${prijs.toFixed(2)}/m²`;
+                item.classList.toggle('disabled', !materialState.sulfatex[key]);
+            }
+        });
+        
+        calculate();
+    };
+    
+    // V10.6: Toggle Sopro materiaal checkbox met Autex
+    window.toggleSoproMaterial = function(materialKey, lagen, qty, metAutex) {
         materialState.sopro[materialKey] = !materialState.sopro[materialKey];
-        const effectief_mat = getSoproMatPrijs(lagen);
+        const effectief_mat = getSoproMatPrijs(lagen, metAutex);
         const breakdown = SOPRO_MAT_BREAKDOWN[lagen] || SOPRO_MAT_BREAKDOWN[2];
         
         const totalEl = document.getElementById('sopro-mat-total');
@@ -3690,11 +4309,14 @@
             totalEl.textContent = `€ ${(qty * effectief_mat).toFixed(2)}`;
         }
         
-        const materials = ['mortel'];
+        const materials = metAutex ? ['mortel', 'autex'] : ['mortel'];
         materials.forEach(key => {
             const item = document.querySelector(`.material-checkbox-item[data-key="${key}"]`);
             if (item) {
-                const prijs = materialState.sopro[key] ? breakdown[key].prijs : 0;
+                let prijs = 0;
+                if (materialState.sopro[key]) {
+                    prijs = breakdown[key].prijs;
+                }
                 const priceEl = item.querySelector('.mat-price');
                 if (priceEl) priceEl.textContent = `€ ${prijs.toFixed(2)}/m²`;
                 item.classList.toggle('disabled', !materialState.sopro[key]);
@@ -3704,30 +4326,28 @@
         calculate();
     };
     
-    // V9.22: Toggle Asocret materiaal checkbox
-    window.toggleAsocretMaterial = function(materialKey, metAutex, qty) {
+    // V10.8: Toggle Asocret materiaal checkbox met dikte
+    window.toggleAsocretMaterial = function(materialKey, dikte, metAutex, qty) {
         materialState.asocret[materialKey] = !materialState.asocret[materialKey];
-        const effectief_mat = getAsocretMatPrijs(metAutex);
+        const effectief_mat = getAsocretMatPrijs(dikte, metAutex);
+        const breakdown = ASOCRET_MAT_BREAKDOWN[dikte] || ASOCRET_MAT_BREAKDOWN[10];
         
         const totalEl = document.getElementById('asocret-mat-total');
         if (totalEl) {
             totalEl.textContent = `€ ${(qty * effectief_mat).toFixed(2)}`;
         }
         
-        const materials = ['mortel', 'autex'];
+        const materials = metAutex ? ['mortel', 'autex'] : ['mortel'];
         materials.forEach(key => {
             const item = document.querySelector(`.material-checkbox-item[data-key="${key}"]`);
             if (item) {
                 let prijs = 0;
-                if (key === 'mortel' && materialState.asocret.mortel) {
-                    prijs = ASOCRET_MAT_BREAKDOWN.mortel.prijs;
-                } else if (key === 'autex' && metAutex && materialState.asocret.autex) {
-                    prijs = ASOCRET_MAT_BREAKDOWN.autex.prijs;
+                if (materialState.asocret[key]) {
+                    prijs = breakdown[key].prijs;
                 }
                 const priceEl = item.querySelector('.mat-price');
                 if (priceEl) priceEl.textContent = `€ ${prijs.toFixed(2)}/m²`;
-                item.classList.toggle('disabled', key === 'autex' ? 
-                    (!metAutex || !materialState.asocret.autex) : !materialState.asocret[key]);
+                item.classList.toggle('disabled', !materialState.asocret[key]);
             }
         });
         
@@ -3805,6 +4425,55 @@
             const priceEl = item.querySelector('.mat-price');
             if (priceEl) priceEl.textContent = `€ ${prijs.toFixed(2)}/cm/m²`;
             item.classList.toggle('disabled', !materialState.bijkomendpleister.mp75);
+        }
+        
+        calculate();
+    };
+    
+    // V9.29: Toggle Grondering materiaal checkbox
+    window.toggleGroderingMaterial = function(product, qty) {
+        materialState.grondering.product = !materialState.grondering.product;
+        const spec = XTRA.grondering[product];
+        
+        if (spec) {
+            let mat_totaal = 0;
+            if (materialState.grondering.product) {
+                if (spec.trapfunctie) {
+                    const kg_nodig = qty * spec.verbruik_per_m2;
+                    const emmers = Math.ceil(kg_nodig / spec.emmer_kg);
+                    mat_totaal = emmers * spec.emmer_prijs;
+                } else {
+                    mat_totaal = qty * spec.mat;
+                }
+            }
+            
+            const totalEl = document.getElementById('grondering-mat-total');
+            if (totalEl) {
+                totalEl.textContent = `€ ${mat_totaal.toFixed(2)}`;
+            }
+            
+            const item = document.querySelector('.material-checkbox-item[data-key="product"]');
+            if (item) {
+                let prijs = 0;
+                if (materialState.grondering.product) {
+                    if (spec.trapfunctie) {
+                        const kg_nodig = qty * spec.verbruik_per_m2;
+                        const emmers = Math.ceil(kg_nodig / spec.emmer_kg);
+                        prijs = emmers * spec.emmer_prijs;
+                    } else {
+                        prijs = spec.mat;
+                    }
+                }
+                const priceEl = item.querySelector('.mat-price');
+                if (priceEl) {
+                    if (spec.trapfunctie) {
+                        priceEl.textContent = `€ ${prijs.toFixed(2)}`;
+                    } else {
+                        priceEl.textContent = `€ ${prijs.toFixed(2)}/m²`;
+                    }
+                }
+                item.classList.toggle('disabled', !materialState.grondering.product);
+            }
         }
         
         calculate();
@@ -3947,11 +4616,13 @@
             }
         });
 
-        // V9.25: XPS met effectieve prijs functie
+        // V10.5: XPS met gitex methode
         if (qty.xps > 0) {
             const dikte = parseInt(document.getElementById('xps-dikte').value);
-            const mat_prijs = getXpsMatPrijs(dikte);
-            const manuren = (qty.xps / XTRA.xps.cap_per_man) * 8;
+            const gitexMethode = document.getElementById('xps-gitex').value || 'naden';
+            const mat_prijs = getXpsMatPrijs(dikte, gitexMethode);
+            const cap_per_man = getXpsCapaciteit(gitexMethode);
+            const manuren = (qty.xps / cap_per_man) * 8;
             const loon = manuren * LOON;
             const mat = qty.xps * mat_prijs;
             const subtotaal = mat + loon;
@@ -3994,43 +4665,49 @@
         if (qty.ultradun > 0) {
             const systeem = document.getElementById('ultradun-systeem').value;
             
-            let mat, cap_per_man;
-            if (systeem === 'sopro') {
-                // V9.25: Sopro met effectieve prijs functie
-                const lagen = parseInt(document.getElementById('sopro-lagen').value) || 2;
-                const lagen_data = XTRA.ultradun.sopro.lagen[lagen];
-                cap_per_man = lagen_data.cap_per_man;
-                mat = qty.ultradun * getSoproMatPrijs(lagen);
-            } else if (systeem === 'asocret') {
-                // V9.25: Asocret met effectieve prijs functie
-                const metAutex = document.getElementById('asocret-autex').value === 'met';
-                if (metAutex) {
-                    cap_per_man = XTRA.ultradun.asocret.cap_met_autex;
-                } else {
-                    cap_per_man = XTRA.ultradun.asocret.cap_zonder_autex;
-                }
-                mat = qty.ultradun * getAsocretMatPrijs(metAutex);
+            // V10.9: Skip berekening als geen geldig systeem geselecteerd
+            if (!systeem || !['sopro', 'asocret', 'sulfatex'].includes(systeem)) {
+                // Geen geldig systeem - geen berekening
             } else {
-                // Sulfatex: geen checkboxes, originele berekening
-                const systeem_data = XTRA.ultradun.sulfatex;
-                cap_per_man = systeem_data.cap_per_man;
-                mat = qty.ultradun * systeem_data.mat;
+                let mat, cap_per_man;
+                if (systeem === 'sopro') {
+                    // V10.6: Sopro met Autex optie
+                    const lagen = parseInt(document.getElementById('sopro-lagen').value) || 2;
+                    const metAutex = document.getElementById('sopro-autex').value === 'met';
+                    const lagen_data = XTRA.ultradun.sopro.lagen[lagen];
+                    cap_per_man = metAutex ? lagen_data.cap_met_autex : lagen_data.cap_per_man;
+                    mat = qty.ultradun * getSoproMatPrijs(lagen, metAutex);
+                } else if (systeem === 'asocret') {
+                    // V10.8: Asocret met dikte dropdown
+                    const dikte = parseInt(document.getElementById('asocret-dikte').value) || 10;
+                    const metAutex = document.getElementById('asocret-autex').value === 'met';
+                    const dikte_data = XTRA.ultradun.asocret.diktes[dikte];
+                    cap_per_man = metAutex ? dikte_data.cap_met_autex : dikte_data.cap_per_man;
+                    mat = qty.ultradun * getAsocretMatPrijs(dikte, metAutex);
+                } else if (systeem === 'sulfatex') {
+                    // V10.7: Sulfatex met lagen en Autex optie
+                    const lagen = parseInt(document.getElementById('sulfatex-lagen').value) || 2;
+                    const metAutex = document.getElementById('sulfatex-autex').value === 'met';
+                    const lagen_data = XTRA.ultradun.sulfatex.lagen[lagen];
+                    cap_per_man = metAutex ? lagen_data.cap_met_autex : lagen_data.cap_per_man;
+                    mat = qty.ultradun * getSulfatexMatPrijs(lagen, metAutex);
+                }
+                
+                const manuren = (qty.ultradun / cap_per_man) * 8;
+                const loon = manuren * LOON;
+                const subtotaal = mat + loon;
+                const prijs = subtotaal / qty.ultradun;
+                
+                result.ultradun = { 
+                    manuren, loon, mat,
+                    tijd: manuren,
+                    prijs: prijs,
+                    subtotaal: subtotaal
+                };
+                result.manuren += manuren;
+                result.loon += loon;
+                result.mat += mat;
             }
-            
-            const manuren = (qty.ultradun / cap_per_man) * 8;
-            const loon = manuren * LOON;
-            const subtotaal = mat + loon;
-            const prijs = subtotaal / qty.ultradun;
-            
-            result.ultradun = { 
-                manuren, loon, mat,
-                tijd: manuren,
-                prijs: prijs,
-                subtotaal: subtotaal
-            };
-            result.manuren += manuren;
-            result.loon += loon;
-            result.mat += mat;
         }
 
         // V9.25: Fixfinish met effectieve prijs functie
@@ -4076,15 +4753,20 @@
             const product = document.getElementById('product-grondering').value || 'stucprimer';
             const spec = XTRA.grondering[product];
             
+            // V9.29: Mat berekenen met checkbox state
             let mat;
             let emmers = 0;
-            if (spec && spec.trapfunctie) {
-                // Technicure AS: trapfunctie (emmer-afronding)
-                const kg_nodig = qty.grondering * spec.verbruik_per_m2;
-                emmers = Math.ceil(kg_nodig / spec.emmer_kg);
-                mat = emmers * spec.emmer_prijs;
-            } else if (spec) {
-                mat = qty.grondering * spec.mat;
+            if (materialState.grondering.product) {
+                if (spec && spec.trapfunctie) {
+                    // Technicure AS: trapfunctie (emmer-afronding)
+                    const kg_nodig = qty.grondering * spec.verbruik_per_m2;
+                    emmers = Math.ceil(kg_nodig / spec.emmer_kg);
+                    mat = emmers * spec.emmer_prijs;
+                } else if (spec) {
+                    mat = qty.grondering * spec.mat;
+                } else {
+                    mat = 0;
+                }
             } else {
                 mat = 0;
             }
@@ -4439,7 +5121,7 @@
                 row.innerHTML = `
                     <span class="component-name">${componentNames[comp]}</span>
                     <span class="component-calc">${qty[comp].toFixed(2)} ${unit} x 
-                    EUR ${eenheidsprijs.toFixed(2)}</span>
+                    € ${eenheidsprijs.toFixed(2)}</span>
                     <span class="component-total">€ ${subtotaal.toFixed(2)}</span>
                 `;
                 invoiceItemsContainer.appendChild(row);
@@ -4453,7 +5135,7 @@
             row.innerHTML = `
                 <span class="component-name">Bijkomend pleisterwerk</span>
                 <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m² x 
-                EUR ${eenheidsprijs.toFixed(2)}</span>
+                € ${eenheidsprijs.toFixed(2)}</span>
                 <span class="component-total">€ ${bijkomend_totaal.toFixed(2)}</span>
             `;
             invoiceItemsContainer.appendChild(row);
@@ -4466,7 +5148,7 @@
             row.innerHTML = `
                 <span class="component-name">Bijkomende egalisatie</span>
                 <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m² x 
-                EUR ${eenheidsprijs.toFixed(2)}</span>
+                € ${eenheidsprijs.toFixed(2)}</span>
                 <span class="component-total">€ ${egalisatie_totaal.toFixed(2)}</span>
             `;
             invoiceItemsContainer.appendChild(row);
@@ -4479,7 +5161,7 @@
             row.innerHTML = `
                 <span class="component-name">Hoekprofiel(en)</span>
                 <span class="component-calc">${hoekprofielen_meters.toFixed(2)} m x 
-                EUR ${eenheidsprijs.toFixed(2)}</span>
+                € ${eenheidsprijs.toFixed(2)}</span>
                 <span class="component-total">€ ${hoekprofielen_totaal.toFixed(2)}</span>
             `;
             invoiceItemsContainer.appendChild(row);
@@ -4492,18 +5174,121 @@
         document.getElementById('invoice').classList.toggle('dormant', !hasAnyValue);
     }
 
+    // ============================================================
+    // V11.0: UX PARITEIT MET V34.5 SALES CALCULATOR
+    // Card activation systeem + auto-scroll + auto-select
+    // ============================================================
+    
+    // V11.0: Map card IDs to their primary (activating) field
+    // Kaart blijft dormant totdat dit numerieke veld waarde > 0 heeft
+    const cardPrimaryField = {
+        'card-afkappen': 'afkappen',
+        'card-injecties': 'injecties',
+        'card-membraan': 'membraan',
+        'card-bezetten': 'bezetten',
+        'card-hoekprofielen': 'hoekprofielen',
+        'card-bijkomendpleister': 'bijkomendpleister',
+        'card-egalisatie': 'egalisatie',
+        'card-xps': 'xps',
+        'card-wedi': 'wedi',
+        'card-ultradun': 'ultradun',
+        'card-fixfinish': 'fixfinish',
+        'card-fassashield': 'fassashield',
+        'card-grondering': 'grondering'
+    };
+    
+    // V11.0: Map input/select IDs to their parent card IDs
+    const inputToCard = {
+        'afkappen': 'card-afkappen',
+        'injecties': 'card-injecties',
+        'membraan': 'card-membraan',
+        'bezetten': 'card-bezetten',
+        'hoekprofielen': 'card-hoekprofielen',
+        'bijkomendpleister': 'card-bijkomendpleister',
+        'egalisatie': 'card-egalisatie',
+        'xps': 'card-xps',
+        'xps-dikte': 'card-xps',
+        'xps-gitex': 'card-xps',
+        'wedi': 'card-wedi',
+        'wedi-dikte': 'card-wedi',
+        'wedi-gitex': 'card-wedi',
+        'ultradun': 'card-ultradun',
+        'ultradun-systeem': 'card-ultradun',
+        'sopro-lagen': 'card-ultradun',
+        'sopro-autex': 'card-ultradun',
+        'sulfatex-lagen': 'card-ultradun',
+        'sulfatex-autex': 'card-ultradun',
+        'asocret-dikte': 'card-ultradun',
+        'asocret-autex': 'card-ultradun',
+        'fixfinish': 'card-fixfinish',
+        'fassashield': 'card-fassashield',
+        'grondering': 'card-grondering',
+        'product-grondering': 'card-grondering'
+    };
+    
+    // V11.0: Check of kaart geactiveerd mag worden (alleen als primair veld waarde > 0)
+    const shouldActivateCard = (cardId) => {
+        const primaryField = cardPrimaryField[cardId];
+        if (!primaryField) return true;  // Geen mapping = altijd activeren
+        
+        const el = document.getElementById(primaryField);
+        return el && parseFloat(el.value.replace(',', '.')) > 0;
+    };
+    
+    // V11.0: Maak kaart dormant als primair veld leeg/0
+    const deactivateCardIfEmpty = (cardId) => {
+        if (!shouldActivateCard(cardId)) {
+            const card = document.getElementById(cardId);
+            if (card) card.classList.add('dormant');
+        }
+    };
+    
+    // V11.0: Activeer kaart (verwijder dormant class)
+    const activateCard = (cardId) => {
+        const card = document.getElementById(cardId);
+        if (card) card.classList.remove('dormant');
+    };
+    
+    // V11.0: Scroll active field to 1/3 from top of viewport (V33.2 pattern)
+    const scrollFieldIntoView = (element) => {
+        if (!element) return;
+        
+        // Small delay to let mobile keyboard appear first
+        setTimeout(() => {
+            const rect = element.getBoundingClientRect();
+            const elementTop = rect.top + window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const targetOffset = viewportHeight / 3;
+            const scrollTo = elementTop - targetOffset;
+            
+            window.scrollTo({
+                top: Math.max(0, scrollTo),
+                behavior: 'smooth'
+            });
+        }, 50);
+    };
+
     // === EVENT LISTENERS ===
     const inputIds = [
         'afkappen', 'injecties', 'membraan', 'bezetten',
         'hoekprofielen', 'bijkomendpleister', 'egalisatie',
-        'xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering'  // V8.8: grondering toegevoegd
+        'xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering'
     ];
     
     inputIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            // Input event: calculate en update unit positie
+            // V11.0: Input event met dormant logica (V34.5 pattern)
             element.addEventListener('input', function(e) {
+                const cardId = inputToCard[id];
+                if (cardId) {
+                    if (shouldActivateCard(cardId)) {
+                        activateCard(cardId);
+                    } else {
+                        deactivateCardIfEmpty(cardId);
+                    }
+                }
+                
                 calculate();
                 UnitPositioner.update(e.target);
             });
@@ -4521,8 +5306,9 @@
                 calculate();
             });
             
-            // Focus event: selecteer waarde voor makkelijk overschrijven
+            // V11.0: Focus event met auto-scroll + auto-select (V33.2 + V27.0 pattern)
             element.addEventListener('focus', function() {
+                scrollFieldIntoView(element);
                 if (element.value) {
                     element.select();
                 }
@@ -4530,7 +5316,9 @@
         }
     });
     
-    ['xps-dikte', 'ultradun-systeem', 'sopro-lagen', 'wedi-dikte', 'wedi-gitex', 'product-grondering'].forEach(id => {
+    // V11.0: Select handlers met shouldActivateCard check (V34.5 pattern)
+    // Dropdown selecties alleen activeren kaart als primair veld waarde > 0 heeft
+    ['xps-dikte', 'xps-gitex', 'ultradun-systeem', 'sopro-lagen', 'wedi-dikte', 'wedi-gitex', 'product-grondering'].forEach(id => {
         const select = document.getElementById(id);
         select.addEventListener('change', function(e) {
             // Toggle placeholder-active class
@@ -4541,33 +5329,133 @@
                 UnitPositioner.update(e.target);
             }
             
-            // V9.1: Show/hide sopro-lagen and asocret-autex based on systeem selection
+            // V11.0: Alleen activeren als primair veld waarde heeft
+            const cardId = inputToCard[id];
+            if (cardId && shouldActivateCard(cardId)) {
+                activateCard(cardId);
+            }
+            
+            // V10.8: Show/hide systeem-specifieke dropdowns
             if (id === 'ultradun-systeem') {
-                const lagenWrapper = document.getElementById('sopro-lagen-wrapper');
-                const lagenSelect = document.getElementById('sopro-lagen');
-                const autexWrapper = document.getElementById('asocret-autex-wrapper');
+                const soproLagenWrapper = document.getElementById('sopro-lagen-wrapper');
+                const soproLagenSelect = document.getElementById('sopro-lagen');
+                const soproAutexWrapper = document.getElementById('sopro-autex-wrapper');
+                const sulfatexLagenWrapper = document.getElementById('sulfatex-lagen-wrapper');
+                const sulfatexLagenSelect = document.getElementById('sulfatex-lagen');
+                const sulfatexAutexWrapper = document.getElementById('sulfatex-autex-wrapper');
+                const asocretAutexWrapper = document.getElementById('asocret-autex-wrapper');
+                const asocretDikteWrapper = document.getElementById('asocret-dikte-wrapper');
+                const asocretDikteSelect = document.getElementById('asocret-dikte');
                 
                 if (e.target.value === 'sopro') {
-                    lagenWrapper.style.display = 'block';
-                    autexWrapper.style.display = 'none';
+                    soproAutexWrapper.style.display = 'block';
+                    soproLagenWrapper.style.display = 'block';
+                    sulfatexAutexWrapper.style.display = 'none';
+                    sulfatexLagenWrapper.style.display = 'none';
+                    asocretAutexWrapper.style.display = 'none';
+                    asocretDikteWrapper.style.display = 'none';
+                } else if (e.target.value === 'sulfatex') {
+                    soproAutexWrapper.style.display = 'none';
+                    soproLagenWrapper.style.display = 'none';
+                    soproLagenSelect.value = '2';
+                    sulfatexAutexWrapper.style.display = 'block';
+                    sulfatexLagenWrapper.style.display = 'block';
+                    asocretAutexWrapper.style.display = 'none';
+                    asocretDikteWrapper.style.display = 'none';
                 } else if (e.target.value === 'asocret') {
-                    lagenWrapper.style.display = 'none';
-                    lagenSelect.value = '2';
-                    autexWrapper.style.display = 'block';
+                    soproAutexWrapper.style.display = 'none';
+                    soproLagenWrapper.style.display = 'none';
+                    soproLagenSelect.value = '2';
+                    sulfatexAutexWrapper.style.display = 'none';
+                    sulfatexLagenWrapper.style.display = 'none';
+                    sulfatexLagenSelect.value = '2';
+                    asocretAutexWrapper.style.display = 'block';
+                    asocretDikteWrapper.style.display = 'block';
                 } else {
-                    // Sulfatex or no selection
-                    lagenWrapper.style.display = 'none';
-                    lagenSelect.value = '2';
-                    autexWrapper.style.display = 'none';
+                    // No selection
+                    soproAutexWrapper.style.display = 'none';
+                    soproLagenWrapper.style.display = 'none';
+                    soproLagenSelect.value = '2';
+                    sulfatexAutexWrapper.style.display = 'none';
+                    sulfatexLagenWrapper.style.display = 'none';
+                    sulfatexLagenSelect.value = '2';
+                    asocretAutexWrapper.style.display = 'none';
+                    asocretDikteWrapper.style.display = 'none';
+                    asocretDikteSelect.value = '10';
                 }
             }
             
             calculate();
         });
+        
+        // V11.0: Focus event voor select met auto-scroll
+        select.addEventListener('focus', function() {
+            scrollFieldIntoView(select);
+        });
     });
 
-    // V9.1: Autex checkbox event listener
-    document.getElementById('asocret-autex').addEventListener('change', calculate);
+    // V11.0: Autex en dikte dropdowns met shouldActivateCard check
+    // Deze dropdowns activeren kaart alleen als primair veld (ultradun) waarde > 0 heeft
+    
+    // Asocret-autex dropdown
+    const asocretAutex = document.getElementById('asocret-autex');
+    asocretAutex.addEventListener('change', function() {
+        if (shouldActivateCard('card-ultradun')) {
+            activateCard('card-ultradun');
+        }
+        calculate();
+    });
+    asocretAutex.addEventListener('focus', function() {
+        scrollFieldIntoView(asocretAutex);
+    });
+
+    // Asocret-dikte dropdown
+    const asocretDikte = document.getElementById('asocret-dikte');
+    asocretDikte.addEventListener('change', function() {
+        if (shouldActivateCard('card-ultradun')) {
+            activateCard('card-ultradun');
+        }
+        calculate();
+    });
+    asocretDikte.addEventListener('focus', function() {
+        scrollFieldIntoView(asocretDikte);
+    });
+
+    // Sopro-autex dropdown
+    const soproAutex = document.getElementById('sopro-autex');
+    soproAutex.addEventListener('change', function() {
+        if (shouldActivateCard('card-ultradun')) {
+            activateCard('card-ultradun');
+        }
+        calculate();
+    });
+    soproAutex.addEventListener('focus', function() {
+        scrollFieldIntoView(soproAutex);
+    });
+
+    // Sulfatex-autex dropdown
+    const sulfatexAutex = document.getElementById('sulfatex-autex');
+    sulfatexAutex.addEventListener('change', function() {
+        if (shouldActivateCard('card-ultradun')) {
+            activateCard('card-ultradun');
+        }
+        calculate();
+    });
+    sulfatexAutex.addEventListener('focus', function() {
+        scrollFieldIntoView(sulfatexAutex);
+    });
+
+    // Sulfatex-lagen dropdown
+    const sulfatexLagen = document.getElementById('sulfatex-lagen');
+    sulfatexLagen.addEventListener('change', function() {
+        if (shouldActivateCard('card-ultradun')) {
+            activateCard('card-ultradun');
+        }
+        calculate();
+    });
+    sulfatexLagen.addEventListener('focus', function() {
+        scrollFieldIntoView(sulfatexLagen);
+    });
 
     // Initialize UnitPositioner
     UnitPositioner.init();
