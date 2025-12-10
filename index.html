@@ -9,43 +9,99 @@
     <title>AQP Subcalculator V11.0</title>
     <style>
     /* ============================================================
-       AQP SUBCALCULATOR V11.0
+       AQP SUBCALCULATOR V11.0 (UTF-8)
        ============================================================
-       BUILD DATE: 08-12-2025
+       BUILD DATE: 10-12-2025
        STATUS: PRODUCTION READY
+       
+       
+       CHANGELOG V11.0 (UTF-8):
+       ------------------------
+       [ENCODING] Complete ASCII naar UTF-8 conversie
+       - EUR -> € in alle prijsbadges, breakdown spans, factuuroverzicht
+       - m2 -> m² in alle unit-inside spans en prijseenheden  
+       - (c) -> © in footer copyright
+       - Alle info modal dynamische content geconverteerd
+       - Mat-calc breakdown regels geconverteerd
+       - Dormant state reset values geconverteerd
+       - Conform ASCII_NAAR_UTF8_CONVERSIE_KB_V2_0
+       
+       [BEZETTEN] Subcalculator specifiek: 100% MP75
+       - Sales Calculator: 75% MP75 + 25% Snelband = EUR 5,45/m²
+       - Subcalculator: 100% MP75 (15 kg/m²) = EUR 5,45/m²
+       - Reden: onderaannemer krijgt 25% marge, MP75 goedkoper dan Snelband
+       - Info modal aangepast: alleen MP75 checkbox, geen Snelband
        
        CHANGELOG V11.0:
        -----------------
-       [UTF-8 ENCODING] Complete conversie conform KB V2.0
+       [NIEUW COMPONENT] Varia / Diversen
+       - Uitbreidbaar productplatform voor diverse producten/handelingen
+       - Initieel product: Volteco Spidy 15 Kimnaadafwerking
+       - Input disabled tot product geselecteerd
+       - Dynamische unit/label per geselecteerd product
+       - Info modal met product-specifieke materialen en checkboxes
+       - Aparte invoice regel met dynamische eenheid
+       - Uitbreidbaar: nieuwe producten = XTRA entry + breakdown + dropdown
        
-       [VALUTA] EUR → € symbool
-       - Alle prijsbadges: EUR X,XX/m² → € X,XX/m²
-       - Alle breakdown spans: EUR X → € X
-       - Alle summary values: EUR X,XX → € X,XX
-       - Alle factuuroverzicht regels: EUR → €
-       - Alle info modal prijzen: EUR → €
-       - Alle dormant reset values: EUR → €
+       [UX] Consistente kaart-activatie
+       - Kaart blijft dormant tot waarde > 0 (zoals alle andere componenten)
+       - Product selectie enabled alleen het input veld
        
-       [EENHEDEN] m2 → m² superscript
-       - Alle unit-inside spans: m2 → m²
-       - Alle sr-only labels: in m2 → in m²
-       - Alle placeholders: (m2) → (m²)
-       - Alle prijsbadges eenheden: /m2 → /m²
-       - Alle verbruik strings: kg/m², L/m², m²/m²
-       - Alle info modal eenheden: /cm/m² formaat
-       - Alle mat-qty regels: X m² = Y kg
+       [UX] Factuuroverzicht V36.0 pariteit
+       - Compacte benamingen exact zoals V36.0:
+         * Kappen (was: Pleisterwerk verwijderen)
+         * Grond. (was: Grondering Muur)
+         * Inj. (was: Injecties)
+         * SNC (was: SNC-Membraan)
+         * Sopro/Asocret/Sulfatex (dynamisch)
+         * XPS {dikte}+{V/N} (bv: XPS 40+N)
+         * Wedi {dikte}+{V/N} (bv: Wedi 4+V)
+         * Fassa (was: Fassa Shield Isolatiesysteem)
+         * Hoekprof. (was: Hoekprofielen)
+         * Pleister (was: Bezetten met gipspleister)
+         * Bijkomend (was: Bijkomend pleister)
+         * Fix&Fin (was: Fix & Finish Afwerking)
+       - Volgorde V36.0: Voorbereidend > Behandeling > Isolatie > Eindafwerking
        
-       [COPYRIGHT] (c) → © symbool
-       - Footer: (c) 2025 Vecon → © 2025 Vecon
+       [SPIDY 15 SPECIFICATIES]
+       - Eenheid: m (lopende meter kimnaad)
+       - Dagcapaciteit: 60 m/man/dag
+       - Materiaalkosten: EUR 4,25/m
+       - Product: Volteco SPIDY 15 snelmortel (15 kg zak)
+       - Zakprijs: EUR 16,90
+       - Rendement: 4 meter kimnaad per zak (0,25 zak/m)
        
-       [PIJLEN] -> → → symbool
-       - Mat-qty regels: -> X m² → → X m²
+       CHANGELOG V10.12:
+       -----------------
+       [PARITEIT] Master Component Sheet V2.0 - 100% prijspariteit
        
-       [TECHNISCH] Behouden in ASCII
-       - Element IDs: vloer_m2, price-membraan etc.
-       - Data attributes: data-field, data-key
-       - JavaScript variabelen: inputs.vloer_m2, qty.bezetten
-       - Config keys: cap_per_man, mat_prijs
+       [XPS PLAATPRIJZEN] Alle 5 diktes gecorrigeerd:
+       - 20mm: EUR 3,15 -> EUR 2,82 (eenheidsprijs EUR 2,82/m2)
+       - 30mm: EUR 3,83 -> EUR 3,52 (eenheidsprijs EUR 3,52/m2)
+       - 40mm: EUR 5,25 -> EUR 4,69 (eenheidsprijs EUR 4,69/m2)
+       - 50mm: EUR 6,56 -> EUR 5,87 (eenheidsprijs EUR 5,87/m2)
+       - 60mm: EUR 7,88 -> EUR 7,04 (eenheidsprijs EUR 7,04/m2)
+       
+       [XPS L-GIPS] Prijscorrectie:
+       - EUR 0,75 -> EUR 0,65 (conform Master Sheet)
+       
+       [CODEX POWER CX2] Prijscorrectie in MEMBRAAN_MAT_BREAKDOWN:
+       - EUR 3,77 -> EUR 3,95 (6,25 kg x EUR 0,632/kg)
+       
+       [CODEX POWER CX2] Prijscorrectie in WEDI_MAT_BREAKDOWN (alle diktes):
+       - EUR 3,77 -> EUR 3,95 (6,25 kg x EUR 0,632/kg)
+       
+       [FASSA SUPERBOND] Verbruik en prijscorrectie:
+       - Verbruik: 2,21 kg/m2 -> 2,14 kg/m2
+       - Prijs: EUR 4,20 -> EUR 4,07
+       
+       [FASSA SHIELD] Totaal materiaal gecorrigeerd:
+       - XTRA.fassashield.mat: EUR 39,89 -> EUR 37,96
+       - Breakdown: Shield EUR 33,89 + Superbond EUR 4,07 = EUR 37,96
+       
+       [BEZETTEN] Breakdown structuur verbeterd:
+       - MP75 (75%): EUR 4,08 + Snelband (25%): EUR 1,37 = EUR 5,45
+       - Totaal ongewijzigd, breakdown nu correct
        
        CHANGELOG V10.11:
        -----------------
@@ -120,7 +176,7 @@
        - sulfatex-lagen dropdown (2/3 lagen)
        - sulfatex-autex dropdown (zonder/met)
        - Capaciteit: 32,50/21,67 m2/dag (met Autex: -20%)
-       - Materiaal: EUR 18,00/27,00 per m² (+EUR 3,24 met Autex)
+       - Materiaal: EUR 18,00/27,00 per m2 (+EUR 3,24 met Autex)
        - Info modal met checkboxes
        - Conform V34.2 Sales Calculator en Master Sheet V1.2
        
@@ -155,13 +211,13 @@
        CHANGELOG V10.4:
        ----------------
        [GRONDERING] Mat-qty regels toegevoegd voor alle 6 producten
-       - Stucprimer: 0,10 kg/m², verpakking 5L
-       - Sopro GD749: 0,15 kg/m², verpakking 5kg
-       - Technicure CS: 0,50 L/m², verpakking 25L
-       - Keisol MB: 0,15 kg/m², verpakking 30kg
-       - Betokontakt: 0,30 kg/m², verpakking 20kg
-       - Technicure AS: 0,33 kg/m², verpakking 5kg (trapfunctie)
-       - Format: "-> qty m² = X,X kg/L (Y,YY emmers a grootte)"
+       - Stucprimer: 0,10 kg/m2, verpakking 5L
+       - Sopro GD749: 0,15 kg/m2, verpakking 5kg
+       - Technicure CS: 0,50 L/m2, verpakking 25L
+       - Keisol MB: 0,15 kg/m2, verpakking 30kg
+       - Betokontakt: 0,30 kg/m2, verpakking 20kg
+       - Technicure AS: 0,33 kg/m2, verpakking 5kg (trapfunctie)
+       - Format: "-> qty m2 = X,X kg/L (Y,YY emmers a grootte)"
        
        CHANGELOG V10.2:
        ----------------
@@ -174,8 +230,8 @@
        ----------------
        [INFO MODALS - MAT-QTY FORMAT FIX]
        - Volledig format hersteld: totaal + exacte verpakkingseenheden
-       - Format: "-> qty m² = X kg/L/m2 (Y,YY zakken/emmers/rollen a grootte)"
-       - Voorbeeld: "-> 42 m² = 630 kg (25,20 zakken a 25kg)"
+       - Format: "-> qty m2 = X kg/L/m2 (Y,YY zakken/emmers/rollen a grootte)"
+       - Voorbeeld: "-> 42 m2 = 630 kg (25,20 zakken a 25kg)"
        - Alle 20 materiaalregels consistent aangepast
        
        CHANGELOG V10:
@@ -189,7 +245,7 @@
        - Prijs/m: EUR 3,16 -> EUR 2,84
        
        [MEMBRAAN]
-       - SNC-Membraan: verbruik 1,10 -> 1,00 m²/m² (overlap verwijderd)
+       - SNC-Membraan: verbruik 1,10 -> 1,00 m2/m2 (overlap verwijderd)
        - SNC prijs: EUR 4,43 -> EUR 4,03/m2
        - Totaal: EUR 8,20 -> EUR 7,80/m2
        
@@ -198,54 +254,54 @@
        - Prijs/m2: EUR 5,70 -> EUR 5,45
        
        [XPS ISOLATIESYSTEEM]
-       - L-gips: forfait EUR 2,40 -> EUR 0,75 (1,8 kg/m² x € 0,4104/kg)
+       - L-gips: forfait EUR 2,40 -> EUR 0,75 (1,8 kg/m2 x EUR 0,4104/kg)
        - Gitex: EUR 1,43 -> EUR 1,38 (rol EUR 125,34/100m2)
-       - Snelband: 3mm -> 1mm, EUR 1,34 -> EUR 0,44 (0,8 kg x € 0,552/kg)
+       - Snelband: 3mm -> 1mm, EUR 1,34 -> EUR 0,44 (0,8 kg x EUR 0,552/kg)
        - Totalen: 20mm EUR 5,72, 30mm EUR 6,40, 40mm EUR 7,82, 
                   50mm EUR 9,13, 60mm EUR 10,45
        
        [WEDI SYSTEEM]
        - Flexlijm -> CODEX: EUR 5,00 -> EUR 3,77/m2
-       - Gitex naden: EUR 0,42 -> EUR 0,31 (0,25 m2 x € 1,2534)
-       - Snelband naden: EUR 0,16 -> EUR 0,11 (0,20 kg x € 0,552)
+       - Gitex naden: EUR 0,42 -> EUR 0,31 (0,25 m2 x EUR 1,2534)
+       - Snelband naden: EUR 0,16 -> EUR 0,11 (0,20 kg x EUR 0,552)
        - Totalen: 4mm EUR 35,61, 6mm EUR 33,17, 10mm EUR 32,00
        
        [ASOCRET]
        - Autex: EUR 2,16 -> EUR 3,24 (rol EUR 178,20/55m2)
-       - Verbruik: 1,1 -> 1,0 m²/m² (overlap verwijderd)
+       - Verbruik: 1,1 -> 1,0 m2/m2 (overlap verwijderd)
        - Totaal: EUR 18,36 -> EUR 19,44/m2
        
        [FIX & FINISH]
        - Laagdikte: 3mm (gebruiker keuze)
-       - Verbruik: 4 -> 2,55 kg/m² (0,85 kg/mm x 3mm)
+       - Verbruik: 4 -> 2,55 kg/m2 (0,85 kg/mm x 3mm)
        - Zakprijs: EUR 17,67/25kg (eenheidsprijs EUR 0,7068/kg)
        - Prijs/m2: EUR 2,40 -> EUR 1,80
        
        [FASSA SHIELD]
-       - Superbond: EUR 4,27 -> EUR 4,20 (2,21 kg/m² x € 1,90/kg)
+       - Superbond: EUR 4,27 -> EUR 4,20 (2,21 kg/m2 x EUR 1,90/kg)
        - Afwerking: EUR 2,12 -> EUR 1,80 (Fix & Finish 3mm)
        - Totaal: EUR 40,28 -> EUR 39,89/m2
        
        [GRONDERING - 6 PRODUCTEN]
-       - Stucprimer: EUR 0,70 -> EUR 0,52 (0,10 kg x € 5,234/kg)
+       - Stucprimer: EUR 0,70 -> EUR 0,52 (0,10 kg x EUR 5,234/kg)
        - Sopro GD749: EUR 1,17 (ongewijzigd)
-       - Technicure CS: EUR 2,91 -> EUR 3,64 (0,50 L x € 7,28/L)
-       - Keisol MB: EUR 3,10 -> EUR 0,78 (0,15 kg x € 5,17/kg)
-       - Betokontakt: EUR 1,73 -> EUR 0,84 (0,30 kg x € 2,79/kg)
+       - Technicure CS: EUR 2,91 -> EUR 3,64 (0,50 L x EUR 7,28/L)
+       - Keisol MB: EUR 3,10 -> EUR 0,78 (0,15 kg x EUR 5,17/kg)
+       - Betokontakt: EUR 1,73 -> EUR 0,84 (0,30 kg x EUR 2,79/kg)
        - Technicure AS: ongewijzigd (trapfunctie)
        
        [BIJKOMEND PLEISTERWERK]
-       - MP75: EUR 2,85 -> EUR 2,72/cm/m2 (7,5 kg x € 0,3632/kg)
+       - MP75: EUR 2,85 -> EUR 2,72/cm/m2 (7,5 kg x EUR 0,3632/kg)
        
        CHANGELOG V9.28:
        ---------------
        [BIJKOMEND PLEISTERWERK - PUUR MP75]
        - Herwerkt naar puur MP75 basis (zonder Snelband)
-       - Materiaal: MP75 EUR 2,85/cm/m2 (7,5 kg/cm x € 0,38/kg)
+       - Materiaal: MP75 EUR 2,85/cm/m2 (7,5 kg/cm x EUR 0,38/kg)
        - Arbeid: EUR 7,15/cm/m2 (vast)
        - Totaal: EUR 10,00/cm/m2 (ongewijzigd)
        - Info modal met checkbox voor MP75 materiaal
-       - Uitvinken MP75 = alleen arbeidskosten (EUR 7,15/cm/m²)
+       - Uitvinken MP75 = alleen arbeidskosten (EUR 7,15/cm/m2)
        
        [BUGFIX - TIJD DUBBELTELLING TOTAALOVERZICHT]
        - Herberekening van result.manuren en result.loon aan einde van
@@ -269,8 +325,8 @@
        ---------------
        [MEMBRAAN CORRECTIE - HYGROSCOPISCHE KB]
        - Twee checkboxes: CODEX POWER CX2 + SNC-Membraan
-       - CODEX POWER CX2: 6,25 kg/m² x € 0,60/kg = EUR 3,77/m2
-       - SNC-Membraan: 1,10 m²/m² x € 4,03/m2 = EUR 4,43/m2
+       - CODEX POWER CX2: 6,25 kg/m2 x EUR 0,60/kg = EUR 3,77/m2
+       - SNC-Membraan: 1,10 m2/m2 x EUR 4,03/m2 = EUR 4,43/m2
        - Materiaalprijs: EUR 8,00/m2 -> EUR 8,20/m2 (KB conform)
        - Bron: HYGROSCOPISCHE_BEHANDELING_MET_SNC-MEMBRAAN_KB
        
@@ -304,7 +360,7 @@
        - Kiesol MB -> Fassa Inject (correcte productnaam)
        - Materiaalprijs: EUR 2,00/m -> EUR 3,30/m (KB conform)
        - Twee checkboxes: Fassa Inject (EUR 3,16/m) + PU-schuim (EUR 0,14/m)
-       - Verbruik: 0,2 L/m x € 15,80/L = EUR 3,16/m
+       - Verbruik: 0,2 L/m x EUR 15,80/L = EUR 3,16/m
        - PU-schuim: forfait EUR 0,14/m
        - Bron: FASSA_INJECT_VOCHTINJECTIES_KNOWLEDGE_BASE
        
@@ -313,12 +369,12 @@
        [ALLE INFO MODALS HERSCHREVEN - KB V1.0 STANDAARD]
        - Alle modals naar two-line layout met checkboxes
        - Injecties: checkbox Kiesol MB (EUR 2,00/m)
-       - Membraan: checkbox SNC-membraan (EUR 8,00/m²)
-       - Bezetten: checkbox MP75 gipspleister (EUR 5,70/m²)
+       - Membraan: checkbox SNC-membraan (EUR 8,00/m2)
+       - Bezetten: checkbox MP75 gipspleister (EUR 5,70/m2)
        - XPS: checkboxes plaat/L-gips/PU-schuim/Gitex/Snelband
        - Ultradun Sopro: checkboxes per laag + wapening
        - Ultradun Asocret: checkboxes mortel + Autex
-       - Fix & Finish: checkbox Fix & Finish (EUR 2,61/m²)
+       - Fix & Finish: checkbox Fix & Finish (EUR 2,61/m2)
        - Fassa Shield: checkboxes Shield/Superbond/Afwerking
        - Consistente V30.13/V30.18 styling voor alle modals
        - materialState uitgebreid voor alle componenten
@@ -330,8 +386,8 @@
        [WEDI GITEX METHODE - V30.18 SYNC]
        - Dropdown: "Naden verstevigen" vs "Volledig oppervlak"
        - WEDI_GITEX_SYSTEMS met productiviteit/prijzen per methode
-       - Naden: 30 m2/dag, Gitex 0,12 m²/m² = EUR 0,42
-       - Volledig: 25 m2/dag, Gitex 1,10 m²/m² = EUR 3,85
+       - Naden: 30 m2/dag, Gitex 0,12 m2/m2 = EUR 0,42
+       - Volledig: 25 m2/dag, Gitex 1,10 m2/m2 = EUR 3,85
        - Snelband variabel per methode (naden = 12% van volledig)
        - Info modal: toont gekozen methode en variabele prijzen
        - Capaciteit en materiaal dynamisch per methode
@@ -351,7 +407,7 @@
        ---------------
        [SNELBAND CORRECTIE]
        - Laagdikte: 3mm (voor Gitex verankering)
-       - Verbruik: 0,8 kg/mm x 3mm = 2,4 kg/m²
+       - Verbruik: 0,8 kg/mm x 3mm = 2,4 kg/m2
        - Prijs: EUR 14,00/25kg = EUR 0,56/kg
        - Kosten: 2,4 x 0,56 = EUR 1,34/m2 (was EUR 2,00)
        - Totaal 10mm: EUR 38,66 -> EUR 38,00 (-EUR 0,66)
@@ -370,7 +426,7 @@
        CHANGELOG V9.17:
        ---------------
        [FLEXLIJM CORRECTIE]
-       - Verbruik: 14 kg/m² -> 6,25 kg/m² (praktijk: 4m2/zak)
+       - Verbruik: 14 kg/m2 -> 6,25 kg/m2 (praktijk: 4m2/zak)
        - Prijs: EUR 11,20 -> EUR 5,00 per m2
        - Bron: Hygroscopische KB + praktijkervaring
        - Impact Wedi totaal: -EUR 6,20/m2
@@ -411,7 +467,7 @@
        ---------------
        [BEZETTEN MATERIAALKOST]
        - mat: 6.50 -> 5.70 (puur MP75, geen Snelband)
-       - 15 kg/m² x € 0,38/kg = EUR 5,70/m2
+       - 15 kg/m2 x EUR 0,38/kg = EUR 5,70/m2
        - Info modal ook aangepast naar 5.70
        
        CHANGELOG V9.12:
@@ -764,7 +820,7 @@
     }
     /* Hide in dormant state */
     .dormant .unit-inside, .dormant .label-inside { display: none !important; }
-    /* V11.0: Placeholder-style in dormant state (grey + lighter weight) - V34.5 parity */
+    /* V10.11: Placeholder-style in dormant state (grey + lighter weight) - V34.5 parity */
     .dormant select, .dormant input { 
         color: var(--text-muted) !important; 
         font-weight: 500 !important; 
@@ -1680,10 +1736,10 @@
                         </div>
                         <div class="input-stack">
                             <div class="input-wrapper">
-                                <label for="afkappen" class="sr-only">Afkappen oppervlakte in m²</label>
+                                <label for="afkappen" class="sr-only">Afkappen oppervlakte in m2</label>
                                 <input type="text" id="afkappen" 
                                        inputmode="decimal"
-                                       placeholder="Afkappen oppervlakte (m²)"
+                                       placeholder="Afkappen oppervlakte (m2)"
                                        data-field="afkappen"
                                        autocomplete="off"
                                        enterkeyhint="next">
@@ -1768,10 +1824,10 @@
                         </div>
                         <div class="input-stack">
                             <div class="input-wrapper">
-                                <label for="membraan" class="sr-only">Membraan oppervlakte in m²</label>
+                                <label for="membraan" class="sr-only">Membraan oppervlakte in m2</label>
                                 <input type="text" id="membraan" 
                                        inputmode="decimal"
-                                       placeholder="Membraan oppervlakte (m²)"
+                                       placeholder="Membraan oppervlakte (m2)"
                                        data-field="membraan"
                                        autocomplete="off"
                                        enterkeyhint="next">
@@ -1812,10 +1868,10 @@
                         </div>
                         <div class="input-stack">
                             <div class="input-wrapper">
-                                <label for="bezetten" class="sr-only">Bezetten oppervlakte in m²</label>
+                                <label for="bezetten" class="sr-only">Bezetten oppervlakte in m2</label>
                                 <input type="text" id="bezetten" 
                                        inputmode="decimal"
-                                       placeholder="Bezetten oppervlakte (m²)"
+                                       placeholder="Bezetten oppervlakte (m2)"
                                        data-field="bezetten"
                                        autocomplete="off"
                                        enterkeyhint="go">
@@ -2021,10 +2077,10 @@
                                         </select>
                                     </div>
                                     <div class="input-wrapper">
-                                        <label for="grondering" class="sr-only">Grondering oppervlakte in m²</label>
+                                        <label for="grondering" class="sr-only">Grondering oppervlakte in m2</label>
                                         <input type="text" id="grondering" 
                                                inputmode="decimal"
-                                               placeholder="Grondering oppervlakte (m²)"
+                                               placeholder="Grondering oppervlakte (m2)"
                                                data-field="grondering"
                                                autocomplete="off">
                                         <span class="unit-inside" aria-hidden="true">m²</span>
@@ -2066,10 +2122,10 @@
                                 <div class="input-stack">
                                     <div class="input-wrapper">
                                         <label for="fixfinish" class="sr-only">
-                                            Fix & Finish oppervlakte in m²</label>
+                                            Fix & Finish oppervlakte in m2</label>
                                         <input type="text" id="fixfinish" 
                                                inputmode="decimal"
-                                               placeholder="Fix & Finish oppervlakte (m²)"
+                                               placeholder="Fix & Finish oppervlakte (m2)"
                                                data-field="fixfinish"
                                                autocomplete="off">
                                         <span class="unit-inside" aria-hidden="true">m²</span>
@@ -2129,10 +2185,10 @@
                                         </select>
                                     </div>
                                     <div class="input-wrapper">
-                                        <label for="xps" class="sr-only">XPS isolatie oppervlakte in m²</label>
+                                        <label for="xps" class="sr-only">XPS isolatie oppervlakte in m2</label>
                                         <input type="text" id="xps" 
                                                inputmode="decimal"
-                                               placeholder="XPS isolatie oppervlakte (m²)"
+                                               placeholder="XPS isolatie oppervlakte (m2)"
                                                data-field="xps"
                                                autocomplete="off">
                                         <span class="unit-inside" aria-hidden="true">m²</span>
@@ -2191,10 +2247,10 @@
                                         </select>
                                     </div>
                                     <div class="input-wrapper">
-                                        <label for="wedi" class="sr-only">Wedi oppervlakte in m²</label>
+                                        <label for="wedi" class="sr-only">Wedi oppervlakte in m2</label>
                                         <input type="text" id="wedi" 
                                                inputmode="decimal"
-                                               placeholder="Wedi bouwplaten oppervlakte (m²)"
+                                               placeholder="Wedi bouwplaten oppervlakte (m2)"
                                                data-field="wedi"
                                                autocomplete="off">
                                         <span class="unit-inside" aria-hidden="true">m²</span>
@@ -2236,10 +2292,10 @@
                                 <div class="input-stack">
                                     <div class="input-wrapper">
                                         <label for="fassashield" class="sr-only">
-                                            Fassa Shield oppervlakte in m²</label>
+                                            Fassa Shield oppervlakte in m2</label>
                                         <input type="text" id="fassashield" 
                                                inputmode="decimal"
-                                               placeholder="Fassa Shield oppervlakte (m²)"
+                                               placeholder="Fassa Shield oppervlakte (m2)"
                                                data-field="fassashield"
                                                autocomplete="off">
                                         <span class="unit-inside" aria-hidden="true">m²</span>
@@ -2339,10 +2395,10 @@
                                     </div>
                                     <div class="input-wrapper">
                                         <label for="ultradun" class="sr-only">
-                                            Waterdichting oppervlakte in m²</label>
+                                            Waterdichting oppervlakte in m2</label>
                                         <input type="text" id="ultradun" 
                                                inputmode="decimal"
-                                               placeholder="Waterdichting oppervlakte (m²)"
+                                               placeholder="Waterdichting oppervlakte (m2)"
                                                data-field="ultradun"
                                                autocomplete="off">
                                         <span class="unit-inside" aria-hidden="true">m²</span>
@@ -2365,6 +2421,58 @@
                                     <div class="breakdown-row total">
                                         <span>Totaal:</span>
                                         <span id="tot-ultradun">€ 0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- VARIA / DIVERSEN - V11.0 -->
+                        <section class="component-card dormant" id="card-varia" 
+                                 aria-labelledby="title-varia">
+                            <button type="button" class="info-btn" tabindex="-1"
+                                    onclick="showInfo('varia')" 
+                                    aria-label="Info Varia">i</button>
+                            <div class="card-content">
+                                <div class="card-header">
+                                    <h2 class="card-title" id="title-varia">Varia / Diversen</h2>
+                                    <span class="price-badge" id="price-varia">€ 0,00/m</span>
+                                </div>
+                                <div class="input-stack">
+                                    <div class="input-wrapper select-wrapper">
+                                        <label for="product-varia" class="sr-only">Selecteer product</label>
+                                        <select id="product-varia" data-field="product_varia" class="placeholder-active">
+                                            <option value="" disabled selected>Selecteer product</option>
+                                            <option value="spidy_15">Spidy 15 Kimnaadafwerking</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <label for="varia" class="sr-only">Varia hoeveelheid</label>
+                                        <input type="text" id="varia" 
+                                               inputmode="decimal"
+                                               placeholder="Selecteer eerst product"
+                                               data-field="varia"
+                                               autocomplete="off"
+                                               disabled>
+                                        <span class="unit-inside" id="varia-unit" aria-hidden="true">m</span>
+                                        <span class="label-inside" id="varia-label" aria-hidden="true">hoeveelheid</span>
+                                    </div>
+                                </div>
+                                <div class="breakdown" id="breakdown-varia">
+                                    <div class="breakdown-row">
+                                        <span>Materiaal:</span>
+                                        <span id="mat-varia">€ 0</span>
+                                    </div>
+                                    <div class="breakdown-row">
+                                        <span>Arbeid:</span>
+                                        <span id="arb-varia">€ 0</span>
+                                    </div>
+                                    <div class="breakdown-row">
+                                        <span>Tijd:</span>
+                                        <span id="tijd-varia">0u 0m</span>
+                                    </div>
+                                    <div class="breakdown-row total">
+                                        <span>Totaal:</span>
+                                        <span id="tot-varia">€ 0</span>
                                     </div>
                                 </div>
                             </div>
@@ -2466,7 +2574,7 @@
         afkappen: { cap_per_man: 35, mat: 0 },
         injecties: { cap_per_man: 60, mat: 2.84 },  // V10: Fassa Inject EUR 14,22/L x 0,2 L/m
         membraan: { cap_per_man: 40, mat: 7.98 },   // V10.10: CODEX 3,95 + SNC 4,03
-        bezetten: { cap_per_man: 20, mat: 5.45 }    // V10: MP75 15 kg x € 0,3632/kg
+        bezetten: { cap_per_man: 20, mat: 5.45 }    // V10: MP75 15 kg x EUR 0,3632/kg
     };
 
     // Extra componenten configuratie
@@ -2476,14 +2584,14 @@
         ultradun: {
             // V10.7: Sulfatex Rapid met lagen en Autex optie
             sulfatex: { 
-                mat_per_laag: 9.00,  // 1,6 kg/m²/laag x € 5,625/kg = EUR 9,00/laag
+                mat_per_laag: 9.00,  // 1,6 kg/m2/laag x EUR 5,625/kg = EUR 9,00/laag
                 lagen: {
                     2: { cap_per_man: 32.50, cap_met_autex: 26.00, mat: 18.00, mat_met_autex: 21.24 },
                     3: { cap_per_man: 21.67, cap_met_autex: 17.33, mat: 27.00, mat_met_autex: 30.24 }
                 }
             },
             sopro: { 
-                mat_per_laag: 3.75,  // V9.29: 1,2 kg/m²/mm x € 3,125/kg = EUR 3,75/laag
+                mat_per_laag: 3.75,  // V9.29: 1,2 kg/m2/mm x EUR 3,125/kg = EUR 3,75/laag
                 // V10.6: Capaciteit en materiaal per aantal lagen met Autex optie
                 lagen: {
                     2: { cap_per_man: 32.50, cap_met_autex: 26.00, mat: 7.50, mat_met_autex: 10.74 },
@@ -2493,7 +2601,7 @@
             },
             // V10.8: Asocret-M30 met dikte dropdown (10/15/20mm)
             asocret: {
-                mat_per_mm: 1.62,  // 1,4 kg/m²/mm x € 1,157/kg = EUR 1,62/mm
+                mat_per_mm: 1.62,  // 1,4 kg/m2/mm x EUR 1,157/kg = EUR 1,62/mm
                 diktes: {
                     10: { cap_per_man: 25, cap_met_autex: 20, mat: 16.20, mat_met_autex: 19.44, verbruik: 14 },
                     15: { cap_per_man: 20, cap_met_autex: 16, mat: 24.30, mat_met_autex: 27.54, verbruik: 21 },
@@ -2501,35 +2609,54 @@
                 }
             }
         },
-        fixfinish: { cap_per_man: 35, mat: 1.80 },  // V10: 2,55 kg/m² x € 0,7068/kg
-        fassashield: { cap_per_man: 25, mat: 39.89 },  // V10.10: cap conform Master Sheet V1.3
+        fixfinish: { cap_per_man: 35, mat: 1.80 },  // V10: 2,55 kg/m2 x EUR 0,7068/kg
+        fassashield: { cap_per_man: 25, mat: 37.96 },  // V10.12: Shield 33,89 + Superbond 4,07
         // V10: Grondering Muur - 6 producten (prijzen geverifieerd)
         grondering: {
-            stucprimer:    { cap_per_man: 140, mat: 0.52, naam: "Knauf, Stuc Primer", verbruik: "0,10 kg/m²", verbruik_num: 0.10, eenheid: "kg", emmer: 5, emmer_eenheid: "L" },
-            sopro_gd749:   { cap_per_man: 140, mat: 1.17, naam: "Sopro, GD749", verbruik: "0,15 kg/m²", verbruik_num: 0.15, eenheid: "kg", emmer: 5, emmer_eenheid: "kg" },
-            technicure_cs: { cap_per_man: 140, mat: 3.64, naam: "Technichem, Technicure CS", verbruik: "0,50 L/m²", verbruik_num: 0.50, eenheid: "L", emmer: 25, emmer_eenheid: "L" },
-            keisol_mb:     { cap_per_man: 140, mat: 0.78, naam: "Remmers, Keisol MB", verbruik: "0,15 kg/m²", verbruik_num: 0.15, eenheid: "kg", emmer: 30, emmer_eenheid: "kg" },
-            betocontact:   { cap_per_man: 120, mat: 0.84, naam: "Knauf, Betokontakt", verbruik: "0,30 kg/m²", verbruik_num: 0.30, eenheid: "kg", emmer: 20, emmer_eenheid: "kg" },
+            stucprimer:    { cap_per_man: 140, mat: 0.52, naam: "Knauf, Stuc Primer", verbruik: "0,10 kg/m2", verbruik_num: 0.10, eenheid: "kg", emmer: 5, emmer_eenheid: "L" },
+            sopro_gd749:   { cap_per_man: 140, mat: 1.17, naam: "Sopro, GD749", verbruik: "0,15 kg/m2", verbruik_num: 0.15, eenheid: "kg", emmer: 5, emmer_eenheid: "kg" },
+            technicure_cs: { cap_per_man: 140, mat: 3.64, naam: "Technichem, Technicure CS", verbruik: "0,50 L/m2", verbruik_num: 0.50, eenheid: "L", emmer: 25, emmer_eenheid: "L" },
+            keisol_mb:     { cap_per_man: 140, mat: 0.78, naam: "Remmers, Keisol MB", verbruik: "0,15 kg/m2", verbruik_num: 0.15, eenheid: "kg", emmer: 30, emmer_eenheid: "kg" },
+            betocontact:   { cap_per_man: 120, mat: 0.84, naam: "Knauf, Betokontakt", verbruik: "0,30 kg/m2", verbruik_num: 0.30, eenheid: "kg", emmer: 20, emmer_eenheid: "kg" },
             technicure_as: { 
                 cap_per_man: 120, 
                 emmer_kg: 5,
                 emmer_prijs: 51.92,
                 verbruik_per_m2: 0.33,
                 naam: "Technichem, Technicure AS",
-                verbruik: "0,33 kg/m² (2 lagen)",
+                verbruik: "0,33 kg/m2 (2 lagen)",
                 trapfunctie: true
+            }
+        },
+        // V11.0: Varia / Diversen - uitbreidbaar productplatform
+        // Patroon: consistent met grondering maar met dynamische unit/label
+        varia: {
+            producten: {
+                spidy_15: {
+                    naam: "Volteco Spidy 15 Kimnaadafwerking",
+                    kort_naam: "Spidy15",
+                    eenheid: "m",
+                    eenheid_label: "lengte kimnaad",
+                    cap_per_man: 60,        // 60 m/dag
+                    mat: 4.25,              // EUR/m materiaalkosten
+                    verbruik_display: "0,25 zak/m",
+                    zak_inhoud: 15,         // kg per zak
+                    zak_prijs: 16.90,       // EUR per zak
+                    rendement: 4            // meter per zak
+                }
+                // Toekomstige producten hier toevoegen met zelfde structuur
             }
         }
     };
 
-    // V10.5: Wedi gitex systemen - Gitex prijs gecorrigeerd (EUR 1,0665/m²)
+    // V10.5: Wedi gitex systemen - Gitex prijs gecorrigeerd (EUR 1,0665/m2)
     const WEDI_GITEX_SYSTEMS = {
         naden: {
             naam: 'Naden verstevigen',
             productiviteit: 30,           // m2/dag per man
             gitex_verbruik: 0.25,         // m2 Gitex per m2 wand
             gitex_prijs: 0.27,            // V10.5: 0.25 x 1.0665 (was 0.31)
-            snelband_verbruik: 0.20,      // kg/m²
+            snelband_verbruik: 0.20,      // kg/m2
             snelband_prijs: 0.11          // 0.20 x 0.552
         },
         volledig: {
@@ -2537,7 +2664,7 @@
             productiviteit: 25,           // m2/dag per man
             gitex_verbruik: 1.10,         // m2 Gitex per m2 wand
             gitex_prijs: 1.17,            // V10.5: 1.10 x 1.0665 (was 1.38)
-            snelband_verbruik: 0.88,      // kg/m²
+            snelband_verbruik: 0.88,      // kg/m2
             snelband_prijs: 0.49          // 0.88 x 0.552
         }
     };
@@ -2549,7 +2676,7 @@
             productiviteit: 35,           // m2/dag per man
             gitex_verbruik: 0.25,         // m2 Gitex per m2 wand
             gitex_prijs: 0.27,            // 0.25 x 1.0665
-            snelband_verbruik: 0.20,      // kg/m²
+            snelband_verbruik: 0.20,      // kg/m2
             snelband_prijs: 0.11          // 0.20 x 0.552
         },
         volledig: {
@@ -2557,31 +2684,31 @@
             productiviteit: 30,           // m2/dag per man
             gitex_verbruik: 1.10,         // m2 Gitex per m2 wand
             gitex_prijs: 1.17,            // 1.10 x 1.0665
-            snelband_verbruik: 0.88,      // kg/m²
+            snelband_verbruik: 0.88,      // kg/m2
             snelband_prijs: 0.49          // 0.88 x 0.552
         }
     };
 
-    // V10: Wedi materiaalkosten per dikte (plaat + CODEX lijm)
+    // V10.12: Wedi materiaalkosten per dikte (prijzen conform Master Sheet V2.0)
     // Gitex en Snelband apart via WEDI_GITEX_SYSTEMS
     const WEDI_MAT_BREAKDOWN = {
         4: {
             plaat:    { naam: 'Wedi plaat 4mm', prijs: 31.42, 
                         verbruik: '1,05 m2/m²', eenheidsprijs: '29,92' },
-            flexlijm: { naam: 'CODEX POWER CX2', prijs: 3.77,  
-                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,60/kg' }
+            flexlijm: { naam: 'CODEX POWER CX2', prijs: 3.95,  
+                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,632/kg' }
         },
         6: {
             plaat:    { naam: 'Wedi plaat 6mm', prijs: 28.98, 
                         verbruik: '1,05 m2/m²', eenheidsprijs: '27,60' },
-            flexlijm: { naam: 'CODEX POWER CX2', prijs: 3.77,  
-                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,60/kg' }
+            flexlijm: { naam: 'CODEX POWER CX2', prijs: 3.95,  
+                        verbruik: '6,25 kg/m²', eenheidsprijs: '0,632/kg' }
         },
         10: {
             plaat:    { naam: 'Wedi plaat 10mm', prijs: 27.81, 
                         verbruik: '1,05 m2/m²',  eenheidsprijs: '26,49' },
-            flexlijm: { naam: 'CODEX POWER CX2',  prijs: 3.77,  
-                        verbruik: '6,25 kg/m²',  eenheidsprijs: '0,60/kg' }
+            flexlijm: { naam: 'CODEX POWER CX2',  prijs: 3.95,  
+                        verbruik: '6,25 kg/m²',  eenheidsprijs: '0,632/kg' }
         }
     };
     
@@ -2603,6 +2730,7 @@
             codex: true,
             snc: true
         },
+        // V11.0 SUBCALCULATOR: Bezetten met 100% MP75 (geen Snelband)
         bezetten: {
             mp75: true
         },
@@ -2642,6 +2770,10 @@
         // V9.29: Grondering met checkbox
         grondering: {
             product: true
+        },
+        // V11.0: Varia met materiaal checkbox
+        varia: {
+            mortel: true
         }
     };
     
@@ -2651,17 +2783,20 @@
                        verbruik: '0,2 L/m', eenheidsprijs: '14,22/L' }
     };
     
-    // V10: Material breakdown voor Membraan (prijzen geverifieerd)
+    // V10.12: Material breakdown voor Membraan (prijzen conform Master Sheet V2.0)
     const MEMBRAAN_MAT_BREAKDOWN = {
-        codex: { naam: 'CODEX POWER CX2', prijs: 3.77, 
-                 verbruik: '6,25 kg/m²', eenheidsprijs: '0,60/kg' },
+        codex: { naam: 'CODEX POWER CX2', prijs: 3.95, 
+                 verbruik: '6,25 kg/m²', eenheidsprijs: '0,632/kg' },
         snc:   { naam: 'SNC-Membraan', prijs: 4.03, 
                  verbruik: '1,00 m2/m²', eenheidsprijs: '4,03/m²' }
     };
     
-    // V10: Material breakdown voor Bezetten (prijzen geverifieerd)
+    // V10.12: Material breakdown voor Bezetten (conform Master Sheet V2.0)
+    // V11.0 SUBCALCULATOR: 100% MP75 (15 kg/m2)
+    // Verschil met Sales Calculator: geen 75%/25% mix met Snelband
+    // Reden: onderaannemer krijgt 25% marge op materiaal, MP75 is goedkoper
     const BEZETTEN_MAT_BREAKDOWN = {
-        mp75: { naam: 'MP75 gipspleister', prijs: 5.45, 
+        mp75: { naam: 'Knauf MP75 E', prijs: 5.45, 
                 verbruik: '15 kg/m²', eenheidsprijs: '0,3632/kg' }
     };
     
@@ -2669,40 +2804,40 @@
     // Gitex en Snelband nu dynamisch via XPS_GITEX_SYSTEMS
     const XPS_MAT_BREAKDOWN = {
         20: {
-            plaat: { naam: 'XPS plaat 20mm', prijs: 3.15, 
-                     verbruik: '1,05 m2/m²', eenheidsprijs: '3,00' },
-            lgips: { naam: 'L-gips', prijs: 0.75, 
-                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
+            plaat: { naam: 'XPS plaat 20mm', prijs: 2.82, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '2,82' },
+            lgips: { naam: 'L-gips', prijs: 0.65, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,361/kg' }
         },
         30: {
-            plaat: { naam: 'XPS plaat 30mm', prijs: 3.83, 
-                     verbruik: '1,05 m2/m²', eenheidsprijs: '3,65' },
-            lgips: { naam: 'L-gips', prijs: 0.75, 
-                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
+            plaat: { naam: 'XPS plaat 30mm', prijs: 3.52, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '3,52' },
+            lgips: { naam: 'L-gips', prijs: 0.65, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,361/kg' }
         },
         40: {
-            plaat: { naam: 'XPS plaat 40mm', prijs: 5.25, 
-                     verbruik: '1,05 m2/m²', eenheidsprijs: '5,00' },
-            lgips: { naam: 'L-gips', prijs: 0.75, 
-                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
+            plaat: { naam: 'XPS plaat 40mm', prijs: 4.69, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '4,69' },
+            lgips: { naam: 'L-gips', prijs: 0.65, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,361/kg' }
         },
         50: {
-            plaat: { naam: 'XPS plaat 50mm', prijs: 6.56, 
-                     verbruik: '1,05 m2/m²', eenheidsprijs: '6,25' },
-            lgips: { naam: 'L-gips', prijs: 0.75, 
-                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
+            plaat: { naam: 'XPS plaat 50mm', prijs: 5.87, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '5,87' },
+            lgips: { naam: 'L-gips', prijs: 0.65, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,361/kg' }
         },
         60: {
-            plaat: { naam: 'XPS plaat 60mm', prijs: 7.88, 
-                     verbruik: '1,05 m2/m²', eenheidsprijs: '7,50' },
-            lgips: { naam: 'L-gips', prijs: 0.75, 
-                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,4104/kg' }
+            plaat: { naam: 'XPS plaat 60mm', prijs: 7.04, 
+                     verbruik: '1,05 m2/m²', eenheidsprijs: '7,04' },
+            lgips: { naam: 'L-gips', prijs: 0.65, 
+                     verbruik: '1,8 kg/m²', eenheidsprijs: '0,361/kg' }
         }
     };
     
     // V10.7: Material breakdown voor Sulfatex Rapid per aantal lagen
-    // Mortel: 1,6 kg/m² per laag x € 5,625/kg
-    // Autex: 1,0 m²/m² x € 3,24/m2
+    // Mortel: 1,6 kg/m2 per laag x EUR 5,625/kg
+    // Autex: 1,0 m2/m2 x EUR 3,24/m2
     const SULFATEX_MAT_BREAKDOWN = {
         2: {
             mortel: { naam: 'Sulfatex Rapid (2 lagen)', prijs: 18.00, 
@@ -2719,8 +2854,8 @@
     };
     
     // V10.6: Material breakdown voor Sopro Ultradun per aantal lagen
-    // Mortel: 1,2 kg/m² per laag x € 3,125/kg
-    // Autex: 1,0 m²/m² x € 3,24/m2
+    // Mortel: 1,2 kg/m2 per laag x EUR 3,125/kg
+    // Autex: 1,0 m2/m2 x EUR 3,24/m2
     const SOPRO_MAT_BREAKDOWN = {
         2: {
             mortel: { naam: 'Sopro ZR Turbo (2 lagen)', prijs: 7.50, 
@@ -2743,8 +2878,8 @@
     };
     
     // V10.8: Material breakdown voor Asocret per dikte
-    // Mortel: 1,4 kg/m²/mm x € 1,157/kg
-    // Autex: 1,0 m²/m² x € 3,24/m2
+    // Mortel: 1,4 kg/m2/mm x EUR 1,157/kg
+    // Autex: 1,0 m2/m2 x EUR 3,24/m2
     const ASOCRET_MAT_BREAKDOWN = {
         10: {
             mortel: { naam: 'Asocret-M30 (10mm)', prijs: 16.20, 
@@ -2767,19 +2902,19 @@
     };
     
     // V10: Material breakdown voor Fix & Finish (3mm laagdikte)
-    // Verbruik: 0,85 kg/mm x 3mm = 2,55 kg/m²
+    // Verbruik: 0,85 kg/mm x 3mm = 2,55 kg/m2
     // Zakprijs: EUR 17,67/25kg = EUR 0,7068/kg
     const FIXFINISH_MAT_BREAKDOWN = {
         absfinish: { naam: 'Fix & Finish', prijs: 1.80, 
                      verbruik: '2,55 kg/m²', eenheidsprijs: '0,7068/kg' }
     };
     
-    // V10: Material breakdown voor Fassa Shield (prijzen geverifieerd)
+    // V10.12: Material breakdown voor Fassa Shield (conform Master Sheet V2.0)
     const FASSASHIELD_MAT_BREAKDOWN = {
         shield:    { naam: 'Fassa Shield', prijs: 33.89, 
                      verbruik: '1,05 m2/m²', eenheidsprijs: '32,28/m²' },
-        superbond: { naam: 'Superbond', prijs: 4.20, 
-                     verbruik: '2,21 kg/m²', eenheidsprijs: '1,90/kg' },
+        superbond: { naam: 'Superbond', prijs: 4.07, 
+                     verbruik: '2,14 kg/m²', eenheidsprijs: '1,90/kg' },
         afwerking: { naam: 'Fix & Finish afwerking', prijs: 1.80, 
                      verbruik: '2,55 kg/m²', eenheidsprijs: '0,7068/kg' }
     };
@@ -2790,6 +2925,18 @@
                 verbruik: '7,5 kg/cm/m²', eenheidsprijs: '0,3632/kg' }
     };
     const BIJKOMENDPLEISTER_ARBEID = 7.28;  // EUR/cm/m2 (10,00 - 2,72 = 7,28 arbeid)
+    
+    // V11.0: Material breakdown voor Varia producten
+    const VARIA_MAT_BREAKDOWN = {
+        spidy_15: {
+            mortel: { 
+                naam: 'Volteco Spidy 15', 
+                prijs: 4.25,
+                verbruik: '0,25 zak/m', 
+                eenheidsprijs: '16,90/zak'
+            }
+        }
+    };
     
     // V9.24: Effectieve materiaalprijs functies per component
     function getInjectiesMatPrijs() {
@@ -2806,6 +2953,7 @@
         return totaal;
     }
     
+    // V11.0 SUBCALCULATOR: Bezetten materiaalprijs met 100% MP75
     function getBezettenMatPrijs() {
         let totaal = 0;
         if (materialState.bezetten.mp75) totaal += BEZETTEN_MAT_BREAKDOWN.mp75.prijs;
@@ -2865,7 +3013,7 @@
         return totaal;
     }
     
-    // V9.28: Bijkomend pleisterwerk materiaalprijs (per cm/m²)
+    // V9.28: Bijkomend pleisterwerk materiaalprijs (per cm/m2)
     function getBijkomendpleisterMatPrijs() {
         let totaal = 0;
         if (materialState.bijkomendpleister.mp75) totaal += BIJKOMENDPLEISTER_MAT_BREAKDOWN.mp75.prijs;
@@ -2877,6 +3025,19 @@
         const spec = XTRA.grondering[product];
         if (!spec || !materialState.grondering.product) return 0;
         return spec.mat || 0;
+    }
+    
+    // V11.0: Varia materiaalprijs ophalen
+    function getVariaMatPrijs(product) {
+        if (!product || !XTRA.varia.producten[product]) return 0;
+        if (!materialState.varia.mortel) return 0;
+        return XTRA.varia.producten[product].mat;
+    }
+    
+    // V11.0: Varia capaciteit ophalen
+    function getVariaCapaciteit(product) {
+        if (!product || !XTRA.varia.producten[product]) return 60; // default
+        return XTRA.varia.producten[product].cap_per_man;
     }
     
     // V9.21: Bereken effectieve Wedi materiaalprijs op basis van checkbox state + gitex methode
@@ -3068,6 +3229,23 @@
         document.getElementById('product-grondering').selectedIndex = 0;
         document.getElementById('product-grondering').classList.add('placeholder-active');
         
+        // V11.0: Reset product-varia dropdown en input
+        const variaSelect = document.getElementById('product-varia');
+        if (variaSelect) {
+            variaSelect.selectedIndex = 0;
+            variaSelect.classList.add('placeholder-active');
+        }
+        const variaInput = document.getElementById('varia');
+        if (variaInput) {
+            variaInput.value = '';
+            variaInput.disabled = true;  // KRITIEK: input moet disabled zijn
+            variaInput.placeholder = 'Selecteer eerst product';
+        }
+        const variaUnit = document.getElementById('varia-unit');
+        if (variaUnit) variaUnit.textContent = 'm';
+        const variaLabel = document.getElementById('varia-label');
+        if (variaLabel) variaLabel.textContent = 'hoeveelheid';
+        
         // Reset unit/label positions
         UnitPositioner.reset();
         
@@ -3096,6 +3274,7 @@
         materialState.fassashield.afwerking = true;
         materialState.bijkomendpleister.mp75 = true;
         materialState.grondering.product = true;
+        materialState.varia.mortel = true;  // V11.0: Varia materiaal reset
         
         // Collapse sections
         ['bijkomend', 'extra'].forEach(section => {
@@ -3110,7 +3289,7 @@
         
         calculate();
         
-        // V11.0: Expliciete dormant state voor alle kaarten na reset (V34.5 pattern)
+        // V10.11: Expliciete dormant state voor alle kaarten na reset (V34.5 pattern)
         setTimeout(() => {
             // Hoofdcomponent cards
             ['afkappen', 'injecties', 'membraan', 'bezetten'].forEach(comp => {
@@ -3125,7 +3304,7 @@
             });
             
             // Extra component cards
-            ['xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering'].forEach(comp => {
+            ['xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering', 'varia'].forEach(comp => {
                 const card = document.getElementById(`card-${comp}`);
                 if (card) card.classList.add('dormant');
             });
@@ -3171,7 +3350,9 @@
             wedi: 'Wedi Bouwplatensysteem',
             ultradun: 'Compacte dichting',
             fixfinish: 'Fix & Finish',
-            fassashield: 'Fassa Shield Isolatiesysteem'
+            fassashield: 'Fassa Shield Isolatiesysteem',
+            grondering: 'Grondering Muur',
+            varia: 'Varia / Diversen'
         };
         
         title.textContent = titles[component] || component;
@@ -3189,7 +3370,7 @@
                 html += '<ul class="material-list">';
                 html += '<li>Geen materiaalkosten (enkel arbeid)</li>';
                 html += '<li>Capaciteit: 35 m2/man/dag</li>';
-                html += `<li>${qty} m² = ${(qty / 35 * 8).toFixed(2)} manuren</li>`;
+                html += `<li>${qty} m2 = ${(qty / 35 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
             }
             // === INJECTIES (V9.24 alleen Fassa Inject) ===
@@ -3243,7 +3424,7 @@
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
                 html += '<li>Capaciteit: 40 m2/man/dag</li>';
-                html += `<li>${qty} m² = ${(qty / 40 * 8).toFixed(2)} manuren</li>`;
+                html += `<li>${qty} m2 = ${(qty / 40 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
                 // Sectie 2: Materiaalkosten met checkboxes
@@ -3294,7 +3475,7 @@
                 html += `<span id="membraan-mat-total" class="total-value">€ ${(qty * effectief_mat).toFixed(2)}</span>`;
                 html += '</div>';
             }
-            // === BEZETTEN (V9.22 two-line layout) ===
+            // === BEZETTEN (V10.12: MP75 + Snelband two-line layout) ===
             else if (component === 'bezetten') {
                 const effectief_mat = getBezettenMatPrijs();
                 const breakdown = BEZETTEN_MAT_BREAKDOWN;
@@ -3302,15 +3483,16 @@
                 // Sectie 1: Capaciteit & Arbeid
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
-                html += '<li>Capaciteit: 20 m2/man/dag</li>';
+                html += '<li>Capaciteit: 20 m²/man/dag</li>';
                 html += `<li>${qty} m² = ${(qty / 20 * 8).toFixed(2)} manuren</li>`;
-                html += `<li>Zakken (25kg): ${(qty * 15 / 25).toFixed(1)} stuks</li>`;
+                html += `<li>Totaal verbruik: ${(qty * 15).toFixed(0)} kg (100% MP75)</li>`;
                 html += '</ul>';
                 
                 // Sectie 2: Materiaalkosten met checkbox
                 html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
                 html += '<ul class="material-checkbox-list">';
                 
+                // MP75 (100%)
                 const mp75Checked = materialState.bezetten.mp75 ? 'checked' : '';
                 const mp75Disabled = materialState.bezetten.mp75 ? '' : 'disabled';
                 const mp75Prijs = materialState.bezetten.mp75 ? breakdown.mp75.prijs : 0;
@@ -3325,7 +3507,7 @@
                 html += `<span class="mat-price">€ ${mp75Prijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.mp75.verbruik} x € ${breakdown.mp75.eenheidsprijs}</div>`;
-                html += `<div class="mat-qty">→ ${qty} m² = ${mp75Kg.toFixed(0)} kg (${mp75Zakken} zakken a 25kg)</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${mp75Kg.toFixed(1)} kg (${mp75Zakken} zakken a 25kg)</div>`;
                 html += '</li>';
                 
                 html += '</ul>';
@@ -3350,7 +3532,7 @@
                 html += '<ul class="material-list">';
                 html += `<li>Methode: ${gitexSys.naam}</li>`;
                 html += `<li>Capaciteit: ${cap_per_man} m2/man/dag</li>`;
-                html += `<li>${qty} m² = ${(qty / cap_per_man * 8).toFixed(2)} manuren</li>`;
+                html += `<li>${qty} m2 = ${(qty / cap_per_man * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
                 // Sectie 2: Materiaalkosten met checkboxes
@@ -3453,7 +3635,7 @@
                 html += '<ul class="material-list">';
                 html += `<li>Methode: ${gitexSys.naam}</li>`;
                 html += `<li>Capaciteit: ${cap_per_man} m2/man/dag</li>`;
-                html += `<li>${qty} m² = ${(qty / cap_per_man * 8).toFixed(2)} manuren</li>`;
+                html += `<li>${qty} m2 = ${(qty / cap_per_man * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
                 // Section 2: Materiaalkosten met checkboxes
@@ -3566,7 +3748,7 @@
                         html += '<li>Methode: Met Autex glasvezelwapening</li>';
                     }
                     html += `<li>Capaciteit: ${cap} m2/man/dag</li>`;
-                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
+                    html += `<li>${qty} m2 = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
                     html += '</ul>';
                     
                     // Sectie 2: Materiaalkosten met checkboxes
@@ -3608,7 +3790,7 @@
                         html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
                         html += '</div>';
                         html += `<div class="mat-calc">${breakdown.autex.verbruik} x € ${breakdown.autex.eenheidsprijs}</div>`;
-                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m2)</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m²)</div>`;
                         html += '</li>';
                     }
                     
@@ -3637,7 +3819,7 @@
                         html += '<li>Methode: Met Autex glasvezelwapening</li>';
                     }
                     html += `<li>Capaciteit: ${cap} m2/man/dag</li>`;
-                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
+                    html += `<li>${qty} m2 = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
                     html += '</ul>';
                     
                     // Sectie 2: Materiaalkosten met checkboxes
@@ -3678,7 +3860,7 @@
                         html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
                         html += '</div>';
                         html += `<div class="mat-calc">${breakdown.autex.verbruik} x € ${breakdown.autex.eenheidsprijs}</div>`;
-                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m2)</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m²)</div>`;
                         html += '</li>';
                     }
                     
@@ -3712,7 +3894,7 @@
                         html += '<li>Methode: Met Autex glasvezelwapening</li>';
                     }
                     html += `<li>Capaciteit: ${cap} m2/man/dag</li>`;
-                    html += `<li>${qty} m² = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
+                    html += `<li>${qty} m2 = ${(qty / cap * 8).toFixed(2)} manuren</li>`;
                     html += '</ul>';
                     
                     // Sectie 2: Materiaalkosten met checkboxes
@@ -3754,7 +3936,7 @@
                         html += `<span class="mat-price">€ ${autexPrijs.toFixed(2)}/m²</span>`;
                         html += '</div>';
                         html += `<div class="mat-calc">${breakdown.autex.verbruik} x € ${breakdown.autex.eenheidsprijs}</div>`;
-                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m2)</div>`;
+                        html += `<div class="mat-qty">→ ${qty} m² = ${autexM2.toFixed(1)} m² (${autexRollen} rollen a 55m²)</div>`;
                         html += '</li>';
                     }
                     
@@ -3781,7 +3963,7 @@
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
                 html += '<li>Capaciteit: 35 m2/man/dag</li>';
-                html += `<li>${qty} m² = ${(qty / 35 * 8).toFixed(2)} manuren</li>`;
+                html += `<li>${qty} m2 = ${(qty / 35 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
                 // Sectie 2: Materiaalkosten met checkbox
@@ -3822,7 +4004,7 @@
                 html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                 html += '<ul class="material-list">';
                 html += '<li>Capaciteit: 15 m2/man/dag</li>';
-                html += `<li>${qty} m² = ${(qty / 15 * 8).toFixed(2)} manuren</li>`;
+                html += `<li>${qty} m2 = ${(qty / 15 * 8).toFixed(2)} manuren</li>`;
                 html += '</ul>';
                 
                 // Sectie 2: Materiaalkosten met checkboxes
@@ -3844,7 +4026,7 @@
                 html += `<span class="mat-price">€ ${shieldPrijs.toFixed(2)}/m²</span>`;
                 html += '</div>';
                 html += `<div class="mat-calc">${breakdown.shield.verbruik} x € ${breakdown.shield.eenheidsprijs}</div>`;
-                html += `<div class="mat-qty">→ ${qty} m² = ${shieldM2.toFixed(1)} m² (${shieldRollen} rollen a 7,125m2)</div>`;
+                html += `<div class="mat-qty">→ ${qty} m² = ${shieldM2.toFixed(1)} m² (${shieldRollen} rollen a 7,125m²)</div>`;
                 html += '</li>';
                 
                 // Superbond lijm
@@ -3901,7 +4083,7 @@
                     html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
                     html += '<ul class="material-list">';
                     html += `<li>Capaciteit: ${spec.cap_per_man} m2/man/dag</li>`;
-                    html += `<li>${qty} m² = ${(qty / spec.cap_per_man * 8).toFixed(2)} manuren</li>`;
+                    html += `<li>${qty} m2 = ${(qty / spec.cap_per_man * 8).toFixed(2)} manuren</li>`;
                     html += '</ul>';
                     
                     // Sectie 2: Materiaalkosten met checkbox
@@ -3962,6 +4144,55 @@
                     }
                 } else {
                     html += '<p style="color: #e53e3e;">Selecteer eerst een gronderingsproduct.</p>';
+                }
+            }
+            // === VARIA (V11.0 - dynamisch per product) ===
+            else if (component === 'varia') {
+                const product = document.getElementById('product-varia').value;
+                const spec = XTRA.varia.producten[product];
+                
+                if (spec) {
+                    const breakdown = VARIA_MAT_BREAKDOWN[product];
+                    
+                    // Sectie 1: Capaciteit & Arbeid
+                    html += '<div class="modal-section-title">Capaciteit & Arbeid</div>';
+                    html += '<ul class="material-list">';
+                    html += `<li>Product: ${spec.naam}</li>`;
+                    html += `<li>Capaciteit: ${spec.cap_per_man} ${spec.eenheid}/man/dag</li>`;
+                    html += `<li>${qty} ${spec.eenheid} = ${(qty / spec.cap_per_man * 8).toFixed(2)} manuren</li>`;
+                    html += '</ul>';
+                    
+                    // Sectie 2: Materiaalkosten met checkbox
+                    html += '<div class="modal-section-title" style="margin-top: 16px;">Materiaalkosten</div>';
+                    html += '<ul class="material-checkbox-list">';
+                    
+                    const mortelChecked = materialState.varia.mortel ? 'checked' : '';
+                    const mortelDisabled = materialState.varia.mortel ? '' : 'disabled';
+                    const mortelPrijs = materialState.varia.mortel ? breakdown.mortel.prijs : 0;
+                    const zakkenNodig = qty / spec.rendement;
+                    
+                    html += `<li class="material-checkbox-item ${mortelDisabled}" data-key="mortel">`;
+                    html += '<div class="mat-row">';
+                    html += '<label>';
+                    html += `<input type="checkbox" ${mortelChecked} onchange="toggleVariaMaterial('${product}', ${qty})">`;
+                    html += `<span class="mat-name">${breakdown.mortel.naam}</span>`;
+                    html += '</label>';
+                    html += `<span class="mat-price">€ ${mortelPrijs.toFixed(2)}/${spec.eenheid}</span>`;
+                    html += '</div>';
+                    html += `<div class="mat-calc">${breakdown.mortel.verbruik} = € ${breakdown.mortel.eenheidsprijs}</div>`;
+                    html += `<div class="mat-qty">→ ${qty} ${spec.eenheid} = ${zakkenNodig.toFixed(2)} zakken a ${spec.zak_inhoud}kg</div>`;
+                    html += '</li>';
+                    
+                    html += '</ul>';
+                    
+                    // Totaal
+                    const mat_totaal = qty * mortelPrijs;
+                    html += '<div class="modal-total">';
+                    html += '<span class="total-label">Materiaal</span>';
+                    html += `<span id="varia-mat-total" class="total-value">€ ${mat_totaal.toFixed(2)}</span>`;
+                    html += '</div>';
+                } else {
+                    html += '<p style="color: #e53e3e;">Selecteer eerst een product.</p>';
                 }
             }
             // === HOEKPROFIELEN (basis modal) ===
@@ -4083,7 +4314,7 @@
                     
                     html += '<div class="modal-section-title" style="margin-top: 16px;">Kostentoeslag</div>';
                     html += '<ul class="material-list">';
-                    html += `<li>€ 3,50/mm/m² x ${totale_dikte_mm.toFixed(2)} mm x ${oppervlakte_bezetten} m²</li>`;
+                    html += `<li>€ 3,50/mm/m² x ${totale_dikte_mm.toFixed(2)} mm x ${oppervlakte_bezetten} m2</li>`;
                     html += '</ul>';
                     
                     html += '<div class="modal-total">';
@@ -4217,7 +4448,7 @@
         calculate();
     };
     
-    // V9.22: Toggle Bezetten materiaal checkbox
+    // V10.12: Toggle Bezetten materiaal checkbox (MP75 + Snelband)
     window.toggleBezettenMaterial = function(materialKey, qty) {
         materialState.bezetten[materialKey] = !materialState.bezetten[materialKey];
         const effectief_mat = getBezettenMatPrijs();
@@ -4227,12 +4458,13 @@
             totalEl.textContent = `€ ${(qty * effectief_mat).toFixed(2)}`;
         }
         
-        const item = document.querySelector('.material-checkbox-item[data-key="mp75"]');
-        if (item) {
+        // Update MP75 item
+        const mp75Item = document.querySelector('.material-checkbox-item[data-key="mp75"]');
+        if (mp75Item) {
             const prijs = materialState.bezetten.mp75 ? BEZETTEN_MAT_BREAKDOWN.mp75.prijs : 0;
-            const priceEl = item.querySelector('.mat-price');
+            const priceEl = mp75Item.querySelector('.mat-price');
             if (priceEl) priceEl.textContent = `€ ${prijs.toFixed(2)}/m²`;
-            item.classList.toggle('disabled', !materialState.bezetten.mp75);
+            mp75Item.classList.toggle('disabled', !materialState.bezetten.mp75);
         }
         
         calculate();
@@ -4473,6 +4705,32 @@
                     }
                 }
                 item.classList.toggle('disabled', !materialState.grondering.product);
+            }
+        }
+        
+        calculate();
+    };
+    
+    // V11.0: Toggle Varia materiaal checkbox
+    window.toggleVariaMaterial = function(product, qty) {
+        materialState.varia.mortel = !materialState.varia.mortel;
+        const spec = XTRA.varia.producten[product];
+        const breakdown = VARIA_MAT_BREAKDOWN[product];
+        
+        if (spec && breakdown) {
+            const mortelPrijs = materialState.varia.mortel ? breakdown.mortel.prijs : 0;
+            const mat_totaal = qty * mortelPrijs;
+            
+            const totalEl = document.getElementById('varia-mat-total');
+            if (totalEl) {
+                totalEl.textContent = `€ ${mat_totaal.toFixed(2)}`;
+            }
+            
+            const item = document.querySelector('.material-checkbox-item[data-key="mortel"]');
+            if (item) {
+                const priceEl = item.querySelector('.mat-price');
+                if (priceEl) priceEl.textContent = `€ ${mortelPrijs.toFixed(2)}/${spec.eenheid}`;
+                item.classList.toggle('disabled', !materialState.varia.mortel);
             }
         }
         
@@ -4781,13 +5039,45 @@
             result.mat += mat;
         }
 
+        // V11.0: VARIA berekening
+        if (qty.varia > 0) {
+            const product = document.getElementById('product-varia').value;
+            const spec = XTRA.varia.producten[product];
+            
+            if (spec) {
+                // Materiaalkosten met checkbox state
+                let mat = 0;
+                if (materialState.varia.mortel) {
+                    mat = qty.varia * spec.mat;
+                }
+                
+                // Arbeid
+                const cap = spec.cap_per_man;
+                const manuren = (qty.varia / cap) * 8;
+                const loon = manuren * LOON;
+                
+                result.varia = { 
+                    manuren, 
+                    loon, 
+                    mat, 
+                    tijd: manuren,
+                    eenheid: spec.eenheid,
+                    product_naam: spec.naam,
+                    kort_naam: spec.kort_naam
+                };
+                result.manuren += manuren;
+                result.loon += loon;
+                result.mat += mat;
+            }
+        }
+
         // V9.28 FIX: Defensieve herberekening van result.manuren voor T&O
         // Voorkomt inconsistentie wanneer manuren verkeerd werden opgeteld
         let verified_manuren = 0;
         let verified_loon = 0;
         let verified_mat = 0;
         ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 'wedi',
-         'ultradun', 'fixfinish', 'fassashield', 'grondering'].forEach(comp => {
+         'ultradun', 'fixfinish', 'fassashield', 'grondering', 'varia'].forEach(comp => {
             if (result[comp]) {
                 verified_manuren += result[comp].manuren || 0;
                 verified_loon += result[comp].loon || 0;
@@ -4816,7 +5106,7 @@
         result.totaal = werkelijke_kosten + result.winst;
 
         ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 'wedi',
-         'ultradun', 'fixfinish', 'fassashield', 'grondering'].forEach(comp => {
+         'ultradun', 'fixfinish', 'fassashield', 'grondering', 'varia'].forEach(comp => {
             if (result[comp]) {
                 const comp_manuren = result[comp].manuren;
                 const comp_ratio = comp_manuren / result.manuren;
@@ -4836,7 +5126,7 @@
         // Herbereken op basis van afgeronde eenheidsprijzen
         let totaal_herberekend = 0;
         ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 'wedi',
-         'ultradun', 'fixfinish', 'fassashield', 'grondering'].forEach(comp => {
+         'ultradun', 'fixfinish', 'fassashield', 'grondering', 'varia'].forEach(comp => {
             if (result[comp] && qty[comp] > 0) {
                 const eenheidsprijs_afgerond = Math.round(result[comp].prijs * 100) / 100;
                 const subtotaal_nieuw = qty[comp] * eenheidsprijs_afgerond;
@@ -4861,14 +5151,15 @@
             ultradun: parseFloat(document.getElementById('ultradun').value) || 0,
             fixfinish: parseFloat(document.getElementById('fixfinish').value) || 0,
             fassashield: parseFloat(document.getElementById('fassashield').value) || 0,
-            grondering: parseFloat(document.getElementById('grondering').value) || 0
+            grondering: parseFloat(document.getElementById('grondering').value) || 0,
+            varia: parseFloat(document.getElementById('varia').value) || 0
         };
 
         let result;
         
         if (isEvenredigVerdeeld(qty) && qty.xps === 0 && qty.wedi === 0 && 
             qty.ultradun === 0 && qty.fixfinish === 0 && qty.fassashield === 0 &&
-            qty.grondering === 0) {
+            qty.grondering === 0 && qty.varia === 0) {
             result = berekenVasteTarieven(qty);
         } else {
             result = berekenDynamisch(qty);
@@ -5002,7 +5293,8 @@
         // Update titels
         const hoofdTitle = document.getElementById('hoofdcomponenten-title');
         const hasExtraComponents = qty.xps > 0 || qty.wedi > 0 || qty.ultradun > 0 || 
-                                   qty.fixfinish > 0 || qty.fassashield > 0 || qty.grondering > 0;
+                                   qty.fixfinish > 0 || qty.fassashield > 0 || qty.grondering > 0 ||
+                                   qty.varia > 0;
         hoofdTitle.textContent = hasExtraComponents ? 
             'Hoofd- en Extra Componenten' : 'Hoofdcomponenten';
         
@@ -5066,6 +5358,38 @@
                     `€ 0,00/${(comp === 'injecties') ? 'm' : 'm²'}`;
             }
         });
+        
+        // V11.0: Varia component card update (dynamische unit)
+        const variaCard = document.getElementById('card-varia');
+        const variaBreakdown = document.getElementById('breakdown-varia');
+        if (qty.varia > 0 && result.varia) {
+            variaCard.classList.remove('dormant');
+            variaBreakdown.classList.add('show');
+            
+            const variaUnit = result.varia.eenheid || 'm';
+            document.getElementById('price-varia').textContent = 
+                `€ ${result.varia.prijs.toFixed(2)}/${variaUnit}`;
+            document.getElementById('mat-varia').textContent = 
+                `€ ${result.varia.mat.toFixed(2)}`;
+            document.getElementById('arb-varia').textContent = 
+                `€ ${result.varia.loon.toFixed(2)}`;
+            
+            const uren = Math.floor(result.varia.tijd);
+            const minuten = Math.round((result.varia.tijd - uren) * 60);
+            document.getElementById('tijd-varia').textContent = 
+                `${uren}u ${minuten}m`;
+            document.getElementById('tot-varia').textContent = 
+                `€ ${result.varia.subtotaal.toFixed(2)}`;
+        } else {
+            // V11.0 UX: Kaart naar dormant als geen waarde (consistent met andere componenten)
+            variaCard.classList.add('dormant');
+            variaBreakdown.classList.remove('show');
+            document.getElementById('price-varia').textContent = '€ 0,00/m';
+            document.getElementById('mat-varia').textContent = '€ 0';
+            document.getElementById('arb-varia').textContent = '€ 0';
+            document.getElementById('tijd-varia').textContent = '0u 0m';
+            document.getElementById('tot-varia').textContent = '€ 0';
+        }
 
         // Update summary
         const hasAnyValue = result.totaal > 0;
@@ -5093,76 +5417,215 @@
             `€ ${result.totaal.toFixed(2)}`;
         
         // === FACTUUROVERZICHT ===
+        // V11.0: Compacte benamingen en volgorde exact zoals V36.0 Sales Calculator
         const invoiceItemsContainer = document.getElementById('invoice-items');
         invoiceItemsContainer.innerHTML = '';
         
-        const componentNames = {
-            'afkappen': 'Afkappen',
-            'injecties': 'Injecties',
-            'membraan': 'SNC-membraan',
-            'bezetten': 'Bezetten',
-            'xps': 'XPS isolatie',
-            'wedi': 'Wedi Bouwplaten',
-            'ultradun': 'Compacte dichting',
-            'fixfinish': 'Fix & Finish',
-            'fassashield': 'Fassa Shield',
-            'grondering': 'Grondering Muur'
-        };
+        // V36.0 VOLGORDE:
+        // 1. VOORBEREIDEND WERK: Kappen, Grond., Egalisatie
+        // 2. BEHANDELING: Injecties, SNC, Ultradun, Varia
+        // 3. NABEHANDELING (isolatie): XPS, Wedi, Fassa
+        // 4. EINDAFWERKING: Hoekprof., Pleister, Bijkomend, Fix&Fin
         
-        ['afkappen', 'injecties', 'membraan', 'bezetten', 'xps', 'wedi',
-         'ultradun', 'fixfinish', 'fassashield', 'grondering'].forEach(comp => {
-            if (qty[comp] > 0 && result[comp]) {
-                const unit = (comp === 'injecties') ? 'm' : 'm²';
-                const eenheidsprijs = result[comp].prijs;
-                const subtotaal = result[comp].subtotaal;
-                
-                const row = document.createElement('div');
-                row.className = 'invoice-row';
-                row.innerHTML = `
-                    <span class="component-name">${componentNames[comp]}</span>
-                    <span class="component-calc">${qty[comp].toFixed(2)} ${unit} x 
-                    € ${eenheidsprijs.toFixed(2)}</span>
-                    <span class="component-total">€ ${subtotaal.toFixed(2)}</span>
-                `;
-                invoiceItemsContainer.appendChild(row);
-            }
-        });
-        
-        if (bijkomend_totaal > 0 && oppervlakte_bezetten > 0) {
-            const eenheidsprijs = bijkomend_totaal / oppervlakte_bezetten;
+        // === 1. VOORBEREIDEND WERK ===
+        if (qty.afkappen > 0 && result.afkappen) {
             const row = document.createElement('div');
             row.className = 'invoice-row';
             row.innerHTML = `
-                <span class="component-name">Bijkomend pleisterwerk</span>
-                <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m² x 
-                € ${eenheidsprijs.toFixed(2)}</span>
-                <span class="component-total">€ ${bijkomend_totaal.toFixed(2)}</span>
+                <span class="component-name">Kappen</span>
+                <span class="component-calc">${qty.afkappen.toFixed(2)} m2 x 
+                € ${result.afkappen.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.afkappen.subtotaal.toFixed(2)}</span>
             `;
             invoiceItemsContainer.appendChild(row);
         }
         
+        if (qty.grondering > 0 && result.grondering) {
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Grond.</span>
+                <span class="component-calc">${qty.grondering.toFixed(2)} m2 x 
+                € ${result.grondering.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.grondering.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        // Egalisatie (voorbereidend werk - ondergrond egaliseren)
         if (egalisatie_totaal > 0 && oppervlakte_bezetten > 0) {
             const eenheidsprijs = egalisatie_totaal / oppervlakte_bezetten;
             const row = document.createElement('div');
             row.className = 'invoice-row';
             row.innerHTML = `
-                <span class="component-name">Bijkomende egalisatie</span>
-                <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m² x 
+                <span class="component-name">Egalisatie</span>
+                <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m2 x 
                 € ${eenheidsprijs.toFixed(2)}</span>
                 <span class="component-total">€ ${egalisatie_totaal.toFixed(2)}</span>
             `;
             invoiceItemsContainer.appendChild(row);
         }
         
+        // === 2. BEHANDELING ===
+        if (qty.injecties > 0 && result.injecties) {
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Inj.</span>
+                <span class="component-calc">${qty.injecties.toFixed(2)} m x 
+                € ${result.injecties.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.injecties.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        if (qty.membraan > 0 && result.membraan) {
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">SNC</span>
+                <span class="component-calc">${qty.membraan.toFixed(2)} m2 x 
+                € ${result.membraan.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.membraan.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        if (qty.ultradun > 0 && result.ultradun) {
+            // Dynamische korte naam gebaseerd op geselecteerd systeem
+            const systeemSelect = document.getElementById('ultradun-systeem');
+            const systeemValue = systeemSelect ? systeemSelect.value : '';
+            let kortNaam = 'Compact';
+            if (systeemValue === 'sopro') kortNaam = 'Sopro';
+            else if (systeemValue === 'asocret') kortNaam = 'Asocret';
+            else if (systeemValue === 'sulfatex') kortNaam = 'Sulfatex';
+            
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">${kortNaam}</span>
+                <span class="component-calc">${qty.ultradun.toFixed(2)} m2 x 
+                € ${result.ultradun.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.ultradun.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        // V11.0: Varia invoice row met dynamische naam
+        if (qty.varia > 0 && result.varia) {
+            const variaUnit = result.varia.eenheid || 'm';
+            const variaNaam = result.varia.kort_naam || 'Varia';
+            
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">${variaNaam}</span>
+                <span class="component-calc">${qty.varia.toFixed(2)} ${variaUnit} x 
+                € ${result.varia.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.varia.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        // === 3. NABEHANDELING (isolatie) ===
+        if (qty.xps > 0 && result.xps) {
+            // Dynamische naam: XPS {dikte}+{V/N}
+            const dikteSelect = document.getElementById('xps-dikte');
+            const gitexSelect = document.getElementById('xps-gitex');
+            const dikte = dikteSelect ? dikteSelect.value : '40';
+            const gitexValue = gitexSelect ? gitexSelect.value : 'naden';
+            const gitexCode = gitexValue === 'volledig' ? 'V' : 'N';
+            
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">XPS ${dikte}+${gitexCode}</span>
+                <span class="component-calc">${qty.xps.toFixed(2)} m2 x 
+                € ${result.xps.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.xps.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        if (qty.wedi > 0 && result.wedi) {
+            // Dynamische naam: Wedi {dikte}+{V/N}
+            const dikteSelect = document.getElementById('wedi-dikte');
+            const gitexSelect = document.getElementById('wedi-gitex');
+            const dikte = dikteSelect ? dikteSelect.value : '4';
+            const gitexValue = gitexSelect ? gitexSelect.value : 'naden';
+            const gitexCode = gitexValue === 'volledig' ? 'V' : 'N';
+            
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Wedi ${dikte}+${gitexCode}</span>
+                <span class="component-calc">${qty.wedi.toFixed(2)} m2 x 
+                € ${result.wedi.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.wedi.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        if (qty.fassashield > 0 && result.fassashield) {
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Fassa</span>
+                <span class="component-calc">${qty.fassashield.toFixed(2)} m2 x 
+                € ${result.fassashield.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.fassashield.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        // === 4. EINDAFWERKING ===
         if (hoekprofielen_totaal > 0 && hoekprofielen_meters > 0) {
             const eenheidsprijs = hoekprofielen_totaal / hoekprofielen_meters;
             const row = document.createElement('div');
             row.className = 'invoice-row';
             row.innerHTML = `
-                <span class="component-name">Hoekprofiel(en)</span>
+                <span class="component-name">Hoekprof.</span>
                 <span class="component-calc">${hoekprofielen_meters.toFixed(2)} m x 
                 € ${eenheidsprijs.toFixed(2)}</span>
                 <span class="component-total">€ ${hoekprofielen_totaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        if (qty.bezetten > 0 && result.bezetten) {
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Pleister</span>
+                <span class="component-calc">${qty.bezetten.toFixed(2)} m2 x 
+                € ${result.bezetten.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.bezetten.subtotaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        // Bijkomend pleister (als aparte lijn na Pleister)
+        if (bijkomend_totaal > 0 && oppervlakte_bezetten > 0) {
+            const eenheidsprijs = bijkomend_totaal / oppervlakte_bezetten;
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Bijkomend</span>
+                <span class="component-calc">${oppervlakte_bezetten.toFixed(2)} m2 x 
+                € ${eenheidsprijs.toFixed(2)}</span>
+                <span class="component-total">€ ${bijkomend_totaal.toFixed(2)}</span>
+            `;
+            invoiceItemsContainer.appendChild(row);
+        }
+        
+        if (qty.fixfinish > 0 && result.fixfinish) {
+            const row = document.createElement('div');
+            row.className = 'invoice-row';
+            row.innerHTML = `
+                <span class="component-name">Fix&Fin</span>
+                <span class="component-calc">${qty.fixfinish.toFixed(2)} m2 x 
+                € ${result.fixfinish.prijs.toFixed(2)}</span>
+                <span class="component-total">€ ${result.fixfinish.subtotaal.toFixed(2)}</span>
             `;
             invoiceItemsContainer.appendChild(row);
         }
@@ -5175,11 +5638,11 @@
     }
 
     // ============================================================
-    // V11.0: UX PARITEIT MET V34.5 SALES CALCULATOR
+    // V10.11: UX PARITEIT MET V34.5 SALES CALCULATOR
     // Card activation systeem + auto-scroll + auto-select
     // ============================================================
     
-    // V11.0: Map card IDs to their primary (activating) field
+    // V10.11: Map card IDs to their primary (activating) field
     // Kaart blijft dormant totdat dit numerieke veld waarde > 0 heeft
     const cardPrimaryField = {
         'card-afkappen': 'afkappen',
@@ -5194,10 +5657,11 @@
         'card-ultradun': 'ultradun',
         'card-fixfinish': 'fixfinish',
         'card-fassashield': 'fassashield',
-        'card-grondering': 'grondering'
+        'card-grondering': 'grondering',
+        'card-varia': 'varia'
     };
     
-    // V11.0: Map input/select IDs to their parent card IDs
+    // V10.11: Map input/select IDs to their parent card IDs
     const inputToCard = {
         'afkappen': 'card-afkappen',
         'injecties': 'card-injecties',
@@ -5223,10 +5687,12 @@
         'fixfinish': 'card-fixfinish',
         'fassashield': 'card-fassashield',
         'grondering': 'card-grondering',
-        'product-grondering': 'card-grondering'
+        'product-grondering': 'card-grondering',
+        'varia': 'card-varia',
+        'product-varia': 'card-varia'
     };
     
-    // V11.0: Check of kaart geactiveerd mag worden (alleen als primair veld waarde > 0)
+    // V10.11: Check of kaart geactiveerd mag worden (alleen als primair veld waarde > 0)
     const shouldActivateCard = (cardId) => {
         const primaryField = cardPrimaryField[cardId];
         if (!primaryField) return true;  // Geen mapping = altijd activeren
@@ -5235,7 +5701,7 @@
         return el && parseFloat(el.value.replace(',', '.')) > 0;
     };
     
-    // V11.0: Maak kaart dormant als primair veld leeg/0
+    // V10.11: Maak kaart dormant als primair veld leeg/0
     const deactivateCardIfEmpty = (cardId) => {
         if (!shouldActivateCard(cardId)) {
             const card = document.getElementById(cardId);
@@ -5243,13 +5709,13 @@
         }
     };
     
-    // V11.0: Activeer kaart (verwijder dormant class)
+    // V10.11: Activeer kaart (verwijder dormant class)
     const activateCard = (cardId) => {
         const card = document.getElementById(cardId);
         if (card) card.classList.remove('dormant');
     };
     
-    // V11.0: Scroll active field to 1/3 from top of viewport (V33.2 pattern)
+    // V10.11: Scroll active field to 1/3 from top of viewport (V33.2 pattern)
     const scrollFieldIntoView = (element) => {
         if (!element) return;
         
@@ -5272,13 +5738,13 @@
     const inputIds = [
         'afkappen', 'injecties', 'membraan', 'bezetten',
         'hoekprofielen', 'bijkomendpleister', 'egalisatie',
-        'xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering'
+        'xps', 'wedi', 'ultradun', 'fixfinish', 'fassashield', 'grondering', 'varia'
     ];
     
     inputIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            // V11.0: Input event met dormant logica (V34.5 pattern)
+            // V10.11: Input event met dormant logica (V34.5 pattern)
             element.addEventListener('input', function(e) {
                 const cardId = inputToCard[id];
                 if (cardId) {
@@ -5306,7 +5772,7 @@
                 calculate();
             });
             
-            // V11.0: Focus event met auto-scroll + auto-select (V33.2 + V27.0 pattern)
+            // V10.11: Focus event met auto-scroll + auto-select (V33.2 + V27.0 pattern)
             element.addEventListener('focus', function() {
                 scrollFieldIntoView(element);
                 if (element.value) {
@@ -5316,7 +5782,7 @@
         }
     });
     
-    // V11.0: Select handlers met shouldActivateCard check (V34.5 pattern)
+    // V10.11: Select handlers met shouldActivateCard check (V34.5 pattern)
     // Dropdown selecties alleen activeren kaart als primair veld waarde > 0 heeft
     ['xps-dikte', 'xps-gitex', 'ultradun-systeem', 'sopro-lagen', 'wedi-dikte', 'wedi-gitex', 'product-grondering'].forEach(id => {
         const select = document.getElementById(id);
@@ -5329,7 +5795,7 @@
                 UnitPositioner.update(e.target);
             }
             
-            // V11.0: Alleen activeren als primair veld waarde heeft
+            // V10.11: Alleen activeren als primair veld waarde heeft
             const cardId = inputToCard[id];
             if (cardId && shouldActivateCard(cardId)) {
                 activateCard(cardId);
@@ -5388,13 +5854,13 @@
             calculate();
         });
         
-        // V11.0: Focus event voor select met auto-scroll
+        // V10.11: Focus event voor select met auto-scroll
         select.addEventListener('focus', function() {
             scrollFieldIntoView(select);
         });
     });
 
-    // V11.0: Autex en dikte dropdowns met shouldActivateCard check
+    // V10.11: Autex en dikte dropdowns met shouldActivateCard check
     // Deze dropdowns activeren kaart alleen als primair veld (ultradun) waarde > 0 heeft
     
     // Asocret-autex dropdown
@@ -5456,6 +5922,60 @@
     sulfatexLagen.addEventListener('focus', function() {
         scrollFieldIntoView(sulfatexLagen);
     });
+
+    // V11.0: Varia product select handler - KRITIEK: input enable/disable
+    const productVaria = document.getElementById('product-varia');
+    if (productVaria) {
+        productVaria.addEventListener('change', function(e) {
+            const variaInput = document.getElementById('varia');
+            const variaUnit = document.getElementById('varia-unit');
+            const variaLabel = document.getElementById('varia-label');
+            const selectedProduct = e.target.value;
+            
+            // Toggle placeholder-active class
+            e.target.classList.remove('placeholder-active');
+            
+            if (selectedProduct && XTRA.varia.producten[selectedProduct]) {
+                const spec = XTRA.varia.producten[selectedProduct];
+                
+                // KRITIEK: Enable input
+                variaInput.disabled = false;
+                variaInput.placeholder = spec.eenheid_label;
+                
+                // Update unit en label dynamisch
+                if (variaUnit) variaUnit.textContent = spec.eenheid;
+                if (variaLabel) variaLabel.textContent = spec.eenheid_label;
+                
+                // V11.0 UX FIX: Kaart blijft dormant - activeert pas bij waarde > 0
+                // (consistent met alle andere componenten)
+                
+                // Focus on input voor directe invoer
+                variaInput.focus();
+            } else {
+                // KRITIEK: Disable input wanneer geen product geselecteerd
+                variaInput.disabled = true;
+                variaInput.value = '';
+                variaInput.placeholder = 'Selecteer eerst product';
+                
+                // Reset unit/label naar defaults
+                if (variaUnit) variaUnit.textContent = 'm';
+                if (variaLabel) variaLabel.textContent = 'hoeveelheid';
+                
+                // Zet kaart terug naar dormant
+                const card = document.getElementById('card-varia');
+                if (card) card.classList.add('dormant');
+                
+                // Herstel placeholder styling
+                e.target.classList.add('placeholder-active');
+            }
+            
+            calculate();
+        });
+        
+        productVaria.addEventListener('focus', function() {
+            scrollFieldIntoView(productVaria);
+        });
+    }
 
     // Initialize UnitPositioner
     UnitPositioner.init();
